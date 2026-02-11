@@ -1,0 +1,48 @@
+<div
+  class="dw-file-item"
+  [class.dw-file-item-error]="errored()"
+  [class.no-right-border]="!!ingestStatus()"
+>
+  <div class="dw-file-item-icon">
+    <dw-file-icon [size]="22" [fileName]="name()"></dw-file-icon>
+  </div>
+  <span class="dw-file-item-name" (click)="onSelect()" [title]="name()">{{ name() }}</span>
+
+  @if (documentStatus(); as status) {
+    <div class="dw-file-item-status">
+      @if (status.loading) {
+        <dw-loader-icon [size]="16"></dw-loader-icon>
+      } @else if (status.value) {
+        <dw-check-circle-icon
+          [size]="16"
+          class="dw-file-item-status-success"
+        ></dw-check-circle-icon>
+      } @else if (status.error) {
+        <div [title]="status.error">
+          <dw-error-info-icon [size]="16"></dw-error-info-icon>
+        </div>
+      }
+    </div>
+  }
+
+  @if (ingestStatus(); as status) {
+    <dw-progress-bar
+      class="dw-file-item-ingest-progress"
+      direction="vertical"
+      [state]="status.error ? 'error' : status.loading ? 'progress' : 'success'"
+    ></dw-progress-bar>
+  }
+
+  @if (removable()) {
+    <button class="dw-file-item-remove" (click)="onRemove()">
+      <dw-close-icon [size]="14"></dw-close-icon>
+    </button>
+  }
+
+  @if (uploadStatus(); as status) {
+    <dw-progress-bar
+      class="dw-file-item-progress"
+      [state]="status.error ? 'error' : status.loading ? 'progress' : 'success'"
+    ></dw-progress-bar>
+  }
+</div>

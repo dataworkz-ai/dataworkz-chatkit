@@ -1,0 +1,32 @@
+import { Component, input } from '@angular/core';
+
+@Component({
+  selector: 'dw-thumbs-down-icon',
+  standalone: true,
+  template: `
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      [attr.width]="size()"
+      [attr.height]="size()"
+      viewBox="0 0 18 18"
+      fill="none"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1 2.14286C1 1.51167 1.51167 1 2.14286 1H11.8571C14.6975 1 17 3.30254 17 6.14286V8.42857C17 10.0065 15.7208 11.2857 14.1429 11.2857H11.2857V14.4464C11.2857 15.8567 10.1424 17 8.73207 17C7.94405 17 7.27935 16.4132 7.18161 15.6313L6.73543 12.0619L4.69418 9H2.14286C1.51167 9 1 8.48833 1 7.85714V2.14286ZM5.57143 8.25556L7.836 11.6524L8.31564 15.4895C8.34189 15.6995 8.52042 15.8571 8.73207 15.8571C9.51123 15.8571 10.1429 15.2255 10.1429 14.4464V10.1429H14.1429C15.0896 10.1429 15.8571 9.37535 15.8571 8.42857V6.14286C15.8571 3.93372 14.0663 2.14286 11.8571 2.14286H5.57143V8.25556ZM4.42857 2.14286H2.14286V7.85714H4.42857V2.14286Z"
+        fill="currentColor"
+      />
+    </svg>
+  `,
+  styles: `
+    :host {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  `,
+})
+export class ThumbsDownIcon {
+  readonly size = input<number>(20);
+}

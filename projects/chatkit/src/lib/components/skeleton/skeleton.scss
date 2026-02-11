@@ -1,0 +1,41 @@
+// Color configuration variables
+$skeleton-bg-color: #e2e8f0;
+$skeleton-shimmer-color: rgba(255, 255, 255, 0.4);
+$skeleton-shimmer-duration: 1.5s;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.dw-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: $skeleton-bg-color;
+  min-width: 100px;
+  padding: 0.25rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, $skeleton-shimmer-color, transparent);
+    animation: dw-skeleton-shimmer $skeleton-shimmer-duration infinite;
+  }
+}
+
+.dw-skeleton-circle {
+  flex-shrink: 0;
+}
+
+@keyframes dw-skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

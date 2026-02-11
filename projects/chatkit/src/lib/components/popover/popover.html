@@ -1,0 +1,17 @@
+<div class="dw-popover" [class.dw-popover-open]="isOpen()">
+  <ng-content select="[trigger]"></ng-content>
+
+  @if (isOpen()) {
+    <div
+      class="dw-popover-panel"
+      [class.dw-popover-panel-top]="position === 'top'"
+      [class.dw-popover-panel-bottom]="position === 'bottom'"
+      [class.dw-popover-panel-left]="align === 'left'"
+      [class.dw-popover-panel-center]="align === 'center'"
+      [class.dw-popover-panel-right]="align === 'right'"
+      (click)="$event.stopPropagation()"
+    >
+      <ng-content select="[content]"></ng-content>
+    </div>
+  }
+</div>

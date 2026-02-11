@@ -1,0 +1,38 @@
+.dw-user-message {
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0rem 1rem;
+
+  .dw-user-message-avatar {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fdf6b2;
+    flex-shrink: 0;
+  }
+
+  .dw-user-message-parts {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .dw-user-message-text {
+    flex-grow: 1;
+    margin: 0.7rem 0rem;
+  }
+
+  .dw-user-message-files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: -0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}

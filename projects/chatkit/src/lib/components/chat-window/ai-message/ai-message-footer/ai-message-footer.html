@@ -1,0 +1,47 @@
+<div class="dw-ai-message-footer-container">
+  <div class="dw-ai-message-footer">
+    <!-- Left: View/Collapse Steps -->
+    @if (showSteps()) {
+      <button
+        class="footer-steps-btn"
+        [class.footer-steps-btn-expanded]="stepsExpanded()"
+        (click)="toggleSteps()"
+      >
+        <dw-list-check-icon [size]="14" />
+        <span>{{ stepsText() }}</span>
+      </button>
+    }
+
+    <!-- Right: View probe + feedback -->
+    <div class="footer-right">
+      @if (showProbe()) {
+        <button class="footer-probe-btn" (click)="onViewProbe()">
+          <span>View probe</span>
+          <dw-arrow-right-icon [size]="14" />
+        </button>
+      }
+      @if (showFeedback()) {
+        <div class="footer-divider"></div>
+        <dw-ai-message-feedback
+          [thumbsUpOrDown]="thumbsUpOrDown()"
+          [additionalFeedback]="additionalFeedback()"
+          type="up"
+          [messageId]="messageId"
+        />
+        <dw-ai-message-feedback
+          [thumbsUpOrDown]="thumbsUpOrDown()"
+          [additionalFeedback]="additionalFeedback()"
+          type="down"
+          [messageId]="messageId"
+        />
+      }
+    </div>
+  </div>
+
+  <!-- Expanded Steps -->
+  @if (stepsExpanded()) {
+    <div class="footer-steps-panel">
+      <dw-steps [messageId]="messageId" />
+    </div>
+  }
+</div>

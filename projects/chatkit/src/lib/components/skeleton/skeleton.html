@@ -1,0 +1,9 @@
+<div
+  class="dw-skeleton"
+  [class.dw-skeleton-circle]="shape === 'circle'"
+  [ngStyle]="{
+    width: width,
+    height: height,
+    'border-radius': shape === 'circle' ? '50%' : borderRadius,
+  }"
+></div>

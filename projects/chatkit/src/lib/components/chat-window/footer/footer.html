@@ -1,0 +1,92 @@
+<div class="dw-chat-window-footer-send">
+  <div class="dw-chat-window-footer-send-files">
+    @for (file of userFiles(); track file) {
+      <dw-user-file-item [filename]="file"></dw-user-file-item>
+    }
+  </div>
+  <div class="dw-chat-window-footer-input-wrapper">
+    <textarea
+      #textareaRef
+      [value]="userText()"
+      (input)="onInputChange($event)"
+      (keydown)="onKeyDown($event)"
+      class="footer-send-textarea"
+      [placeholder]="placeholder()"
+      rows="3"
+    ></textarea>
+    <button
+      class="footer-send-button"
+      [class.footer-send-button-active]="!disableSend()"
+      [disabled]="disableSend()"
+      (click)="onSend()"
+    >
+      <dw-send-arrow-icon />
+    </button>
+  </div>
+</div>
+
+<div class="dw-chat-window-footer-options">
+  @if (showAttachment()) {
+    <dw-popover position="top" align="left">
+      <button
+        trigger
+        class="footer-options-attach-btn"
+        (click)="onAttachmentClick(); $event.stopPropagation()"
+      >
+        <dw-paperclip-icon [size]="16" />
+      </button>
+
+      <ul content class="footer-options-popover-list">
+        @if (showAttachmentDataStore()) {
+          <li class="footer-options-popover-item" (click)="onSelectDataStore()">
+            <span class="footer-options-popover-icon">
+              <dw-document-icon [size]="18" />
+            </span>
+            <div class="footer-options-popover-content">
+              <div class="footer-options-popover-label">Select from Data Store</div>
+            </div>
+          </li>
+        }
+        @if (showAttachmentComputer()) {
+          <li class="footer-options-popover-item" (click)="onUploadFile()">
+            <span class="footer-options-popover-icon">
+              <dw-upload-icon [size]="18" />
+            </span>
+            <div class="footer-options-popover-content">
+              <div class="footer-options-popover-label">Upload from your computer</div>
+              <div class="footer-options-popover-subtitle">
+                (Spaces or special characters in uploaded filenames will be replaced with '_')
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </dw-popover>
+  }
+
+  @if (showLLMSelector()) {
+    @if (LLMsErrored()) {
+      <div class="footer-options-llm-error">Failed to load LLMs</div>
+    } @else {
+      <dw-dropdown
+        placeholder="Select..."
+        [options]="LLMs()"
+        [loading]="LLMsLoading()"
+        (valueChange)="onLLMChange($event)"
+        position="top"
+        [value]="selectedLLMId()"
+        label="LLM:"
+      >
+      </dw-dropdown>
+    }
+  }
+</div>
+
+<input
+  #fileInput
+  type="file"
+  multiple
+  [accept]="acceptedTypes()"
+  (change)="onFileSelected($event)"
+  style="display: none"
+/>

@@ -1,0 +1,32 @@
+<div class="dw-ai-file-item" [class.image]="isImage()" [class.pdf]="isPdf()">
+  @if (isImage()) {
+    <div class="dw-ai-image-container">
+      <img [src]="fileUrl()" [alt]="fileName()" />
+
+      <div class="dw-ai-file-actions">
+        @if (copySuccess()) {
+          <span class="dw-copy-feedback">Copied!</span>
+        }
+        <button class="dw-ai-file-action" (click)="downloadFile($event)" title="Download">
+          <dw-download-icon [size]="16" />
+        </button>
+        <button class="dw-ai-file-action" (click)="copyToClipboard()" title="Copy Data URI">
+          <dw-copy-icon [size]="16" />
+        </button>
+      </div>
+    </div>
+  } @else if (isPdf()) {
+    <div class="dw-ai-pdf-container" (click)="onItemClick()">
+      <dw-file-icon [size]="24" [fileName]="fileName()" />
+      <div class="dw-pdf-info">
+        <span class="dw-pdf-name">{{ fileName() }}</span>
+        <span class="dw-pdf-size">PDF Document</span>
+      </div>
+    </div>
+  } @else {
+    <div class="dw-ai-generic-file" (click)="onItemClick()">
+      <dw-file-icon [size]="20" [fileName]="fileName()" />
+      <span>{{ fileName() }}</span>
+    </div>
+  }
+</div>

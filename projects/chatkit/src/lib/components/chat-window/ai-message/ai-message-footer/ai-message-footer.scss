@@ -1,0 +1,76 @@
+// Color configuration variables
+$footer-text-color: #1d4ed8;
+$footer-border-color: #e5e7eb;
+$feedback-icon-color: #1d4ed8;
+$footer-btn-expanded-color: #ffffff;
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.dw-ai-message-footer-container {
+  padding: 0.75rem 1rem;
+  overflow: visible;
+  .footer-steps-panel {
+    border-radius: 0.75rem;
+    border-top-left-radius: 0rem;
+    overflow: hidden;
+  }
+}
+
+.dw-ai-message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: visible;
+}
+
+.footer-steps-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: $footer-text-color;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &-expanded {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background-color: $footer-btn-expanded-color;
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.footer-probe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: $footer-text-color;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.footer-divider {
+  width: 1px;
+  height: 14px;
+  background-color: #e5e7eb;
+  margin: 0 4px;
+}

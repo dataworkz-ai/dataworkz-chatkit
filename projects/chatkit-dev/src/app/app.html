@@ -1,0 +1,22 @@
+<div class="app-container">
+  <dw-chatkit
+    [chatkitData]="chatkitData()"
+    [chatkitConfig]="chatkitConfig()"
+    (sendMessage)="onSendMessage($event)"
+    (userMessageChange)="onUserMessageChange($event)"
+    (selectLLM)="onSelectLLM($event)"
+    (viewSteps)="onViewSteps($event)"
+    (selectDataStore)="onSelectDataStore()"
+    (selectComputerUpload)="onSelectComputerUpload($event)"
+    (selectFile)="onSelectFile($event)"
+    (selectAiFile)="onSelectAiFile($event)"
+    (viewProbe)="onViewProbe($event)"
+    (feedback)="onFeedback($event)"
+  ></dw-chatkit>
+</div>
+
+<router-outlet />
+
+<!-- <div class="app-container">
+    <dw-chat-widget-native [conversationId]="conversationId()" [agentId]="agentId()"></dw-chat-widget-native>
+</div> -->

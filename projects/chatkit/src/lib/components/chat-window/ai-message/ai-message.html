@@ -1,0 +1,38 @@
+<div class="dw-ai-message-container">
+  <div class="dw-ai-message" [class.dw-ai-message-highlighted]="isHighlighted()">
+    <div class="dw-ai-message-avatar">
+      <dw-agent-avatar-icon [size]="40"></dw-agent-avatar-icon>
+    </div>
+    <div class="dw-ai-message-content">
+      @if (!!messageError()) {
+        <p class="dw-ai-message-error">
+          {{ messageError() }}
+        </p>
+      } @else if (messageLoading()) {
+        <div class="dw-ai-message-loader">
+          @for (_ of [].constructor(2); track _) {
+            <dw-skeleton height="12px" />
+          }
+        </div>
+      } @else {
+        @for (part of parts(); track part) {
+          @if (part.kind === 'text') {
+            <dw-markdown-viewer
+              [messageId]="messageId()"
+              [content]="part.text"
+            ></dw-markdown-viewer>
+          } @else if (part.kind === 'data') {
+            <dw-ai-data-item [data]="part.data" />
+          } @else if (part.kind === 'file') {
+            <dw-ai-file-item [part]="part" />
+          } @else {
+            <p>Unsupported part kind</p>
+          }
+        }
+      }
+    </div>
+  </div>
+  @if (showFooter()) {
+    <dw-ai-message-footer [messageId]="messageId()"></dw-ai-message-footer>
+  }
+</div>

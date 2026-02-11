@@ -1,0 +1,49 @@
+@if (chatkitConversationError()) {
+  <div class="dw-chat-window-error">{{ chatkitConversationError() }}</div>
+} @else {
+  <div class="dw-chat-window-wrapper">
+    <div class="dw-chat-window-body-container">
+      <div class="dw-chat-window-body" #chatBody>
+        @if (chatkitConversationLoading()) {
+          <div class="dw-chat-window-loading">
+            @for (_ of [].constructor(6); track _) {
+              <dw-skeleton></dw-skeleton>
+            }
+          </div>
+        } @else if (!!chatkitConversation()?.length) {
+          @for (task of chatkitConversation(); track task) {
+            <dw-user-message [attr.id]="task[0]" [messageId]="task[0]"></dw-user-message>
+            <dw-ai-message [attr.id]="task[1]" [messageId]="task[1]"></dw-ai-message>
+          }
+        } @else {
+          <div class="dw-start-conversation-wrapper">
+            @if (chatkitAgentError()) {
+              <dw-conversation-icon [size]="64"></dw-conversation-icon>
+              <div class="start-conversation-error">{{ chatkitAgentError() }}</div>
+            } @else if (chatkitAgentLoading()) {
+              <dw-conversation-icon [size]="64"></dw-conversation-icon>
+              <dw-skeleton></dw-skeleton>
+            } @else if (!!chatkitAgentDescription()) {
+              <dw-conversation-icon [size]="64"></dw-conversation-icon>
+              <p class="start-conversation-text">
+                {{ chatkitAgentDescription() }}
+              </p>
+            }
+          </div>
+        }
+      </div>
+
+      @if (showScrollDownButton()) {
+        <button class="dw-scroll-bottom-button" (click)="onScrollButton()">
+          <dw-chevron-icon [size]="16"></dw-chevron-icon>
+        </button>
+      }
+    </div>
+
+    @if (showFooter()) {
+      <div class="dw-chat-window-footer">
+        <dw-chat-footer></dw-chat-footer>
+      </div>
+    }
+  </div>
+}

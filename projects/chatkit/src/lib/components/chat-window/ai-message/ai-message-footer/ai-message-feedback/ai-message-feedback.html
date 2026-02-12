@@ -2,6 +2,8 @@
   <button
     trigger
     class="footer-feedback-btn"
+    [class.not-clickable]="!isPopoverEnabled()"
+    [disabled]="!isPopoverEnabled()"
     (click)="onToggle(feedbackPopover); $event.stopPropagation()"
   >
     @if (type() === 'up') {

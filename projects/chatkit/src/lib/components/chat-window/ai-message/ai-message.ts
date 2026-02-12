@@ -35,7 +35,7 @@ export class AiMessage {
 
   readonly showFooter = computed(() => {
     return (
-      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback ||
+      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback !== undefined ||
       !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.steps ||
       !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.probe
     );

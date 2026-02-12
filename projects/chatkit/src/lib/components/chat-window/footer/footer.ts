@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, ViewChild } from '@angular/core';
 import { ChatWindowEventsService } from '../../../services/chat-window.events';
 import { ChatWindowDataService } from '../../../services/chat-window.data';
 import { Dropdown } from '../../dropdown/dropdown';
@@ -30,12 +30,14 @@ export class Footer {
   private sessionSuggestions: string[] = [];
 
   constructor() {
-    if (
-      !this.sessionSuggestions.length ||
-      this.sessionSuggestions.length < this.userMessageSuggestions().length
-    ) {
-      this.sessionSuggestions = [...this.userMessageSuggestions()];
-    }
+    effect(() => {
+      if (
+        !this.sessionSuggestions.length ||
+        this.sessionSuggestions.length < this.userMessageSuggestions().length
+      ) {
+        this.sessionSuggestions = [...this.userMessageSuggestions()];
+      }
+    });
   }
 
   readonly userText = computed(() => {

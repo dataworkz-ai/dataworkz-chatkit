@@ -19,6 +19,7 @@ import {
 import { Popover } from '../../../../popover/popover';
 import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
 import { TAdditionalFeedback } from '../../../../../typings/data';
+import { ChatWindowDataService } from '../../../../../services/chat-window.data';
 
 @Component({
   selector: 'dw-ai-message-feedback',
@@ -45,6 +46,7 @@ export class AiMessageFeedback {
 
   private readonly elementRef = inject(ElementRef);
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
+  private readonly chatWindowDataService = inject(ChatWindowDataService);
 
   readonly id = computed(() => `${this.messageId()}-${this.type()}`);
   readonly popoverPosition = signal<'top' | 'bottom'>('top');
@@ -61,6 +63,10 @@ export class AiMessageFeedback {
   readonly isActive = computed(() => {
     const current = this.thumbsUpOrDown();
     return (this.type() === 'up' && current === 1) || (this.type() === 'down' && current === -1);
+  });
+
+  readonly isPopoverEnabled = computed(() => {
+    return this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback === true;
   });
 
   readonly feedbackText = signal<string | undefined>(undefined);

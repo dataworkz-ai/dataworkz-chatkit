@@ -13,6 +13,11 @@
   cursor: pointer;
   transition: color 0.2s ease;
   border-radius: 4px;
+
+  &.not-clickable {
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 .footer-feedback-popover {

@@ -53,7 +53,8 @@ export class AiMessageFooter {
 
   readonly showFeedback = computed(() => {
     return (
-      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback && !this.messageLoading()
+      this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback !== undefined &&
+      !this.messageLoading()
     );
   });
 

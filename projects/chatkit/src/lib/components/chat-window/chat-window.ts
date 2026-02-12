@@ -15,7 +15,8 @@ import { UserMessage } from './user-message/user-message';
 import { AiMessage } from './ai-message/ai-message';
 import { ChatWindowDataService } from '../../services/chat-window.data';
 import { Skeleton } from '../skeleton/skeleton';
-import { ConversationIcon, ChevronIcon } from '../icons';
+import { ConversationIcon, ChevronIcon, UploadIcon } from '../icons';
+import { ChatWindowEventsService } from '../../services/chat-window.events';
 import {
   isScrolledUp,
   scrollToBottom,
@@ -26,19 +27,20 @@ import {
 
 @Component({
   selector: 'dw-chat-window',
-  imports: [Footer, UserMessage, AiMessage, Skeleton, ConversationIcon, ChevronIcon],
+  imports: [Footer, UserMessage, AiMessage, Skeleton, ConversationIcon, ChevronIcon, UploadIcon],
   templateUrl: './chat-window.html',
   styleUrl: './chat-window.scss',
 })
 export class ChatWindow implements AfterViewInit, OnDestroy {
   private readonly chatWindowDataService = inject(ChatWindowDataService);
+  private readonly chatWindowEventsService = inject(ChatWindowEventsService);
   private readonly ngZone = inject(NgZone);
 
   constructor() {
     effect(() => {
       const request = this.chatkitScroll();
       if (!request) return;
-      this.chatWindowDataService.setChatkitScroll(undefined);
+      this.chatWindowEventsService.scrollComplete$.next();
 
       const chatbody = this.chatBodyRef?.nativeElement;
       if (!chatbody) return;
@@ -60,6 +62,8 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
   @ViewChild('chatBody') chatBodyRef!: ElementRef<HTMLDivElement>;
 
   readonly showScrollDownButton = signal(false);
+  readonly isDragging = signal(false);
+  private dragCounter = 0;
 
   private mutationObserver: MutationObserver | undefined = undefined;
 
@@ -93,6 +97,10 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
 
   readonly showFooter = computed(() => {
     return !!this.chatWindowDataService.chatkitFlags()?.footer;
+  });
+
+  readonly showAttachmentComputer = computed(() => {
+    return !!this.chatWindowDataService.chatkitFlags()?.footer?.attachment?.computer;
   });
 
   ngAfterViewInit() {
@@ -142,5 +150,43 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
         characterData: true,
       });
     });
+  }
+
+  onDragOver(event: DragEvent) {
+    if (!event.dataTransfer?.types.includes('Files')) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDragEnter(event: DragEvent) {
+    if (!event.dataTransfer?.types.includes('Files')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.dragCounter++;
+    if (this.dragCounter === 1) {
+      this.isDragging.set(true);
+    }
+  }
+
+  onDragLeave(event: DragEvent) {
+    if (!event.dataTransfer?.types.includes('Files')) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.dragCounter--;
+    if (this.dragCounter === 0) {
+      this.isDragging.set(false);
+    }
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.dragCounter = 0;
+    this.isDragging.set(false);
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const filesArray = Array.from(event.dataTransfer.files);
+      this.chatWindowEventsService.selectComputerUpload$.next(filesArray);
+    }
   }
 }

@@ -1,7 +1,13 @@
 @if (chatkitConversationError()) {
   <div class="dw-chat-window-error">{{ chatkitConversationError() }}</div>
 } @else {
-  <div class="dw-chat-window-wrapper">
+  <div
+    class="dw-chat-window-wrapper"
+    (dragover)="showAttachmentComputer() && onDragOver($event)"
+    (dragenter)="showAttachmentComputer() && onDragEnter($event)"
+    (dragleave)="showAttachmentComputer() && onDragLeave($event)"
+    (drop)="showAttachmentComputer() && onDrop($event)"
+  >
     <div class="dw-chat-window-body-container">
       <div class="dw-chat-window-body" #chatBody>
         @if (chatkitConversationLoading()) {
@@ -43,6 +49,15 @@
     @if (showFooter()) {
       <div class="dw-chat-window-footer">
         <dw-chat-footer></dw-chat-footer>
+      </div>
+    }
+
+    @if (isDragging()) {
+      <div class="dw-drag-drop-overlay">
+        <div class="dw-drag-drop-content">
+          <dw-upload-icon [size]="48"></dw-upload-icon>
+          <span class="dw-drag-drop-text">Drop files to upload</span>
+        </div>
       </div>
     }
   </div>

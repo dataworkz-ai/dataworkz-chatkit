@@ -20,4 +20,5 @@ export class ChatWindowEventsService {
     additionalFeedback?: TAdditionalFeedback;
   }>();
   readonly viewProbe$ = new Subject<string>();
+  readonly scrollComplete$ = new Subject<void>();
 }

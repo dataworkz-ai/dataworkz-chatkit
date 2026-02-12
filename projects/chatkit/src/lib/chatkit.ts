@@ -80,6 +80,12 @@ export class Chatkit {
         this.viewProbe.emit(value);
       },
     });
+
+    this.chatWindowEventsService.scrollComplete$.subscribe({
+      next: () => {
+        this.viewProbe.emit();
+      },
+    });
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -137,4 +143,5 @@ export class Chatkit {
     thumbsUpOrDown?: number;
     additionalFeedback?: TAdditionalFeedback;
   }>();
+  @Output() scrollComplete = new EventEmitter<void>();
 }

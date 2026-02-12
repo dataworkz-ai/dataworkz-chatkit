@@ -46,6 +46,7 @@ export type TChatkitFooter = {
   sendDisabled?: boolean;
   userFiles?: string[];
   userFilesMap?: Record<string, TUserFile>;
+  userMessageSuggestions?: string[];
 };
 
 export type TChatkitCitation = {

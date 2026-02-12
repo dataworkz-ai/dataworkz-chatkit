@@ -184,9 +184,10 @@ export class App {
   });
 
   private readonly _chatkitFooter = signal<TChatkitFooter>({
-    userMessage: 'Hey, you good?',
+    userMessage: '',
     sendDisabled: false,
     userFiles: ['madhu.pdf'],
+    userMessageSuggestions: ['Hello, how are you?', 'What is the weather like today?'],
     userFilesMap: {
       'madhu.pdf': {
         ingestStatus: {

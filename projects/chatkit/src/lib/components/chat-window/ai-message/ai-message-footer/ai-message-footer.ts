@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, signal } from '@angular/core';
+import { Component, computed, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Steps } from './steps/steps';
@@ -20,12 +20,12 @@ export class AiMessageFooter {
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
   private readonly chatWindowDataService = inject(ChatWindowDataService);
 
-  readonly messageLoading = computed(() => {
-    return !!this.chatWindowDataService.messagesMap()[this.messageId]?.loading;
+  readonly messagePresent = computed(() => {
+    return !!this.chatWindowDataService.messagesMap()[this.messageId]?.value;
   });
 
   readonly stepsText = computed(() => {
-    if (this.messageLoading()) {
+    if (!this.messagePresent()) {
       return 'Steps';
     }
     if (this.stepsExpanded()) {
@@ -35,7 +35,7 @@ export class AiMessageFooter {
   });
 
   readonly stepsExpanded = computed(() => {
-    if (this.messageLoading()) {
+    if (!this.messagePresent()) {
       return true;
     }
     return this.chatWindowDataService.stepPlanItemsOpenMap()[this.messageId];
@@ -47,14 +47,14 @@ export class AiMessageFooter {
 
   readonly showProbe = computed(() => {
     return (
-      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.probe && !this.messageLoading()
+      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.probe && this.messagePresent()
     );
   });
 
   readonly showFeedback = computed(() => {
     return (
       this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback !== undefined &&
-      !this.messageLoading()
+      this.messagePresent()
     );
   });
 
@@ -71,7 +71,7 @@ export class AiMessageFooter {
   });
 
   toggleSteps() {
-    if (this.messageLoading()) {
+    if (!this.messagePresent()) {
       return;
     }
     this.chatWindowEventsService.viewSteps$.next(this.messageId);

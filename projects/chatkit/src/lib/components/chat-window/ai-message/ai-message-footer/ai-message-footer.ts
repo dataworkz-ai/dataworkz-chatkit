@@ -21,7 +21,7 @@ export class AiMessageFooter {
   private readonly chatWindowDataService = inject(ChatWindowDataService);
 
   readonly messagePresent = computed(() => {
-    return !!this.chatWindowDataService.messagesMap()[this.messageId]?.value;
+    return !!this.chatWindowDataService.messagesMap()[this.messageId]?.value?.parts?.length;
   });
 
   readonly stepsText = computed(() => {

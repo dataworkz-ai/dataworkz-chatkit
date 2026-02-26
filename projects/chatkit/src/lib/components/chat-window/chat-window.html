@@ -18,8 +18,9 @@
           </div>
         } @else if (!!chatkitConversation()?.length) {
           @for (task of chatkitConversation(); track task) {
-            <dw-user-message [attr.id]="task[0]" [messageId]="task[0]"></dw-user-message>
-            <dw-ai-message [attr.id]="task[1]" [messageId]="task[1]"></dw-ai-message>
+            @for (messageId of task; track messageId) {
+              <dw-chat-message [messageId]="messageId"></dw-chat-message>
+            }
           }
         } @else {
           <div class="dw-start-conversation-wrapper">

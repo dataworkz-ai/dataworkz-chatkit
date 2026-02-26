@@ -85,6 +85,7 @@ export type TAdditionalFeedback = {
 };
 
 export type TChatkitConversationTaskMessage = {
+  role: 'AGENT' | 'USER';
   parts: (TMessageTextPart | TMessageDataPart | IMessageFilePart)[];
   thumbsUpOrDown?: number;
   additionalFeedback?: TAdditionalFeedback;
@@ -106,7 +107,7 @@ export type TMessageFile = {
   ingestUuid?: string;
 };
 
-export type TChatkitConversationTask = [string, string];
+export type TChatkitConversationTask = string[];
 
 export type TChatkitData = {
   chatkitConversation?: TItemState<TChatkitConversationTask[]>;

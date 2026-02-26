@@ -112,6 +112,7 @@ export class App {
             loading: false,
             error: '',
             value: {
+              role: message.role as any,
               parts: message.parts as (TMessageTextPart | TMessageDataPart)[],
             },
           };
@@ -186,10 +187,10 @@ export class App {
   private readonly _chatkitFooter = signal<TChatkitFooter>({
     userMessage: '',
     sendDisabled: false,
-    userFiles: ['madhu.pdf'],
+    userFiles: ['madhu.mp3'],
     userMessageSuggestions: ['Hello, how are you?', 'What is the weather like today?'],
     userFilesMap: {
-      'madhu.pdf': {
+      'madhu.mp3': {
         ingestStatus: {
           error: '',
           loading: false,
@@ -207,7 +208,7 @@ export class App {
         },
         messageFile: {
           documentId: '',
-          file: 'madhu.pdf',
+          file: 'madhu.mp3',
           filePath: '',
           ingestUuid: '',
         },
@@ -287,6 +288,7 @@ export class App {
           loading: false,
           error: '',
           value: {
+            role: 'USER',
             parts,
           },
         },
@@ -294,6 +296,7 @@ export class App {
           loading: true,
           error: '',
           value: {
+            role: 'AGENT',
             parts: [],
           },
         },

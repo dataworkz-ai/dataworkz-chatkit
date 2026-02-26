@@ -9,6 +9,7 @@ import {
   NgZone,
   signal,
   effect,
+  input,
 } from '@angular/core';
 import { Footer } from './footer/footer';
 import { UserMessage } from './user-message/user-message';
@@ -26,8 +27,30 @@ import {
 } from './utils';
 
 @Component({
+  standalone: true,
+  selector: 'dw-chat-message',
+  imports: [UserMessage, AiMessage],
+  template: `
+    @if (role() === 'USER') {
+      <dw-user-message [attr.id]="messageId()" [messageId]="messageId()"></dw-user-message>
+    } @else {
+      <dw-ai-message [attr.id]="messageId()" [messageId]="messageId()"></dw-ai-message>
+    }
+  `,
+})
+export class ChatMessage {
+  messageId = input<string>('');
+
+  private readonly chatWindowDataService = inject(ChatWindowDataService);
+
+  readonly role = computed(() => {
+    return this.chatWindowDataService.messagesMap()[this.messageId()]?.value?.role;
+  });
+}
+
+@Component({
   selector: 'dw-chat-window',
-  imports: [Footer, UserMessage, AiMessage, Skeleton, ConversationIcon, ChevronIcon, UploadIcon],
+  imports: [Footer, Skeleton, ConversationIcon, ChevronIcon, UploadIcon, ChatMessage],
   templateUrl: './chat-window.html',
   styleUrl: './chat-window.scss',
 })

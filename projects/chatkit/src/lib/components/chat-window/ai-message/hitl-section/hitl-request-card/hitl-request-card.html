@@ -1,0 +1,103 @@
+@if (request()) {
+  <div class="dw-hitl-card" [class.dw-hitl-card-provided]="isProvided()">
+    <div class="dw-hitl-card-header">
+      @if (isPending()) {
+        <span class="dw-hitl-status-icon dw-hitl-pending-icon">
+          <dw-circle-icon [size]="14" />
+        </span>
+      } @else {
+        <span class="dw-hitl-status-icon dw-hitl-provided-icon">
+          <dw-check-circle-icon [size]="14" />
+        </span>
+      }
+      <span class="dw-hitl-type-label">{{ typeLabel() }}:</span>
+      @if (isPending()) {
+        <span class="dw-hitl-badge dw-hitl-badge-pending">Pending</span>
+      } @else {
+        <span class="dw-hitl-badge dw-hitl-badge-provided">Provided</span>
+      }
+    </div>
+
+    <div class="dw-hitl-content">
+      <p class="dw-hitl-question">{{ request()!.question }}</p>
+
+      @if (isApproval() && contextEntries().length) {
+        <ul class="dw-hitl-context-list">
+          @for (entry of contextEntries(); track entry.key) {
+            <li><strong>{{ entry.key }}:</strong> {{ entry.value }}</li>
+          }
+        </ul>
+      }
+
+      @if (isPending()) {
+        @if (isApproval()) {
+          <div class="dw-hitl-actions">
+            <button class="dw-hitl-btn dw-hitl-btn-reject" (click)="onReject()">Reject</button>
+            <button class="dw-hitl-btn dw-hitl-btn-approve" (click)="onApprove()">Approve</button>
+          </div>
+        } @else if (isInput()) {
+          <div class="dw-hitl-input-group">
+            <input
+              type="text"
+              class="dw-hitl-text-input"
+              placeholder="Your response..."
+              [value]="userInput()"
+              (input)="userInput.set($any($event.target).value)"
+              (keydown)="onInputKeydown($event)"
+            />
+            <button class="dw-hitl-btn dw-hitl-btn-confirm" (click)="onConfirmInput()">Confirm</button>
+          </div>
+        } @else if (isClarification()) {
+          <div class="dw-hitl-clarification-group">
+            @for (option of request()!.options; track option.optionId) {
+              <label class="dw-hitl-radio-option">
+                <input
+                  type="radio"
+                  [name]="'hitl-' + requestId()"
+                  [checked]="selectedOptionId() === option.optionId"
+                  (change)="selectedOptionId.set(option.optionId)"
+                />
+                <span>{{ option.label }}</span>
+              </label>
+            }
+            <button
+              class="dw-hitl-btn dw-hitl-btn-confirm"
+              [disabled]="!selectedOptionId()"
+              (click)="onConfirmClarification()"
+            >
+              Confirm
+            </button>
+          </div>
+        }
+      }
+
+      @if (isProvided()) {
+        @if (isClarification()) {
+          <div class="dw-hitl-clarification-group dw-hitl-clarification-disabled">
+            @for (option of request()!.options; track option.optionId) {
+              <label class="dw-hitl-radio-option dw-hitl-radio-disabled">
+                <input
+                  type="radio"
+                  disabled
+                  [checked]="resolution()?.selectedOption === option.optionId"
+                />
+                <span>{{ option.label }}</span>
+              </label>
+            }
+          </div>
+        }
+        <div class="dw-hitl-resolved-bubble">
+          {{ resolvedAnswerText() }}
+        </div>
+      }
+    </div>
+
+    @if (isPending()) {
+      <div class="dw-hitl-cancel-row">
+        <button class="dw-hitl-btn-cancel" (click)="onCancel()">
+          <dw-stop-icon [size]="18" />
+        </button>
+      </div>
+    }
+  </div>
+}

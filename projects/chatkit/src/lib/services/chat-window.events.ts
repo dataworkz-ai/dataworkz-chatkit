@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IMessageFilePart, TAdditionalFeedback, TMessageFile } from '../typings/data';
+import { IMessageFilePart, TAdditionalFeedback, THitlResolution, TMessageFile } from '../typings/data';
 
 @Injectable()
 export class ChatWindowEventsService {
@@ -21,4 +21,10 @@ export class ChatWindowEventsService {
   }>();
   readonly viewProbe$ = new Subject<string>();
   readonly scrollComplete$ = new Subject<void>();
+  readonly hitlResolve$ = new Subject<{
+    messageId: string;
+    requestId: string;
+    resolution: THitlResolution;
+  }>();
+  readonly hitlCancel$ = new Subject<{ messageId: string }>();
 }

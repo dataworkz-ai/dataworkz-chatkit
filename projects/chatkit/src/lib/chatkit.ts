@@ -3,7 +3,7 @@ import { ChatWindow } from './components/chat-window/chat-window';
 import { ChatWindowDataService } from './services/chat-window.data';
 import { ChatWindowEventsService } from './services/chat-window.events';
 import { TChatkitConfig } from './typings/config';
-import { TMessageFile, TChatkitData, IMessageFilePart, TAdditionalFeedback } from './typings/data';
+import { TMessageFile, TChatkitData, IMessageFilePart, TAdditionalFeedback, THitlResolution } from './typings/data';
 
 @Component({
   selector: 'dw-chatkit',
@@ -86,6 +86,18 @@ export class Chatkit {
         this.viewProbe.emit();
       },
     });
+
+    this.chatWindowEventsService.hitlResolve$.subscribe({
+      next: (value) => {
+        this.hitlResolve.emit(value);
+      },
+    });
+
+    this.chatWindowEventsService.hitlCancel$.subscribe({
+      next: (value) => {
+        this.hitlCancel.emit(value);
+      },
+    });
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -126,6 +138,7 @@ export class Chatkit {
     this.chatWindowDataService.setMessagesMap(chatkitData?.messagesMap || {});
     this.chatWindowDataService.setStepPlanItemsMap(chatkitData?.stepPlanItemsMap || {});
     this.chatWindowDataService.setStepPlanItemsOpenMap(chatkitData?.stepPlanItemsOpenMap || {});
+    this.chatWindowDataService.setHitlRequestsMap(chatkitData?.hitlRequestsMap || {});
   }
 
   @Output() sendMessage = new EventEmitter<string>();
@@ -144,4 +157,10 @@ export class Chatkit {
     additionalFeedback?: TAdditionalFeedback;
   }>();
   @Output() scrollComplete = new EventEmitter<void>();
+  @Output() hitlResolve = new EventEmitter<{
+    messageId: string;
+    requestId: string;
+    resolution: THitlResolution;
+  }>();
+  @Output() hitlCancel = new EventEmitter<{ messageId: string }>();
 }

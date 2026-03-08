@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, Input, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { MarkdownViewer } from './markdown-viewer/markdown-viewer';
 import { AiMessageFooter } from './ai-message-footer/ai-message-footer';
 import { ChatWindowDataService } from '../../../services/chat-window.data';
@@ -6,10 +6,11 @@ import { Skeleton } from '../../skeleton/skeleton';
 import { AgentAvatarIcon } from '../../icons';
 import { AiDataItem } from './ai-data-item/ai-data-item';
 import { AiFileItem } from './ai-file-item/ai-file-item';
+import { HitlSection } from './hitl-section/hitl-section';
 
 @Component({
   selector: 'dw-ai-message',
-  imports: [MarkdownViewer, AiMessageFooter, AiFileItem, Skeleton, AgentAvatarIcon, AiDataItem],
+  imports: [MarkdownViewer, AiMessageFooter, AiFileItem, Skeleton, AgentAvatarIcon, AiDataItem, HitlSection],
   templateUrl: './ai-message.html',
   styleUrl: './ai-message.scss',
 })
@@ -40,6 +41,11 @@ export class AiMessage {
       !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.probe
     );
   });
+  readonly hasHitlRequests = computed(() => {
+    const msg = this.chatWindowDataService.messagesMap()[this.messageId()]?.value;
+    return !!(msg?.metadata?.hitlRequests?.length);
+  });
+
   readonly isHighlighted = computed(() => {
     return this.chatWindowDataService.chatkitProps().highlightMessageId === this.messageId();
   });

@@ -29,6 +29,9 @@
             <p>Unsupported part kind</p>
           }
         }
+        @if (hasHitlRequests()) {
+          <dw-hitl-section [messageId]="messageId()" />
+        }
       }
     </div>
   </div>

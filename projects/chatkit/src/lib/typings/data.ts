@@ -1,6 +1,6 @@
 import { TItemState } from './common';
 
-export type TStepStatus = 'in_progress' | 'completed' | 'not_started' | 'failed';
+export type TStepStatus = 'in_progress' | 'completed' | 'not_started' | 'failed' | 'pending';
 
 export type TStepBase = {
   type: string;
@@ -89,6 +89,10 @@ export type TChatkitConversationTaskMessage = {
   parts: (TMessageTextPart | TMessageDataPart | IMessageFilePart)[];
   thumbsUpOrDown?: number;
   additionalFeedback?: TAdditionalFeedback;
+  metadata?: {
+    hitlRequests?: string[];
+    [key: string]: any;
+  };
 };
 
 export type TChatkitLLMItem = {
@@ -109,11 +113,49 @@ export type TMessageFile = {
 
 export type TChatkitConversationTask = string[];
 
+// HITL Types
+export type THitlRequestType =
+  | 'APPROVAL_REQUIRED'
+  | 'APPROVAL_WITH_MODIFICATIONS'
+  | 'INPUT_REQUIRED'
+  | 'CLARIFICATION_REQUIRED';
+
+export type THitlOption = {
+  optionId: string;
+  label: string;
+  metadata: Record<string, any>;
+};
+
+export type THitlRequest = {
+  requestId: string;
+  type: THitlRequestType;
+  toolId: string | null;
+  toolName: string | null;
+  question: string;
+  context: Record<string, any>;
+  options: THitlOption[];
+  createdAt: string;
+};
+
+export type THitlResolution = {
+  requestId: string;
+  selectedOption: string;
+  modifiedArgs?: Record<string, any>;
+  userInput?: string;
+  resolvedAt?: string;
+};
+
+export type THitlRequestItem = {
+  request: THitlRequest;
+  resolution?: THitlResolution;
+};
+
 export type TChatkitData = {
   chatkitConversation?: TItemState<TChatkitConversationTask[]>;
   messagesMap?: Record<string, TItemState<TChatkitConversationTaskMessage>>;
   stepPlanItemsMap?: Record<string, TItemState<TStepPlanItem[]>>;
   stepPlanItemsOpenMap?: Record<string, boolean>;
+  hitlRequestsMap?: Record<string, THitlRequestItem>;
   LLMs?: TItemState<TChatkitLLMItem[]>;
   chatkitAgent?: TItemState<TChatkitAgent>;
 };

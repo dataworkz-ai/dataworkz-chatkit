@@ -23,6 +23,7 @@
               [class.dw-step-status-completed]="item.status === 'completed'"
               [class.dw-step-status-in-progress]="item.status === 'in_progress'"
               [class.dw-step-status-failed]="item.status === 'failed'"
+              [class.dw-step-status-pending]="item.status === 'pending'"
             >
               @if (item.status === 'completed') {
                 <dw-check-circle-icon />
@@ -74,6 +75,7 @@
                   [class.dw-step-status-completed]="item.planning.status === 'completed'"
                   [class.dw-step-status-in-progress]="item.planning.status === 'in_progress'"
                   [class.dw-step-status-failed]="item.planning.status === 'failed'"
+                  [class.dw-step-status-pending]="item.planning.status === 'pending'"
                 >
                   @if (item.planning.status === 'completed') {
                     <dw-check-circle-icon />
@@ -127,6 +129,7 @@
                   [class.dw-step-status-completed]="item.agentResponse.status === 'completed'"
                   [class.dw-step-status-in-progress]="item.agentResponse.status === 'in_progress'"
                   [class.dw-step-status-failed]="item.agentResponse.status === 'failed'"
+                  [class.dw-step-status-pending]="item.agentResponse.status === 'pending'"
                 >
                   @if (item.agentResponse.status === 'completed') {
                     <dw-check-circle-icon />
@@ -180,6 +183,7 @@
             [class.dw-step-status-completed]="execution.status === 'completed'"
             [class.dw-step-status-in-progress]="execution.status === 'in_progress'"
             [class.dw-step-status-failed]="execution.status === 'failed'"
+            [class.dw-step-status-pending]="execution.status === 'pending'"
           >
             @if (execution.status === 'completed') {
               <dw-check-circle-icon />

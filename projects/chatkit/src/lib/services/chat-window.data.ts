@@ -5,6 +5,7 @@ import {
   TChatkitConversationTask,
   TChatkitConversationTaskMessage,
   TChatkitLLMItem,
+  THitlRequestItem,
   TStepPlanItem,
 } from '../typings/data';
 import {
@@ -43,6 +44,7 @@ export class ChatWindowDataService {
   >({});
   private readonly _stepPlanItemsMap = signal<Record<string, TItemState<TStepPlanItem[]>>>({});
   private readonly _stepPlanItemsOpenMap = signal<Record<string, boolean>>({});
+  private readonly _hitlRequestsMap = signal<Record<string, THitlRequestItem>>({});
 
   // readonly getters
   readonly chatkitFlags = computed<TChatkitFlags>(() => this._chatkitFlags());
@@ -61,6 +63,9 @@ export class ChatWindowDataService {
   );
   readonly stepPlanItemsOpenMap = computed<Record<string, boolean>>(() =>
     this._stepPlanItemsOpenMap(),
+  );
+  readonly hitlRequestsMap = computed<Record<string, THitlRequestItem>>(() =>
+    this._hitlRequestsMap(),
   );
   readonly chatkitFooter = computed<TChatkitFooter>(() => this._chatkitFooter());
   readonly chatkitScroll = computed<TChatkitScroll | undefined>(() => this._chatkitScroll());
@@ -92,6 +97,9 @@ export class ChatWindowDataService {
   }
   setStepPlanItemsOpenMap(value: Record<string, boolean>) {
     this._stepPlanItemsOpenMap.set(value);
+  }
+  setHitlRequestsMap(value: Record<string, THitlRequestItem>) {
+    this._hitlRequestsMap.set(value);
   }
   setChatkitFooter(value: TChatkitFooter) {
     this._chatkitFooter.set(value);

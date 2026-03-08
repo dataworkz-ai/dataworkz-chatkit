@@ -4,6 +4,7 @@ $step-border-color: #d1d5db;
 $step-completed-color: #16a34a;
 $step-in-progress-color: #6b7280;
 $step-failed-color: #dc2626;
+$step-pending-color: #f59e0b;
 $step-thought-bg: #f9fafb;
 $steps-background: #fff;
 
@@ -60,6 +61,10 @@ $steps-background: #fff;
 
     &-failed {
       color: $step-failed-color;
+    }
+
+    &-pending {
+      color: $step-pending-color;
     }
   }
 

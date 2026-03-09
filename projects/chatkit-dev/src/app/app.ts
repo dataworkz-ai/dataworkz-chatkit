@@ -16,6 +16,7 @@ import {
   TChatkitFlags,
   TChatkitProps,
   TChatkitFooter,
+  THitlRequestItem,
 } from 'dw-chatkit';
 import {
   LLMsResponse,
@@ -90,10 +91,10 @@ export class App {
   private readonly _chatkitConversation = signal<TItemState<TChatkitConversationTask[]>>({
     loading: false,
     error: '',
-    value: selectedConversationResponse.tasks.map((t) => [
-      t.history[0].messageID,
-      t.history[1].messageID,
-    ]),
+    value: selectedConversationResponse.tasks.map((t) => ({
+      taskId: t.id,
+      messageIds: t.history.map((h) => h.messageID),
+    })),
   });
 
   private readonly _LLMs = signal<TItemState<TChatkitLLMItem[]>>({
@@ -107,19 +108,54 @@ export class App {
   >(
     selectedConversationResponse.tasks.reduce(
       (res: Record<string, TItemState<TChatkitConversationTaskMessage>>, cur) => {
-        cur.history.forEach((message) => {
+        cur.history.forEach((message: any) => {
           res[message.messageID] = {
             loading: false,
             error: '',
             value: {
               role: message.role as any,
               parts: message.parts as (TMessageTextPart | TMessageDataPart)[],
+              hitlRequestIds: message.metadata?.hitlRequests?.map((r: any) => r.requestId) || [],
             },
           };
         });
         return res;
       },
-      {},
+      {} as Record<string, TItemState<TChatkitConversationTaskMessage>>,
+    ),
+  );
+
+  private readonly _hitlRequestsMap = signal<Record<string, THitlRequestItem>>(
+    selectedConversationResponse.tasks.reduce(
+      (res: Record<string, THitlRequestItem>, cur) => {
+        cur.history.forEach((message: any) => {
+          message?.metadata?.hitlRequests?.forEach?.((hitlRequest: any) => {
+            res[hitlRequest.requestId] = {
+              request: hitlRequest,
+              resolution: (() => {
+                let resolution = undefined;
+                selectedConversationResponse.tasks.forEach((task: any) => {
+                  task.history.forEach((m: any) => {
+                    m?.metadata?.HITL_Resolutions?.forEach((resol: any) => {
+                      if (resol.requestId === hitlRequest.requestId) {
+                        resolution = resol;
+                      }
+                    });
+                    m?.metadata?.appliedHITLResolutions?.forEach((appliedResolution: any) => {
+                      if (appliedResolution?.request?.requestId === hitlRequest.requestId) {
+                        resolution = appliedResolution?.resolution;
+                      }
+                    });
+                  });
+                });
+                return resolution;
+              })(),
+            };
+          });
+        });
+        return res;
+      },
+      {} as Record<string, THitlRequestItem>,
     ),
   );
 
@@ -155,6 +191,7 @@ export class App {
     chatkitConversation: this._chatkitConversation(),
     LLMs: this._LLMs(),
     chatkitAgent: this._chatkitAgent(),
+    hitlRequestsMap: this._hitlRequestsMap(),
   }));
 
   private readonly _chatkitCitation = signal<TChatkitCitation>({
@@ -256,7 +293,8 @@ export class App {
     },
   }));
 
-  onViewSteps(messageId: string) {
+  onViewSteps({ taskId, messageId }: { taskId: string; messageId: string }) {
+    console.log('onViewSteps', { taskId, messageId });
     this._stepPlanItemsOpenMap.update((prev) => {
       return { ...prev, [messageId]: !prev[messageId] };
     });
@@ -278,7 +316,7 @@ export class App {
     this._chatkitConversation.update((prev) => {
       return {
         ...prev,
-        value: [...prev.value, ['2222', '3333']],
+        value: [...prev.value, { taskId: 'new-task', messageIds: ['2222', '3333'] }],
       };
     });
     this._messagesMap.update((prev) => {
@@ -354,4 +392,21 @@ export class App {
   onFeedback(data: any) {
     console.log('onfeedback', data);
   }
+
+  onHitlResolve(data: { taskId: string; messageId: string; requestId: string; resolution: any }) {
+    console.log('onHitlResolve', data);
+    // Update the hitlRequestsMap with the resolution to show "Provided" state
+    this._hitlRequestsMap.update((prev) => {
+      const item = prev[data.requestId];
+      if (!item) return prev;
+      return {
+        ...prev,
+        [data.requestId]: {
+          ...item,
+          resolution: data.resolution,
+        },
+      };
+    });
+  }
+
 }

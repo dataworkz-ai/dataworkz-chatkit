@@ -10,11 +10,20 @@ import { HitlSection } from './hitl-section/hitl-section';
 
 @Component({
   selector: 'dw-ai-message',
-  imports: [MarkdownViewer, AiMessageFooter, AiFileItem, Skeleton, AgentAvatarIcon, AiDataItem, HitlSection],
+  imports: [
+    MarkdownViewer,
+    AiMessageFooter,
+    AiFileItem,
+    Skeleton,
+    AgentAvatarIcon,
+    AiDataItem,
+    HitlSection,
+  ],
   templateUrl: './ai-message.html',
   styleUrl: './ai-message.scss',
 })
 export class AiMessage {
+  readonly taskId = input<string>('');
   readonly messageId = input<string>('');
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -43,7 +52,7 @@ export class AiMessage {
   });
   readonly hasHitlRequests = computed(() => {
     const msg = this.chatWindowDataService.messagesMap()[this.messageId()]?.value;
-    return !!(msg?.metadata?.hitlRequests?.length);
+    return !!msg?.hitlRequestIds?.length;
   });
 
   readonly isHighlighted = computed(() => {

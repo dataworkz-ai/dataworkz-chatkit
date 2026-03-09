@@ -1064,6 +1064,143 @@ export const selectedConversationResponse = {
         },
       ],
     },
+    {
+      id: 'hitl-task-pending',
+      history: [
+        {
+          messageID: 'hitl-user-msg-1',
+          role: 'USER',
+          parts: [{ kind: 'text', text: 'Run the data cleanup and enrichment pipeline' }],
+        },
+        {
+          messageID: 'hitl-agent-pending',
+          role: 'AGENT',
+          parts: [{ kind: 'text', text: '' }],
+          metadata: {
+            hitlRequests: [
+              {
+                requestId: 'hitl-clarify-resolved',
+                type: 'CLARIFICATION_REQUIRED',
+                toolId: 'export-tool',
+                toolName: 'Export Data',
+                question: 'Which format should the export use?',
+                context: {},
+                options: [
+                  { optionId: 'csv', label: 'CSV', metadata: {} },
+                  { optionId: 'json', label: 'JSON', metadata: {} },
+                  { optionId: 'parquet', label: 'Parquet', metadata: {} },
+                ],
+                createdAt: '2026-03-08T09:15:00Z',
+              },
+              {
+                requestId: 'hitl-approval-resolved',
+                type: 'APPROVAL_REQUIRED',
+                toolId: 'deploy-tool',
+                toolName: 'Deploy Service',
+                question: 'The agent wants to deploy version 2.4.1 to production. Do you approve?',
+                context: {
+                  service: 'payment-gateway',
+                  version: '2.4.1',
+                  environment: 'production',
+                },
+                options: [],
+                createdAt: '2026-03-08T09:00:00Z',
+              },
+              {
+                requestId: 'hitl-input-resolved',
+                type: 'INPUT_REQUIRED',
+                toolId: 'config-tool',
+                toolName: 'Update Config',
+                question: 'What should the maximum retry count be for failed API calls?',
+                context: {},
+                options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
+                createdAt: '2026-03-08T09:10:00Z',
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      id: 'hitl-task-resolved',
+      history: [
+        {
+          messageID: 'hitl-user-msg-2',
+          role: 'USER',
+          parts: [{ kind: 'text', text: 'Deploy the payment service and export the report' }],
+          metadata: {
+            HITL_Resolutions: [
+              {
+                requestId: 'hitl-approval-resolved',
+                selectedOption: 'approve',
+                resolvedAt: '2026-03-08T09:05:00Z',
+              },
+              {
+                requestId: 'hitl-input-resolved',
+                selectedOption: 'provide',
+                userInput: '5',
+                resolvedAt: '2026-03-08T09:12:00Z',
+              },
+              {
+                requestId: 'hitl-clarify-resolved',
+                selectedOption: 'csv',
+                resolvedAt: '2026-03-08T09:16:00Z',
+              },
+            ],
+          },
+        },
+        {
+          messageID: 'hitl-agent-resolved',
+          role: 'AGENT',
+          parts: [{ kind: 'text', text: 'All actions have been completed successfully.' }],
+          metadata: {
+            hitlRequests: [
+              {
+                requestId: 'hitl-approval-1',
+                type: 'APPROVAL_REQUIRED',
+                toolId: 'delete-records-tool',
+                toolName: 'Delete Records',
+                question:
+                  'The agent wants to delete 47 customer records from the staging database. Do you approve this action?',
+                context: {
+                  database: 'staging_db',
+                  table: 'customers',
+                  recordCount: '47',
+                  filter: "status = 'inactive' AND last_login < '2025-01-01'",
+                },
+                options: [],
+                createdAt: '2026-03-08T10:00:00Z',
+              },
+              {
+                requestId: 'hitl-input-1',
+                type: 'INPUT_REQUIRED',
+                toolId: 'join-tool',
+                toolName: 'Join Data Sources',
+                question:
+                  'Please provide the API key for the external weather service to proceed with data enrichment.',
+                context: {},
+                options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
+                createdAt: '2026-03-08T10:01:00Z',
+              },
+              {
+                requestId: 'hitl-clarify-1',
+                type: 'CLARIFICATION_REQUIRED',
+                toolId: 'report-tool',
+                toolName: 'Generate Report',
+                question: 'Which time range should be used for the quarterly revenue report?',
+                context: {},
+                options: [
+                  { optionId: 'q1', label: 'Q1 2026 (Jan - Mar)', metadata: {} },
+                  { optionId: 'q4', label: 'Q4 2025 (Oct - Dec)', metadata: {} },
+                  { optionId: 'last-90', label: 'Last 90 days', metadata: {} },
+                ],
+                createdAt: '2026-03-08T10:02:00Z',
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };
 

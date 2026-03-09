@@ -5,7 +5,7 @@
       <strong>{{ requestCount() }} request(s)</strong>
     </div>
     @for (requestId of hitlRequestIds(); track requestId) {
-      <dw-hitl-request-card [requestId]="requestId" [messageId]="messageId()" />
+      <dw-hitl-request-card [taskId]="taskId()" [requestId]="requestId" [messageId]="messageId()" />
     }
   </div>
 }

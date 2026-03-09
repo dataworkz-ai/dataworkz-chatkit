@@ -17,9 +17,9 @@
             }
           </div>
         } @else if (!!chatkitConversation()?.length) {
-          @for (task of chatkitConversation(); track task) {
-            @for (messageId of task; track messageId) {
-              <dw-chat-message [messageId]="messageId"></dw-chat-message>
+          @for (task of chatkitConversation(); track task.taskId) {
+            @for (messageId of task.messageIds; track messageId) {
+              <dw-chat-message [taskId]="task.taskId" [messageId]="messageId"></dw-chat-message>
             }
           }
         } @else {

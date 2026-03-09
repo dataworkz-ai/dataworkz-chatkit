@@ -93,11 +93,6 @@ export class Chatkit {
       },
     });
 
-    this.chatWindowEventsService.hitlCancel$.subscribe({
-      next: (value) => {
-        this.hitlCancel.emit(value);
-      },
-    });
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -144,23 +139,24 @@ export class Chatkit {
   @Output() sendMessage = new EventEmitter<string>();
   @Output() userMessageChange = new EventEmitter<{ event: Event; text: string }>();
   @Output() selectLLM = new EventEmitter<string>();
-  @Output() viewSteps = new EventEmitter<string>();
+  @Output() viewSteps = new EventEmitter<{ taskId: string; messageId: string }>();
   @Output() selectDataStore = new EventEmitter<void>();
   @Output() removeUserFile = new EventEmitter<string>();
   @Output() selectFile = new EventEmitter<TMessageFile | undefined>();
   @Output() selectAiFile = new EventEmitter<IMessageFilePart>();
   @Output() selectComputerUpload = new EventEmitter<File[]>();
-  @Output() viewProbe = new EventEmitter<string>();
+  @Output() viewProbe = new EventEmitter<{ taskId: string; messageId: string }>();
   @Output() feedback = new EventEmitter<{
+    taskId: string;
     messageId: string;
     thumbsUpOrDown?: number;
     additionalFeedback?: TAdditionalFeedback;
   }>();
   @Output() scrollComplete = new EventEmitter<void>();
   @Output() hitlResolve = new EventEmitter<{
+    taskId: string;
     messageId: string;
     requestId: string;
     resolution: THitlResolution;
   }>();
-  @Output() hitlCancel = new EventEmitter<{ messageId: string }>();
 }

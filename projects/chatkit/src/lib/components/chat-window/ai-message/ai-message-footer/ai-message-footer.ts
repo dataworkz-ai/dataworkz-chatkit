@@ -15,6 +15,7 @@ import { AiMessageFeedback } from './ai-message-feedback/ai-message-feedback';
   styleUrl: './ai-message-footer.scss',
 })
 export class AiMessageFooter {
+  @Input({ required: true }) taskId!: string;
   @Input({ required: true }) messageId!: string;
 
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
@@ -74,10 +75,10 @@ export class AiMessageFooter {
     if (!this.messagePresent()) {
       return;
     }
-    this.chatWindowEventsService.viewSteps$.next(this.messageId);
+    this.chatWindowEventsService.viewSteps$.next({ taskId: this.taskId, messageId: this.messageId });
   }
 
   onViewProbe() {
-    this.chatWindowEventsService.viewProbe$.next(this.messageId);
+    this.chatWindowEventsService.viewProbe$.next({ taskId: this.taskId, messageId: this.messageId });
   }
 }

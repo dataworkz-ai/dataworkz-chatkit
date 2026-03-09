@@ -89,10 +89,7 @@ export type TChatkitConversationTaskMessage = {
   parts: (TMessageTextPart | TMessageDataPart | IMessageFilePart)[];
   thumbsUpOrDown?: number;
   additionalFeedback?: TAdditionalFeedback;
-  metadata?: {
-    hitlRequests?: string[];
-    [key: string]: any;
-  };
+  hitlRequestIds?: string[];
 };
 
 export type TChatkitLLMItem = {
@@ -111,7 +108,10 @@ export type TMessageFile = {
   ingestUuid?: string;
 };
 
-export type TChatkitConversationTask = string[];
+export type TChatkitConversationTask = {
+  taskId: string;
+  messageIds: string[];
+};
 
 // HITL Types
 export type THitlRequestType =

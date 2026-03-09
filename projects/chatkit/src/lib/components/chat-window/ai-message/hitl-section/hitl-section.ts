@@ -10,13 +10,14 @@ import { HitlRequestCard } from './hitl-request-card/hitl-request-card';
   styleUrl: './hitl-section.scss',
 })
 export class HitlSection {
+  readonly taskId = input.required<string>();
   readonly messageId = input.required<string>();
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
 
   readonly hitlRequestIds = computed(() => {
     const msg = this.chatWindowDataService.messagesMap()[this.messageId()]?.value;
-    return msg?.metadata?.hitlRequests || [];
+    return msg?.hitlRequestIds || [];
   });
 
   readonly requestCount = computed(() => this.hitlRequestIds().length);

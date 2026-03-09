@@ -34,11 +34,12 @@ import {
     @if (role() === 'USER') {
       <dw-user-message [attr.id]="messageId()" [messageId]="messageId()"></dw-user-message>
     } @else {
-      <dw-ai-message [attr.id]="messageId()" [messageId]="messageId()"></dw-ai-message>
+      <dw-ai-message [attr.id]="messageId()" [taskId]="taskId()" [messageId]="messageId()"></dw-ai-message>
     }
   `,
 })
 export class ChatMessage {
+  taskId = input<string>('');
   messageId = input<string>('');
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);

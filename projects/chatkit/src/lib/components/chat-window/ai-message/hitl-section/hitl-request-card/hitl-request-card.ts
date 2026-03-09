@@ -1,16 +1,17 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { ChatWindowDataService } from '../../../../../services/chat-window.data';
 import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
-import { CheckCircleIcon, CircleIcon, StopIcon } from '../../../../icons';
+import { CheckCircleIcon, CircleIcon } from '../../../../icons';
 
 @Component({
   selector: 'dw-hitl-request-card',
   standalone: true,
-  imports: [CheckCircleIcon, CircleIcon, StopIcon],
+  imports: [CheckCircleIcon, CircleIcon],
   templateUrl: './hitl-request-card.html',
   styleUrl: './hitl-request-card.scss',
 })
 export class HitlRequestCard {
+  readonly taskId = input.required<string>();
   readonly requestId = input.required<string>();
   readonly messageId = input.required<string>();
 
@@ -81,10 +82,6 @@ export class HitlRequestCard {
     this.emitResolution(selectedId);
   }
 
-  onCancel() {
-    this.chatWindowEventsService.hitlCancel$.next({ messageId: this.messageId() });
-  }
-
   onInputKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.onConfirmInput();
@@ -93,6 +90,7 @@ export class HitlRequestCard {
 
   private emitResolution(selectedOption: string, userInput?: string) {
     this.chatWindowEventsService.hitlResolve$.next({
+      taskId: this.taskId(),
       messageId: this.messageId(),
       requestId: this.requestId(),
       resolution: {

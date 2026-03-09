@@ -30,12 +30,12 @@
           }
         }
         @if (hasHitlRequests()) {
-          <dw-hitl-section [messageId]="messageId()" />
+          <dw-hitl-section [taskId]="taskId()" [messageId]="messageId()" />
         }
       }
     </div>
   </div>
   @if (showFooter()) {
-    <dw-ai-message-footer [messageId]="messageId()"></dw-ai-message-footer>
+    <dw-ai-message-footer [taskId]="taskId()" [messageId]="messageId()"></dw-ai-message-footer>
   }
 </div>

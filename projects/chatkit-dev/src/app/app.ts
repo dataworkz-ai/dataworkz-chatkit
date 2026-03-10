@@ -65,10 +65,7 @@ export class CitationLink {
 })
 export class App {
   constructor() {
-    // const messageIds = [
-    //   'ab120e4c-d96d-4f75-b7ef-065c99f2471d',
-    //   '7cea6815-1438-4500-863a-5c705253bc6c',
-    // ];
+    // const messageIds = ['9b1bd561-233a-4814-b1a1-db36d9363817'];
     // let idx = 0;
     // window.setInterval(() => {
     //   this._chatkitProps.update((prev) => {
@@ -215,7 +212,6 @@ export class App {
   private readonly _chatkitProps = signal<TChatkitProps>({
     placeholder: 'Ask me anything...',
     selectedLLMId: LLMsResponse.find((llm) => llm.defaultLLM)?.identifier || '',
-    userInitials: '',
     highlightMessageId: '',
   });
 
@@ -285,10 +281,10 @@ export class App {
     chatkitFlags: this._chatkitFlags(),
     chatkitProps: this._chatkitProps(),
     chatkitFooter: this._chatkitFooter(),
-    chatkitScroll: {
-      type: 'bottom',
-      behavior: 'smooth',
-    },
+    // chatkitScroll: {
+    //   type: 'bottom',
+    //   behavior: 'smooth',
+    // },
   }));
 
   onViewSteps({ taskId, messageId }: { taskId: string; messageId: string }) {

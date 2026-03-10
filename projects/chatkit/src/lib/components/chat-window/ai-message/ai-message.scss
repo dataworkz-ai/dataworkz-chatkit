@@ -1,35 +1,21 @@
 .dw-ai-message-container {
   border-radius: 1rem;
-  background: #f3f4f6;
 
   .dw-ai-message {
-    padding: 1rem;
+    padding: 0rem 1rem;
     border-radius: 1rem;
-    background-color: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    background-color: #ffffff;
     overflow-x: auto;
     display: flex;
-    justify-content: left;
     align-items: flex-start;
-    gap: 1rem;
 
     &.dw-ai-message-highlighted {
       background-color: #cee0f5;
     }
 
-    .dw-ai-message-avatar {
-      height: 2.5rem;
-      width: 2.5rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
     .dw-ai-message-content {
       flex-grow: 1;
-      width: 1px;
+      width: 100%;
       .dw-ai-message-error {
         color: red;
       }
@@ -39,22 +25,10 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        padding-right: 1rem;
+        padding-right: 0.5rem;
+        padding-top: 0rem;
+        padding-bottom: 0.75rem;
       }
-    }
-  }
-
-  .dw-ai-message-footer {
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #0b66ce;
-
-    .dw-ai-message-footer-link {
-      font-size: 12px;
-      font-weight: 500;
-      color: #0b66ce;
     }
   }
 }

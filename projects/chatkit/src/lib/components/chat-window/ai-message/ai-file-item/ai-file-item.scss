@@ -14,11 +14,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
-  &.pdf {
-    max-width: 100%;
-    width: 320px;
-  }
-
   .dw-ai-image-container {
     position: relative;
     display: flex;
@@ -78,34 +73,6 @@
         color: #64748b;
         background-color: #ffffff;
         transform: scale(1.1);
-      }
-    }
-  }
-
-  .dw-ai-pdf-container {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    gap: 1rem;
-
-    .dw-pdf-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-
-      .dw-pdf-name {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: #334155;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        max-width: 200px;
-      }
-
-      .dw-pdf-size {
-        font-size: 0.75rem;
-        color: #64748b;
       }
     }
   }

@@ -21,3 +21,4 @@ export { UploadIcon } from './upload-icon';
 export { CloseIcon } from './close-icon';
 export { CopyIcon } from './copy-icon';
 export { DownloadIcon } from './download-icon';
+export { CheckIcon } from './check-icon';

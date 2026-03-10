@@ -1,0 +1,11 @@
+@if (hasRequests()) {
+  <div class="dw-hitl-section">
+    <div class="dw-hitl-header">
+      User response required-
+      <strong>{{ requestCount() }} request(s)</strong>
+    </div>
+    @for (requestId of hitlRequestIds(); track requestId) {
+      <dw-hitl-request-card [taskId]="taskId()" [requestId]="requestId" [messageId]="messageId()" />
+    }
+  </div>
+}

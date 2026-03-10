@@ -1,0 +1,318 @@
+$hitl-blue: #0369a1;
+$hitl-text: #374151;
+$hitl-border: #d1d5db;
+
+.dw-hitl-card {
+  background: linear-gradient(to right, #ffffff, #f8fafc);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.dw-hitl-card.dw-hitl-card-provided {
+  .dw-hitl-content {
+    border-left: 2px solid $hitl-border;
+  }
+}
+
+.dw-hitl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dw-hitl-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dw-hitl-pending-icon {
+  color: $hitl-blue;
+}
+
+.dw-hitl-provided-icon {
+  color: $hitl-blue;
+}
+
+.dw-hitl-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: currentColor;
+  margin: 0rem 3px;
+}
+
+.dw-hitl-type-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $hitl-text;
+}
+
+.dw-hitl-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.dw-hitl-badge-pending {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.dw-hitl-badge-provided {
+  background: #e0f2fe;
+  color: $hitl-blue;
+}
+
+.dw-hitl-content {
+  border-left: 2px solid $hitl-blue;
+  padding-left: 0.75rem;
+  margin-left: 0.375rem;
+}
+
+.dw-hitl-question {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.5;
+}
+
+.dw-hitl-context-list {
+  list-style: disc;
+  padding: 0 0 0 1.25rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.6;
+
+  li {
+    padding: 0.125rem 0;
+
+    strong {
+      color: $hitl-text;
+    }
+  }
+}
+
+.dw-hitl-context-json {
+  margin: 0.25rem 0 0 0;
+  padding: 0.5rem 0.75rem;
+  background: #f9fafb;
+  border: 1px solid $hitl-border;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: $hitl-text;
+  line-height: 1.5;
+}
+
+// Editable args (APPROVAL_WITH_MODIFICATIONS)
+.dw-hitl-args-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dw-hitl-arg-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dw-hitl-arg-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: $hitl-text;
+}
+
+.dw-hitl-arg-value {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.dw-hitl-text-input-disabled {
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.dw-hitl-arg-modified {
+  border-color: $hitl-blue;
+  background: #f0f9ff;
+  color: $hitl-text;
+}
+
+.dw-hitl-args-provided {
+  opacity: 0.9;
+}
+
+.dw-hitl-args-readonly {
+  opacity: 0.8;
+
+  .dw-hitl-arg-entry {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+}
+
+// Action buttons
+.dw-hitl-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.dw-hitl-btn {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.dw-hitl-btn-approve {
+  background: $hitl-blue;
+  color: #fff;
+
+  &:hover {
+    background: #1c63b5;
+  }
+}
+
+.dw-hitl-btn-reject {
+  background: #fff;
+  color: $hitl-text;
+  border-color: $hitl-border;
+
+  &:hover {
+    background: #f9fafb;
+  }
+}
+
+.dw-hitl-btn-confirm {
+  background: $hitl-blue;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: #1c63b5;
+  }
+}
+
+// Input required - vertical layout
+.dw-hitl-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .dw-hitl-btn-confirm {
+    align-self: flex-start;
+  }
+}
+
+.dw-hitl-text-input {
+  width: 100%;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid $hitl-border;
+  border-radius: 0.375rem;
+  outline: none;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $hitl-blue;
+    box-shadow: 0 0 0 2px rgba(35, 117, 211, 0.15);
+  }
+}
+
+// Clarification required
+.dw-hitl-clarification-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .dw-hitl-btn-confirm {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+  }
+}
+
+.dw-hitl-radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: $hitl-text;
+  cursor: pointer;
+
+  input[type='radio'] {
+    accent-color: $hitl-blue;
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.dw-hitl-radio-disabled {
+  cursor: default;
+  opacity: 0.7;
+
+  input[type='radio'] {
+    cursor: default;
+  }
+}
+
+.dw-hitl-clarification-disabled {
+  opacity: 0.7;
+}
+
+.dw-hitl-clarify-input {
+  margin-top: 0.25rem;
+}
+
+// Resolved answer bubble (clarification + input)
+.dw-hitl-resolved-bubble {
+  margin-top: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #b6d1f0;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: $hitl-text;
+  text-align: right;
+  margin-left: auto;
+  width: fit-content;
+  max-width: 100%;
+}
+
+// Resolved action for approval (button style)
+.dw-hitl-resolved-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.dw-hitl-resolved-btn {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #b6d1f0;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: $hitl-text;
+  text-transform: capitalize;
+}

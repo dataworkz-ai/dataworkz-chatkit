@@ -49,7 +49,6 @@ export class AiFileItem {
   });
 
   readonly isImage = computed(() => this.mimeType().startsWith('image/'));
-  readonly isPdf = computed(() => this.mimeType() === 'application/pdf');
 
   readonly fileName = computed(() => {
     return this.file().fileName || this.file().name || 'File';

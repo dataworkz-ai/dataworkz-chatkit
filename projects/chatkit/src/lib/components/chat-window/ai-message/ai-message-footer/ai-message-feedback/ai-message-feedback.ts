@@ -37,6 +37,7 @@ import { ChatWindowDataService } from '../../../../../services/chat-window.data'
   styleUrl: './ai-message-feedback.scss',
 })
 export class AiMessageFeedback {
+  taskId = input.required<string>();
   messageId = input.required<string>();
   type = input.required<'up' | 'down'>();
   thumbsUpOrDown = input<number | undefined>();
@@ -124,6 +125,7 @@ export class AiMessageFeedback {
 
   private sendCurrentState = () => {
     this.chatWindowEventsService.feedback$.next({
+      taskId: this.taskId(),
       messageId: this.messageId(),
       thumbsUpOrDown: this.type() === 'up' ? 1 : -1,
       additionalFeedback: {

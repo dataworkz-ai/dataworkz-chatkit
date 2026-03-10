@@ -3,7 +3,7 @@ import { ChatWindow } from './components/chat-window/chat-window';
 import { ChatWindowDataService } from './services/chat-window.data';
 import { ChatWindowEventsService } from './services/chat-window.events';
 import { TChatkitConfig } from './typings/config';
-import { TMessageFile, TChatkitData, IMessageFilePart, TAdditionalFeedback } from './typings/data';
+import { TMessageFile, TChatkitData, IMessageFilePart, TAdditionalFeedback, THitlResolution } from './typings/data';
 
 @Component({
   selector: 'dw-chatkit',
@@ -83,9 +83,16 @@ export class Chatkit {
 
     this.chatWindowEventsService.scrollComplete$.subscribe({
       next: () => {
-        this.viewProbe.emit();
+        this.scrollComplete.emit();
       },
     });
+
+    this.chatWindowEventsService.hitlResolve$.subscribe({
+      next: (value) => {
+        this.hitlResolve.emit(value);
+      },
+    });
+
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -126,22 +133,30 @@ export class Chatkit {
     this.chatWindowDataService.setMessagesMap(chatkitData?.messagesMap || {});
     this.chatWindowDataService.setStepPlanItemsMap(chatkitData?.stepPlanItemsMap || {});
     this.chatWindowDataService.setStepPlanItemsOpenMap(chatkitData?.stepPlanItemsOpenMap || {});
+    this.chatWindowDataService.setHitlRequestsMap(chatkitData?.hitlRequestsMap || {});
   }
 
   @Output() sendMessage = new EventEmitter<string>();
   @Output() userMessageChange = new EventEmitter<{ event: Event; text: string }>();
   @Output() selectLLM = new EventEmitter<string>();
-  @Output() viewSteps = new EventEmitter<string>();
+  @Output() viewSteps = new EventEmitter<{ taskId: string; messageId: string }>();
   @Output() selectDataStore = new EventEmitter<void>();
   @Output() removeUserFile = new EventEmitter<string>();
   @Output() selectFile = new EventEmitter<TMessageFile | undefined>();
   @Output() selectAiFile = new EventEmitter<IMessageFilePart>();
   @Output() selectComputerUpload = new EventEmitter<File[]>();
-  @Output() viewProbe = new EventEmitter<string>();
+  @Output() viewProbe = new EventEmitter<{ taskId: string; messageId: string }>();
   @Output() feedback = new EventEmitter<{
+    taskId: string;
     messageId: string;
     thumbsUpOrDown?: number;
     additionalFeedback?: TAdditionalFeedback;
   }>();
   @Output() scrollComplete = new EventEmitter<void>();
+  @Output() hitlResolve = new EventEmitter<{
+    taskId: string;
+    messageId: string;
+    requestId: string;
+    resolution: THitlResolution;
+  }>();
 }

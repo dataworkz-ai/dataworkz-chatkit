@@ -1,23 +1,14 @@
 <div class="dw-user-message">
-  @if (userInitials()) {
-    <div class="dw-user-message-avatar">
-      <p>{{ userInitials() }}</p>
-    </div>
-  } @else {
-    <div class="dw-user-message-avatar">
-      <dw-profile-icon />
-    </div>
-  }
-  <div class="dw-user-message-parts">
+  <div class="dw-user-message-bubble">
     @for (part of parts(); track part) {
-      @if (part.kind === 'data' && !!part.data?.files?.length) {
+      @if (part.kind === 'text') {
+        <p class="dw-user-message-text">{{ part.text }}</p>
+      } @else if (part.kind === 'data' && !!part.data?.files?.length) {
         <div class="dw-user-message-files">
           @for (file of part.data!.files; track file) {
             <dw-file-item [messageFile]="file" (click)="onClick(file)"></dw-file-item>
           }
         </div>
-      } @else if (part.kind === 'text') {
-        <p class="dw-user-message-text">{{ part.text }}</p>
       }
     }
   </div>

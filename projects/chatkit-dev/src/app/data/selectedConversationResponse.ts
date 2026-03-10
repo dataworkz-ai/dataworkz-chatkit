@@ -293,7 +293,7 @@ export const selectedConversationResponse = {
                 question:
                   'The agent wants to send an email. Please review and modify the parameters if needed.',
                 context: {
-                  reason: 'Follow-up to last week\'s meeting',
+                  reason: "Follow-up to last week's meeting",
                   triggeredBy: 'scheduledWorkflow',
                   priority: 'high',
                   args: {
@@ -397,9 +397,7 @@ export const selectedConversationResponse = {
         {
           messageID: 'hitl-agent-resolved',
           role: 'AGENT',
-          parts: [
-            { kind: 'text', text: 'All actions have been completed successfully.' },
-          ],
+          parts: [{ kind: 'text', text: 'All actions have been completed successfully.' }],
           metadata: {
             hitlRequests: [
               // 1. APPROVAL_REQUIRED — resolved
@@ -408,8 +406,7 @@ export const selectedConversationResponse = {
                 type: 'APPROVAL_REQUIRED',
                 toolId: 'deploy-tool',
                 toolName: 'Deploy Service',
-                question:
-                  'The agent wants to deploy version 2.4.1 to production. Do you approve?',
+                question: 'The agent wants to deploy version 2.4.1 to production. Do you approve?',
                 context: {
                   service: 'payment-gateway',
                   version: '2.4.1',

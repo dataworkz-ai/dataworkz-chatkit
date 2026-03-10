@@ -2,6 +2,12 @@ $hitl-blue: #0369a1;
 $hitl-text: #374151;
 $hitl-border: #d1d5db;
 
+.dw-hitl-card {
+  background: linear-gradient(to right, #ffffff, #f8fafc);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
 .dw-hitl-card.dw-hitl-card-provided {
   .dw-hitl-content {
     border-left: 2px solid $hitl-border;
@@ -310,4 +316,3 @@ $hitl-border: #d1d5db;
   color: $hitl-text;
   text-transform: capitalize;
 }
-

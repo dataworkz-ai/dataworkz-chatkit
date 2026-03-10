@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IMessageFilePart, TAdditionalFeedback, THitlResolution, TMessageFile } from '../typings/data';
+import { TAdditionalFeedback, THitlResolution, TMessageFile } from '../typings/data';
 
 @Injectable()
 export class ChatWindowEventsService {
@@ -12,7 +12,6 @@ export class ChatWindowEventsService {
   readonly selectDataStore$ = new Subject<void>();
   readonly removeUserFile$ = new Subject<string>();
   readonly selectComputerUpload$ = new Subject<File[]>();
-  readonly selectAiFile$ = new Subject<IMessageFilePart>();
   readonly selectFile$ = new Subject<TMessageFile | undefined>();
   readonly feedback$ = new Subject<{
     taskId: string;

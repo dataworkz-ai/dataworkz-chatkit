@@ -16,9 +16,14 @@
       </div>
     </div>
   } @else {
-    <div class="dw-ai-generic-file" (click)="onItemClick()">
+    <div class="dw-ai-generic-file">
       <dw-file-icon [size]="20" [fileName]="fileName()" />
       <span>{{ fileName() }}</span>
+      <div class="dw-ai-file-actions">
+        <button class="dw-ai-file-action" (click)="downloadFile($event)" title="Download">
+          <dw-download-icon [size]="16" />
+        </button>
+      </div>
     </div>
   }
 </div>

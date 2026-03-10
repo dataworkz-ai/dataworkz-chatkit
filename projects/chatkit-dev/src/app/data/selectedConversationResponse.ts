@@ -113,6 +113,16 @@ export const selectedConversationResponse = {
             {
               kind: 'file',
               file: {
+                mimeType: 'text/csv',
+                name: 'csv-file',
+                bytes:
+                  'U25hbWUsQWdlLFByb2Zlc3Npb24KU2FyYWggSm9uZXMsMzAsdGVhY2hlcgpBc2hpc2ggQW10ZSw0NCxlbmdpbmVlcgpTdXJlc2ggSW5ubywyMyxzYWxlcw==',
+              },
+              metadata: { mimetype: 'text/csv' },
+            },
+            {
+              kind: 'file',
+              file: {
                 mimeType: 'image/svg+xml',
                 name: 'Wikipedia logo',
                 uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/40px-Wikipedia-logo-v2.svg.png',

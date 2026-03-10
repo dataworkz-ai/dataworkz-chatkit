@@ -379,10 +379,6 @@ export class App {
     console.log('onselectfile', data);
   }
 
-  onSelectAiFile(data: any) {
-    console.log('onselectaifile', data);
-  }
-
   onViewProbe(data: any) {
     console.log('onviewprobe', data);
   }

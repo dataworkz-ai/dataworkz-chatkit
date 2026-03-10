@@ -26,7 +26,6 @@ export type TChatkitScroll = {
 export type TChatkitProps = {
   placeholder?: string;
   allowedFileTypes?: string[];
-  userInitials?: string;
   selectedLLMId?: string;
   highlightMessageId?: string;
 };

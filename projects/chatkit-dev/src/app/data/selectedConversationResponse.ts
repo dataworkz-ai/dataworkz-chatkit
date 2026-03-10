@@ -249,6 +249,7 @@ export const selectedConversationResponse = {
         },
       ],
     },
+    // ── HITL TASK: ALL TYPES PENDING ──────────────────────────────────
     {
       id: 'hitl-task-pending',
       history: [
@@ -263,85 +264,9 @@ export const selectedConversationResponse = {
           parts: [{ kind: 'text', text: '' }],
           metadata: {
             hitlRequests: [
+              // 1. APPROVAL_REQUIRED — with context (string values + JSON object value)
               {
-                requestId: 'hitl-clarify-resolved',
-                type: 'CLARIFICATION_REQUIRED',
-                toolId: 'export-tool',
-                toolName: 'Export Data',
-                question: 'Which format should the export use?',
-                context: {},
-                options: [
-                  { optionId: 'csv', label: 'CSV', metadata: {} },
-                  { optionId: 'json', label: 'JSON', metadata: {} },
-                  { optionId: 'parquet', label: 'Parquet', metadata: {} },
-                ],
-                createdAt: '2026-03-08T09:15:00Z',
-              },
-              {
-                requestId: 'hitl-approval-resolved',
-                type: 'APPROVAL_REQUIRED',
-                toolId: 'deploy-tool',
-                toolName: 'Deploy Service',
-                question: 'The agent wants to deploy version 2.4.1 to production. Do you approve?',
-                context: {
-                  service: 'payment-gateway',
-                  version: '2.4.1',
-                  environment: 'production',
-                },
-                options: [],
-                createdAt: '2026-03-08T09:00:00Z',
-              },
-              {
-                requestId: 'hitl-input-resolved',
-                type: 'INPUT_REQUIRED',
-                toolId: 'config-tool',
-                toolName: 'Update Config',
-                question: 'What should the maximum retry count be for failed API calls?',
-                context: {},
-                options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
-                createdAt: '2026-03-08T09:10:00Z',
-              },
-            ],
-          },
-        },
-      ],
-    },
-    {
-      id: 'hitl-task-resolved',
-      history: [
-        {
-          messageID: 'hitl-user-msg-2',
-          role: 'USER',
-          parts: [{ kind: 'text', text: 'Deploy the payment service and export the report' }],
-          metadata: {
-            HITL_Resolutions: [
-              {
-                requestId: 'hitl-approval-resolved',
-                selectedOption: 'approve',
-                resolvedAt: '2026-03-08T09:05:00Z',
-              },
-              {
-                requestId: 'hitl-input-resolved',
-                selectedOption: 'provide',
-                userInput: '5',
-                resolvedAt: '2026-03-08T09:12:00Z',
-              },
-              {
-                requestId: 'hitl-clarify-resolved',
-                selectedOption: 'csv',
-                resolvedAt: '2026-03-08T09:16:00Z',
-              },
-            ],
-          },
-        },
-        {
-          messageID: 'hitl-agent-resolved',
-          role: 'AGENT',
-          parts: [{ kind: 'text', text: 'All actions have been completed successfully.' }],
-          metadata: {
-            hitlRequests: [
-              {
-                requestId: 'hitl-approval-1',
+                requestId: 'pending-approval',
                 type: 'APPROVAL_REQUIRED',
                 toolId: 'delete-records-tool',
                 toolName: 'Delete Records',
@@ -351,35 +276,205 @@ export const selectedConversationResponse = {
                   database: 'staging_db',
                   table: 'customers',
                   recordCount: '47',
-                  filter: "status = 'inactive' AND last_login < '2025-01-01'",
+                  filter: { status: 'inactive', lastLogin: { $lt: '2025-01-01' } },
                 },
-                options: [],
+                options: [
+                  { optionId: 'approve', label: 'Approve', metadata: {} },
+                  { optionId: 'reject', label: 'Reject', metadata: {} },
+                ],
                 createdAt: '2026-03-08T10:00:00Z',
               },
+              // 2. APPROVAL_WITH_MODIFICATIONS — with args + random context keys
               {
-                requestId: 'hitl-input-1',
-                type: 'INPUT_REQUIRED',
-                toolId: 'join-tool',
-                toolName: 'Join Data Sources',
+                requestId: 'pending-approval-mods',
+                type: 'APPROVAL_WITH_MODIFICATIONS',
+                toolId: 'send-email-tool',
+                toolName: 'Send Email',
                 question:
-                  'Please provide the API key for the external weather service to proceed with data enrichment.',
-                context: {},
-                options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
+                  'The agent wants to send an email. Please review and modify the parameters if needed.',
+                context: {
+                  reason: 'Follow-up to last week\'s meeting',
+                  triggeredBy: 'scheduledWorkflow',
+                  priority: 'high',
+                  args: {
+                    to: 'john@example.com',
+                    subject: 'Monthly Report - March 2026',
+                    body: 'Hi John, please find the monthly report attached.',
+                    cc: 'manager@example.com',
+                    attachments: { files: ['report.pdf'], compress: false },
+                  },
+                },
+                options: [
+                  { optionId: 'approve', label: 'Approve', metadata: {} },
+                  { optionId: 'reject', label: 'Reject', metadata: {} },
+                ],
                 createdAt: '2026-03-08T10:01:00Z',
               },
+              // 3. INPUT_REQUIRED — with context
               {
-                requestId: 'hitl-clarify-1',
+                requestId: 'pending-input',
+                type: 'INPUT_REQUIRED',
+                toolId: 'config-tool',
+                toolName: 'Update Config',
+                question: 'What should the maximum retry count be for failed API calls?',
+                context: {
+                  currentValue: '3',
+                  service: 'payment-gateway',
+                  config: { retryDelay: '1000ms', backoffMultiplier: 2 },
+                },
+                options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
+                createdAt: '2026-03-08T10:02:00Z',
+              },
+              // 4. CLARIFICATION_REQUIRED — with clarify option + context
+              {
+                requestId: 'pending-clarification',
                 type: 'CLARIFICATION_REQUIRED',
                 toolId: 'report-tool',
                 toolName: 'Generate Report',
-                question: 'Which time range should be used for the quarterly revenue report?',
-                context: {},
+                question: 'Which database should the migration run against?',
+                context: {
+                  currentStep: 'Database Migration',
+                  availableEnvironments: 'staging, production, dev',
+                },
                 options: [
-                  { optionId: 'q1', label: 'Q1 2026 (Jan - Mar)', metadata: {} },
-                  { optionId: 'q4', label: 'Q4 2025 (Oct - Dec)', metadata: {} },
-                  { optionId: 'last-90', label: 'Last 90 days', metadata: {} },
+                  { optionId: 'opt-staging', label: 'Staging', metadata: {} },
+                  { optionId: 'opt-production', label: 'Production', metadata: {} },
+                  { optionId: 'opt-dev', label: 'Dev', metadata: {} },
+                  { optionId: 'clarify', label: 'Other (provide details)', metadata: {} },
                 ],
-                createdAt: '2026-03-08T10:02:00Z',
+                createdAt: '2026-03-08T10:03:00Z',
+              },
+            ],
+          },
+        },
+      ],
+    },
+    // ── HITL TASK: ALL TYPES RESOLVED ─────────────────────────────────
+    {
+      id: 'hitl-task-resolved',
+      history: [
+        {
+          messageID: 'hitl-user-msg-2',
+          role: 'USER',
+          parts: [{ kind: 'text', text: 'HITL resolutions provided' }],
+          metadata: {
+            HITL_Resolutions: [
+              // Resolution for APPROVAL_REQUIRED
+              {
+                requestId: 'resolved-approval',
+                selectedOption: 'approve',
+                resolvedAt: '2026-03-08T09:05:00Z',
+              },
+              // Resolution for APPROVAL_WITH_MODIFICATIONS (with modifiedArgs)
+              {
+                requestId: 'resolved-approval-mods',
+                selectedOption: 'approve',
+                modifiedArgs: {
+                  to: 'john.doe@newdomain.com',
+                  body: 'Hi John, the updated monthly report is attached.',
+                  cc: 'director@example.com',
+                  attachments: { files: ['report.pdf', 'summary.xlsx'], compress: true },
+                },
+                resolvedAt: '2026-03-08T09:06:00Z',
+              },
+              // Resolution for INPUT_REQUIRED
+              {
+                requestId: 'resolved-input',
+                selectedOption: 'provide',
+                userInput: '5',
+                resolvedAt: '2026-03-08T09:07:00Z',
+              },
+              // Resolution for CLARIFICATION_REQUIRED (using clarify option with free text)
+              {
+                requestId: 'resolved-clarification',
+                selectedOption: 'clarify',
+                userInput: 'Run it against the QA database on host qa-db.internal:5432',
+                resolvedAt: '2026-03-08T09:08:00Z',
+              },
+            ],
+          },
+        },
+        {
+          messageID: 'hitl-agent-resolved',
+          role: 'AGENT',
+          parts: [
+            { kind: 'text', text: 'All actions have been completed successfully.' },
+          ],
+          metadata: {
+            hitlRequests: [
+              // 1. APPROVAL_REQUIRED — resolved
+              {
+                requestId: 'resolved-approval',
+                type: 'APPROVAL_REQUIRED',
+                toolId: 'deploy-tool',
+                toolName: 'Deploy Service',
+                question:
+                  'The agent wants to deploy version 2.4.1 to production. Do you approve?',
+                context: {
+                  service: 'payment-gateway',
+                  version: '2.4.1',
+                  environment: 'production',
+                },
+                options: [
+                  { optionId: 'approve', label: 'Approve', metadata: {} },
+                  { optionId: 'reject', label: 'Reject', metadata: {} },
+                ],
+                createdAt: '2026-03-08T09:00:00Z',
+              },
+              // 2. APPROVAL_WITH_MODIFICATIONS — resolved with modifiedArgs
+              {
+                requestId: 'resolved-approval-mods',
+                type: 'APPROVAL_WITH_MODIFICATIONS',
+                toolId: 'send-email-tool',
+                toolName: 'Send Email',
+                question:
+                  'The agent wants to send an email. Review and modify the parameters if needed.',
+                context: {
+                  reason: 'Quarterly review follow-up',
+                  args: {
+                    to: 'john@example.com',
+                    subject: 'Monthly Report - March 2026',
+                    body: 'Hi John, please find the monthly report attached.',
+                    cc: 'manager@example.com',
+                    attachments: { files: ['report.pdf'], compress: false },
+                  },
+                },
+                options: [
+                  { optionId: 'approve', label: 'Approve', metadata: {} },
+                  { optionId: 'reject', label: 'Reject', metadata: {} },
+                ],
+                createdAt: '2026-03-08T09:01:00Z',
+              },
+              // 3. INPUT_REQUIRED — resolved
+              {
+                requestId: 'resolved-input',
+                type: 'INPUT_REQUIRED',
+                toolId: 'config-tool',
+                toolName: 'Update Config',
+                question: 'What should the maximum retry count be for failed API calls?',
+                context: {
+                  currentValue: '3',
+                  service: 'payment-gateway',
+                },
+                options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
+                createdAt: '2026-03-08T09:02:00Z',
+              },
+              // 4. CLARIFICATION_REQUIRED with clarify — resolved with userInput
+              {
+                requestId: 'resolved-clarification',
+                type: 'CLARIFICATION_REQUIRED',
+                toolId: 'migration-tool',
+                toolName: 'Run Migration',
+                question: 'Which database should the migration run against?',
+                context: {
+                  currentStep: 'Database Migration',
+                },
+                options: [
+                  { optionId: 'opt-staging', label: 'Staging', metadata: {} },
+                  { optionId: 'opt-production', label: 'Production', metadata: {} },
+                  { optionId: 'clarify', label: 'Other (provide details)', metadata: {} },
+                ],
+                createdAt: '2026-03-08T09:03:00Z',
               },
             ],
           },

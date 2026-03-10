@@ -45,12 +45,84 @@ export class HitlRequestCard {
       this.request()?.type === 'APPROVAL_REQUIRED' ||
       this.request()?.type === 'APPROVAL_WITH_MODIFICATIONS',
   );
+  readonly isApprovalWithMods = computed(
+    () => this.request()?.type === 'APPROVAL_WITH_MODIFICATIONS',
+  );
   readonly isInput = computed(() => this.request()?.type === 'INPUT_REQUIRED');
   readonly isClarification = computed(() => this.request()?.type === 'CLARIFICATION_REQUIRED');
 
-  readonly contextEntries = computed(() => {
+  // Context entries — excludes 'args' key for APPROVAL_WITH_MODIFICATIONS
+  readonly contextDisplayEntries = computed(() => {
     const ctx = this.request()?.context || {};
-    return Object.entries(ctx).map(([key, value]) => ({ key, value }));
+    return Object.entries(ctx)
+      .filter(([key]) => !(this.isApprovalWithMods() && key === 'args'))
+      .map(([key, value]) => ({
+        key,
+        isObject: typeof value === 'object' && value !== null,
+        displayValue:
+          typeof value === 'object' && value !== null
+            ? JSON.stringify(value, null, 2)
+            : String(value),
+      }));
+  });
+
+  // Args editing for APPROVAL_WITH_MODIFICATIONS
+  readonly originalArgs = computed(() => {
+    const req = this.request();
+    if (req?.type === 'APPROVAL_WITH_MODIFICATIONS') {
+      return (req.context?.['args'] as Record<string, any>) || {};
+    }
+    return {};
+  });
+
+  // Track which original arg keys are object types (need JSON editing)
+  readonly originalArgIsObject = computed(() => {
+    const args = this.originalArgs();
+    const map: Record<string, boolean> = {};
+    for (const [key, value] of Object.entries(args)) {
+      map[key] = typeof value === 'object' && value !== null;
+    }
+    return map;
+  });
+
+  readonly editedArgs = signal<Record<string, any> | null>(null);
+  readonly currentArgs = computed(() => this.editedArgs() ?? this.originalArgs());
+
+  // Serialize values for display in textboxes — objects become JSON strings
+  readonly argsEntries = computed(() =>
+    Object.entries(this.currentArgs()).map(([key, value]) => ({
+      key,
+      value:
+        typeof value === 'object' && value !== null
+          ? JSON.stringify(value, null, 2)
+          : String(value),
+    })),
+  );
+
+  // For provided state: show all original args with modifiedArgs overrides, as disabled inputs
+  readonly providedArgsEntries = computed(() => {
+    const original = this.originalArgs();
+    const res = this.resolution();
+    const modified = res?.modifiedArgs || {};
+    // Merge: start with originals, override with modified values
+    const merged = { ...original, ...modified };
+    return Object.entries(merged).map(([key, value]) => {
+      const isModified = key in modified;
+      const origValue = original[key];
+      const origStr =
+        typeof origValue === 'object' && origValue !== null
+          ? JSON.stringify(origValue, null, 2)
+          : String(origValue ?? '');
+      return {
+        key,
+        value:
+          typeof value === 'object' && value !== null
+            ? JSON.stringify(value, null, 2)
+            : String(value),
+        isModified,
+        tooltip: isModified ? `Original: ${origStr}` : '',
+      };
+    });
   });
 
   readonly resolvedAnswerText = computed(() => {
@@ -61,11 +133,62 @@ export class HitlRequestCard {
     return option?.label || res.selectedOption;
   });
 
+  // Signals for user interaction
   readonly userInput = signal('');
   readonly selectedOptionId = signal<string | null>(null);
+  readonly clarifyInput = signal('');
+
+  // Clarification free text support
+  readonly hasClarifyOption = computed(
+    () => !!this.request()?.options?.some((o) => o.optionId === 'clarify'),
+  );
+  readonly isClarifySelected = computed(() => this.selectedOptionId() === 'clarify');
+  readonly isClarificationValid = computed(() => {
+    const id = this.selectedOptionId();
+    if (!id) return false;
+    if (id === 'clarify') return this.clarifyInput().trim().length > 0;
+    return true;
+  });
 
   onApprove() {
-    this.emitResolution('approve');
+    if (this.isApprovalWithMods()) {
+      const original = this.originalArgs();
+      const current = this.currentArgs();
+      const isObjectMap = this.originalArgIsObject();
+
+      // Build modifiedArgs with only changed keys
+      const modifiedArgs: Record<string, any> = {};
+      for (const [key, value] of Object.entries(current)) {
+        const origValue = original[key];
+        const origStr =
+          typeof origValue === 'object' && origValue !== null
+            ? JSON.stringify(origValue, null, 2)
+            : String(origValue);
+        const curStr = String(value);
+
+        if (curStr !== origStr) {
+          // For object-type args, try to parse back to object; fallback to string
+          if (isObjectMap[key]) {
+            try {
+              modifiedArgs[key] = JSON.parse(curStr);
+            } catch {
+              modifiedArgs[key] = curStr;
+            }
+          } else {
+            modifiedArgs[key] = curStr;
+          }
+        }
+      }
+
+      // Only send modifiedArgs if there are actual changes
+      this.emitResolution(
+        'approve',
+        undefined,
+        Object.keys(modifiedArgs).length > 0 ? modifiedArgs : undefined,
+      );
+    } else {
+      this.emitResolution('approve');
+    }
   }
 
   onReject() {
@@ -81,7 +204,13 @@ export class HitlRequestCard {
   onConfirmClarification() {
     const selectedId = this.selectedOptionId();
     if (!selectedId) return;
-    this.emitResolution(selectedId);
+    if (selectedId === 'clarify') {
+      const text = this.clarifyInput();
+      if (!text.trim()) return;
+      this.emitResolution(selectedId, text);
+    } else {
+      this.emitResolution(selectedId);
+    }
   }
 
   onInputKeydown(event: KeyboardEvent) {
@@ -90,7 +219,28 @@ export class HitlRequestCard {
     }
   }
 
-  private emitResolution(selectedOption: string, userInput?: string) {
+  onArgChange(key: string, value: string) {
+    const current = this.editedArgs() ?? { ...this.originalArgs() };
+    this.editedArgs.set({ ...current, [key]: value });
+  }
+
+  onOptionSelect(optionId: string) {
+    this.selectedOptionId.set(optionId);
+    if (optionId !== 'clarify') {
+      this.clarifyInput.set('');
+    }
+  }
+
+  onClarifyInputChange(value: string) {
+    this.clarifyInput.set(value);
+    this.selectedOptionId.set('clarify');
+  }
+
+  private emitResolution(
+    selectedOption: string,
+    userInput?: string,
+    modifiedArgs?: Record<string, any>,
+  ) {
     this.chatWindowEventsService.hitlResolve$.next({
       taskId: this.taskId(),
       messageId: this.messageId(),
@@ -99,6 +249,7 @@ export class HitlRequestCard {
         requestId: this.requestId(),
         selectedOption,
         userInput,
+        modifiedArgs,
       },
     });
   }

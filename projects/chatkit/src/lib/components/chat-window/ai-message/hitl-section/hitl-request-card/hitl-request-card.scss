@@ -90,6 +90,72 @@ $hitl-border: #d1d5db;
   }
 }
 
+.dw-hitl-context-json {
+  margin: 0.25rem 0 0 0;
+  padding: 0.5rem 0.75rem;
+  background: #f9fafb;
+  border: 1px solid $hitl-border;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: $hitl-text;
+  line-height: 1.5;
+}
+
+// Editable args (APPROVAL_WITH_MODIFICATIONS)
+.dw-hitl-args-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dw-hitl-arg-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dw-hitl-arg-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: $hitl-text;
+}
+
+.dw-hitl-arg-value {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.dw-hitl-text-input-disabled {
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.dw-hitl-arg-modified {
+  border-color: $hitl-blue;
+  background: #f0f9ff;
+  color: $hitl-text;
+}
+
+.dw-hitl-args-provided {
+  opacity: 0.9;
+}
+
+.dw-hitl-args-readonly {
+  opacity: 0.8;
+
+  .dw-hitl-arg-entry {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+}
+
 // Action buttons
 .dw-hitl-actions {
   display: flex;
@@ -209,6 +275,10 @@ $hitl-border: #d1d5db;
   opacity: 0.7;
 }
 
+.dw-hitl-clarify-input {
+  margin-top: 0.25rem;
+}
+
 // Resolved answer bubble (clarification + input)
 .dw-hitl-resolved-bubble {
   margin-top: 0.5rem;
@@ -240,3 +310,4 @@ $hitl-border: #d1d5db;
   color: $hitl-text;
   text-transform: capitalize;
 }
+

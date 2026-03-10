@@ -108,7 +108,7 @@ export class App {
       (res: Record<string, TItemState<TChatkitConversationTaskMessage>>, cur) => {
         cur.history.forEach((message: any) => {
           res[message.messageID] = {
-            loading: true,
+            loading: false,
             error: '',
             value: {
               role: message.role as any,

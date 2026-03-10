@@ -21,17 +21,38 @@
     <div class="dw-hitl-content">
       <p class="dw-hitl-question">{{ request()!.question }}</p>
 
-      @if (isApproval() && contextEntries().length) {
+      @if (contextDisplayEntries().length) {
         <ul class="dw-hitl-context-list">
-          @for (entry of contextEntries(); track entry.key) {
+          @for (entry of contextDisplayEntries(); track entry.key) {
             <li>
-              <strong>{{ entry.key }}:</strong> {{ entry.value }}
+              <strong>{{ entry.key }}:</strong>
+              @if (entry.isObject) {
+                <pre class="dw-hitl-context-json">{{ entry.displayValue }}</pre>
+              } @else {
+                {{ entry.displayValue }}
+              }
             </li>
           }
         </ul>
       }
 
       @if (isPending()) {
+        @if (isApprovalWithMods() && argsEntries().length) {
+          <div class="dw-hitl-args-group">
+            @for (entry of argsEntries(); track entry.key) {
+              <div class="dw-hitl-arg-entry">
+                <label class="dw-hitl-arg-label">{{ entry.key }}</label>
+                <input
+                  type="text"
+                  class="dw-hitl-text-input"
+                  [value]="entry.value"
+                  (input)="onArgChange(entry.key, $any($event.target).value)"
+                />
+              </div>
+            }
+          </div>
+        }
+
         @if (isApproval()) {
           <div class="dw-hitl-actions">
             <button class="dw-hitl-btn dw-hitl-btn-reject" (click)="onReject()">Reject</button>
@@ -59,14 +80,23 @@
                   type="radio"
                   [name]="'hitl-' + requestId()"
                   [checked]="selectedOptionId() === option.optionId"
-                  (change)="selectedOptionId.set(option.optionId)"
+                  (change)="onOptionSelect(option.optionId)"
                 />
                 <span>{{ option.label }}</span>
               </label>
             }
+            @if (hasClarifyOption() && isClarifySelected()) {
+              <input
+                type="text"
+                class="dw-hitl-text-input dw-hitl-clarify-input"
+                placeholder="Provide details..."
+                [value]="clarifyInput()"
+                (input)="onClarifyInputChange($any($event.target).value)"
+              />
+            }
             <button
               class="dw-hitl-btn dw-hitl-btn-confirm"
-              [disabled]="!selectedOptionId()"
+              [disabled]="!isClarificationValid()"
               (click)="onConfirmClarification()"
             >
               Confirm
@@ -87,6 +117,23 @@
                 />
                 <span>{{ option.label }}</span>
               </label>
+            }
+          </div>
+        }
+        @if (isApprovalWithMods()) {
+          <div class="dw-hitl-args-group dw-hitl-args-provided">
+            @for (entry of providedArgsEntries(); track entry.key) {
+              <div class="dw-hitl-arg-entry">
+                <label class="dw-hitl-arg-label">{{ entry.key }}</label>
+                <input
+                  type="text"
+                  class="dw-hitl-text-input dw-hitl-text-input-disabled"
+                  [class.dw-hitl-arg-modified]="entry.isModified"
+                  [value]="entry.value"
+                  [title]="entry.tooltip"
+                  disabled
+                />
+              </div>
             }
           </div>
         }

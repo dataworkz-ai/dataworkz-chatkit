@@ -3,7 +3,7 @@ import { ChatWindow } from './components/chat-window/chat-window';
 import { ChatWindowDataService } from './services/chat-window.data';
 import { ChatWindowEventsService } from './services/chat-window.events';
 import { TChatkitConfig } from './typings/config';
-import { TMessageFile, TChatkitData, IMessageFilePart, TAdditionalFeedback, THitlResolution } from './typings/data';
+import { TMessageFile, TChatkitData, TAdditionalFeedback, THitlResolution } from './typings/data';
 
 @Component({
   selector: 'dw-chatkit',
@@ -57,12 +57,6 @@ export class Chatkit {
       },
     });
 
-    this.chatWindowEventsService.selectAiFile$.subscribe({
-      next: (value) => {
-        this.selectAiFile.emit(value);
-      },
-    });
-
     this.chatWindowEventsService.selectFile$.subscribe({
       next: (value) => {
         this.selectFile.emit(value);
@@ -92,7 +86,6 @@ export class Chatkit {
         this.hitlResolve.emit(value);
       },
     });
-
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -143,7 +136,6 @@ export class Chatkit {
   @Output() selectDataStore = new EventEmitter<void>();
   @Output() removeUserFile = new EventEmitter<string>();
   @Output() selectFile = new EventEmitter<TMessageFile | undefined>();
-  @Output() selectAiFile = new EventEmitter<IMessageFilePart>();
   @Output() selectComputerUpload = new EventEmitter<File[]>();
   @Output() viewProbe = new EventEmitter<{ taskId: string; messageId: string }>();
   @Output() feedback = new EventEmitter<{

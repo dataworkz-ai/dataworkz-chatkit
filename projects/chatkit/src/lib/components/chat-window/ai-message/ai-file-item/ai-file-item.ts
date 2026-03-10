@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { IMessageFilePart } from '../../../../typings/data';
 import { CopyIcon, DownloadIcon, FileIcon } from '../../../icons';
-import { ChatWindowEventsService } from '../../../../services/chat-window.events';
 
 const convertImageUrlToBlobViaCanvas = async (url: string) => {
   return new Promise((resolve, reject) => {
@@ -38,8 +37,6 @@ const convertImageUrlToBlobViaCanvas = async (url: string) => {
 export class AiFileItem {
   readonly part = input.required<IMessageFilePart>();
 
-  readonly chatWindowEventsService = inject(ChatWindowEventsService);
-
   readonly copySuccess = signal(false);
 
   readonly file = computed(() => this.part().file);
@@ -64,10 +61,6 @@ export class AiFileItem {
     }
     return url;
   });
-
-  onItemClick() {
-    this.chatWindowEventsService.selectAiFile$.next(this.part());
-  }
 
   copyToClipboard = async () => {
     try {

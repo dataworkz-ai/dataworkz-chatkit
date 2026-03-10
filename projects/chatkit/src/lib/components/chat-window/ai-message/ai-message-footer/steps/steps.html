@@ -17,7 +17,7 @@
       <!-- Scenario Selection Step -->
       @if (isScenarioSelection(item)) {
         <div class="dw-step-item">
-          <div class="dw-step-header" [class.dw-step-header-failed]="item.status === 'failed'">
+          <div class="dw-step-header" [class.dw-step-header-failed]="item.status === 'failed'" [class.dw-step-header-pending]="item.status === 'pending'">
             <span
               class="dw-step-status"
               [class.dw-step-status-completed]="item.status === 'completed'"
@@ -31,12 +31,17 @@
                 <dw-loader-icon />
               } @else if (item.status === 'failed') {
                 <dw-error-info-icon />
+              } @else if (item.status === 'pending') {
+                <span class="dw-step-dot"></span>
               } @else {
                 <dw-circle-icon />
               }
             </span>
             <span class="dw-step-title">Scenario Selected:</span>
             <span class="dw-step-name">{{ item.name }}</span>
+            @if (item.status === 'pending') {
+              <span class="dw-step-pending-label">Pending</span>
+            }
           </div>
           <!-- Collapsible Thought -->
           @if (asScenarioSelection(item).llmThought) {
@@ -69,6 +74,7 @@
               <div
                 class="dw-step-header"
                 [class.dw-step-header-failed]="item.planning.status === 'failed'"
+                [class.dw-step-header-pending]="item.planning.status === 'pending'"
               >
                 <span
                   class="dw-step-status"
@@ -83,12 +89,17 @@
                     <dw-loader-icon />
                   } @else if (item.planning.status === 'failed') {
                     <dw-error-info-icon />
+                  } @else if (item.planning.status === 'pending') {
+                    <span class="dw-step-dot"></span>
                   } @else {
                     <dw-circle-icon />
                   }
                 </span>
                 <span class="dw-step-label">Planning:</span>
                 <span class="dw-step-name">{{ item.planning.name }}</span>
+                @if (item.planning.status === 'pending') {
+                  <span class="dw-step-pending-label">Pending</span>
+                }
               </div>
               <!-- Collapsible Thought -->
               @if (item.planning.llmThought) {
@@ -123,6 +134,7 @@
               <div
                 class="dw-step-header"
                 [class.dw-step-header-failed]="item.agentResponse.status === 'failed'"
+                [class.dw-step-header-pending]="item.agentResponse.status === 'pending'"
               >
                 <span
                   class="dw-step-status"
@@ -137,6 +149,8 @@
                     <dw-loader-icon />
                   } @else if (item.agentResponse.status === 'failed') {
                     <dw-error-info-icon />
+                  } @else if (item.agentResponse.status === 'pending') {
+                    <span class="dw-step-dot"></span>
                   } @else {
                     <dw-circle-icon />
                   }
@@ -145,6 +159,9 @@
                   <dw-response-icon />
                 </span>
                 <span class="dw-step-title">Response</span>
+                @if (item.agentResponse.status === 'pending') {
+                  <span class="dw-step-pending-label">Pending</span>
+                }
               </div>
               <!-- Collapsible Thought -->
               @if (item.agentResponse.llmThought) {
@@ -176,6 +193,7 @@
           class="dw-step-header"
           [class.dw-step-header-clickable]="hasNestedExecutions(execution)"
           [class.dw-step-header-failed]="execution.status === 'failed'"
+          [class.dw-step-header-pending]="execution.status === 'pending'"
           (click)="hasNestedExecutions(execution) && toggleExecution(execution.executionId)"
         >
           <span
@@ -191,6 +209,8 @@
               <dw-loader-icon />
             } @else if (execution.status === 'failed') {
               <dw-error-info-icon />
+            } @else if (execution.status === 'pending') {
+              <span class="dw-step-dot"></span>
             } @else {
               <dw-circle-icon />
             }
@@ -200,6 +220,9 @@
           </span>
           <span class="dw-step-label">Executing Tool:</span>
           <span class="dw-step-name">{{ execution.name }}</span>
+          @if (execution.status === 'pending') {
+            <span class="dw-step-pending-label">Pending</span>
+          }
           @if (hasNestedExecutions(execution)) {
             <span
               class="dw-execution-arrow"

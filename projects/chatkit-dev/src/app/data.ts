@@ -30,6 +30,67 @@ export const selectedConversationResponse = {
               kind: 'text',
               text: 'fdsfds',
             },
+            {
+              kind: 'data',
+              data: {
+                files: [
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                  {
+                    documentId: 'test',
+                    file: 'test.pdf',
+                    filePath: 'test.pdf',
+                    ingestUuid: '2837283',
+                  },
+                ],
+              },
+            },
           ],
         },
         {
@@ -86,931 +147,55 @@ export const selectedConversationResponse = {
             },
             {
               kind: 'data',
-              data: `
-                {
-                  id: '0ef78850-1059-42fc-b6ec-248d45443345',
-                  conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-                  status: {
-                    state: 'completed',
-                    timestamp: '2026-01-20T01:45:55.048+00:00'
+              data: {
+                id: '0ef78850-1059-42fc-b6ec-248d45443345',
+                conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
+                status: {
+                  state: 'completed',
+                  timestamp: '2026-01-20T01:45:55.048+00:00',
+                },
+                history: [
+                  {
+                    messageID: '9d330668-a932-4d71-bf07-584cddc20b8f',
+                    conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
+                    taskID: '0ef78850-1059-42fc-b6ec-248d45443345',
+                    timestamp: '2026-01-20T01:45:51.503226',
+                    thumbsUpOrDown: 0,
+                    timeToAnswer: 0,
+                    kind: 'message',
+                    role: 'USER',
+                    parts: [
+                      {
+                        kind: 'text',
+                        text: 'fdsfds',
+                      },
+                    ],
                   },
-                  history: [
-                    {
-                      messageID: '9d330668-a932-4d71-bf07-584cddc20b8f',
-                      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-                      taskID: '0ef78850-1059-42fc-b6ec-248d45443345',
-                      timestamp: '2026-01-20T01:45:51.503226',
-                      thumbsUpOrDown: 0,
-                      timeToAnswer: 0,
-                      kind: 'message',
-                      role: 'USER',
-                      parts: [
-                        {
-                          kind: 'text',
-                          text: 'fdsfds'
-                        }
-                      ]
-                    },
-                    {
-                      messageID: '9b1bd561-233a-4814-b1a1-db36d9363817',
-                      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-                      taskID: '0ef78850-1059-42fc-b6ec-248d45443345',
-                      timestamp: '2026-01-20T01:45:55.048495',
-                      thumbsUpOrDown: 0,
-                      timeToAnswer: 3437,
-                      kind: 'message',
-                      role: 'AGENT',
-                      parts: [
-                        {
-                          kind: 'text',
-                          text: 'I could not find the financial information you requested. Please try rephrasing your query.',
-                          metadata: {
-                            mimetype: 'text/plain'
-                          }
+                  {
+                    messageID: '9b1bd561-233a-4814-b1a1-db36d9363817',
+                    conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
+                    taskID: '0ef78850-1059-42fc-b6ec-248d45443345',
+                    timestamp: '2026-01-20T01:45:55.048495',
+                    thumbsUpOrDown: 0,
+                    timeToAnswer: 3437,
+                    kind: 'message',
+                    role: 'AGENT',
+                    parts: [
+                      {
+                        kind: 'text',
+                        text: 'I could not find the financial information you requested. Please try rephrasing your query.',
+                        metadata: {
+                          mimetype: 'text/plain',
                         },
-                        {
-                          kind: 'data',
-                          data: {}
-                        }
-                      ],
-                      metadata: {}
-                    }
-                  ]
-                }
-              `,
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: 'cbbe6b8f-12c2-4414-9dc0-60464338d362',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:18:46.723+00:00',
-      },
-      history: [
-        {
-          messageID: '2239d87b-27dd-49ac-b64c-9bf23cbed55f',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'cbbe6b8f-12c2-4414-9dc0-60464338d362',
-          timestamp: '2026-01-20T05:18:43.020385',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'testt',
-            },
-          ],
-        },
-        {
-          messageID: 'c52d71b5-d8ba-4004-950f-37b43837d791',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'cbbe6b8f-12c2-4414-9dc0-60464338d362',
-          timestamp: '2026-01-20T05:18:46.723833',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 3605,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: 'I could not find the financial information you requested. Please try rephrasing your query.',
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '8fab93e7-25b2-4700-84f7-2763121678b5',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:19:05.934+00:00',
-      },
-      history: [
-        {
-          messageID: 'a90681ab-789d-4795-8f8a-f7e33d5d8694',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '8fab93e7-25b2-4700-84f7-2763121678b5',
-          timestamp: '2026-01-20T05:18:59.651945',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what do you do?',
-            },
-          ],
-        },
-        {
-          messageID: '7cea6815-1438-4500-863a-5c705253bc6c',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '8fab93e7-25b2-4700-84f7-2763121678b5',
-          timestamp: '2026-01-20T05:19:05.934783',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 6185,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I can help you with queries related to Apple's financial information and 10-K filings. If you have questions about Apple's financial reports, statements, or need details from their official filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '1e64e409-f543-4a8d-a8bf-a4850c09887b',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:19:57.050+00:00',
-      },
-      history: [
-        {
-          messageID: 'ef8ca187-10a1-4455-8226-7441182d9d8f',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '1e64e409-f543-4a8d-a8bf-a4850c09887b',
-          timestamp: '2026-01-20T05:19:50.448392',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what do you do?',
-            },
-          ],
-        },
-        {
-          messageID: '0c53ad25-d9bf-4858-b6f4-7367473017c1',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '1e64e409-f543-4a8d-a8bf-a4850c09887b',
-          timestamp: '2026-01-20T05:19:57.050302',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 6502,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '89d57349-89da-4e2d-a5c8-c5d41f677de4',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:35:29.492+00:00',
-      },
-      history: [
-        {
-          messageID: '3ef913cf-c932-421a-9707-502bd377c36c',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '89d57349-89da-4e2d-a5c8-c5d41f677de4',
-          timestamp: '2026-01-20T05:35:26.575211',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'do?\n',
-            },
-          ],
-        },
-        {
-          messageID: 'b310f386-0a47-4a54-92db-09ae7c3d0306',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '89d57349-89da-4e2d-a5c8-c5d41f677de4',
-          timestamp: '2026-01-20T05:35:29.492425',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 2818,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "Could you please clarify your question? Are you asking about what I can help you with, or do you have a specific query about Apple's financial information?",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '5b97d0ac-d90d-4aa5-be9e-f62e7c3b8ca5',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:37:55.326+00:00',
-      },
-      history: [
-        {
-          messageID: 'f45a7b82-11f4-49b9-b376-42038e86e7bd',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '5b97d0ac-d90d-4aa5-be9e-f62e7c3b8ca5',
-          timestamp: '2026-01-20T05:37:51.524798',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what do u do?\n',
-            },
-          ],
-        },
-        {
-          messageID: '88240064-1af8-4eff-b460-dc74fdf2923c',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '5b97d0ac-d90d-4aa5-be9e-f62e7c3b8ca5',
-          timestamp: '2026-01-20T05:37:55.326061',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 3703,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '7abca729-0de7-41d6-829d-c29a840f4ead',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:39:28.830+00:00',
-      },
-      history: [
-        {
-          messageID: '3a79a4da-b39e-4ba0-9fc4-1f295e601f54',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '7abca729-0de7-41d6-829d-c29a840f4ead',
-          timestamp: '2026-01-20T05:39:23.505937',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what do you do?',
-            },
-          ],
-        },
-        {
-          messageID: '69e8e88c-fffe-4e3d-b3b3-17bce13d95a4',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '7abca729-0de7-41d6-829d-c29a840f4ead',
-          timestamp: '2026-01-20T05:39:28.83057',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 5227,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '5598a05a-fa73-400e-bdd8-003812b5c688',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:39:52.329+00:00',
-      },
-      history: [
-        {
-          messageID: '281cbc9e-32ba-46ff-bd95-d2a5ab0524cb',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '5598a05a-fa73-400e-bdd8-003812b5c688',
-          timestamp: '2026-01-20T05:39:48.117108',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what do yo do?',
-            },
-          ],
-        },
-        {
-          messageID: '9871095f-6849-462c-a1f3-152646bf528d',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '5598a05a-fa73-400e-bdd8-003812b5c688',
-          timestamp: '2026-01-20T05:39:52.329263',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 4115,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: 'a22e8967-6f3d-4584-8f19-c64f3e4dd9ef',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:40:26.916+00:00',
-      },
-      history: [
-        {
-          messageID: '38264cc1-7a03-45ae-9701-955c826ed420',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'a22e8967-6f3d-4584-8f19-c64f3e4dd9ef',
-          timestamp: '2026-01-20T05:40:21.297723',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what di u do?\n',
-            },
-          ],
-        },
-        {
-          messageID: 'ee960487-daa3-4cbc-a475-8e7b16399667',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'a22e8967-6f3d-4584-8f19-c64f3e4dd9ef',
-          timestamp: '2026-01-20T05:40:26.916624',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 5520,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '29020ce9-c9a8-48f6-8b80-766f438c4896',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:47:43.444+00:00',
-      },
-      history: [
-        {
-          messageID: '943a99a3-0221-4636-938e-28b662358618',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '29020ce9-c9a8-48f6-8b80-766f438c4896',
-          timestamp: '2026-01-20T05:47:37.788482',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'what is it you do?\n',
-            },
-          ],
-        },
-        {
-          messageID: '078e0fc0-e9d3-4182-9423-df580aba6578',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '29020ce9-c9a8-48f6-8b80-766f438c4896',
-          timestamp: '2026-01-20T05:47:43.444819',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 5556,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: 'bfb5f4a2-1adc-4ee5-8cf8-adfa332086d4',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:49:58.956+00:00',
-      },
-      history: [
-        {
-          messageID: '74e5c653-e53d-4f62-b344-2ba287a5bdbc',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'bfb5f4a2-1adc-4ee5-8cf8-adfa332086d4',
-          timestamp: '2026-01-20T05:49:22.878487',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'draw table wise details of filing?',
-            },
-          ],
-        },
-        {
-          messageID: 'ab120e4c-d96d-4f75-b7ef-065c99f2471d',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'bfb5f4a2-1adc-4ee5-8cf8-adfa332086d4',
-          timestamp: '2026-01-20T05:49:58.956894',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 35979,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: 'Below is a table-wise breakdown of the main items typically found in Apple’s 10-K filing:\n\n| Item Number | Section Title                                                      | Description                                                                                                   |\n|-------------|--------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|\n| Item 1      | Business                                                           | Overview of Apple’s business, products, services, and markets.                                                |\n| Item 1A     | Risk Factors                                                       | Discussion of significant risks that could affect Apple’s business and financial results.                      |\n| Item 1B     | Unresolved Staff Comments                                          | Information on any unresolved comments from the SEC staff.                                                    |\n| Item 2      | Properties                                                         | Details about Apple’s physical properties and facilities.                                                     |\n| Item 3      | Legal Proceedings                                                  | Information on significant legal proceedings involving Apple.                                                 |\n| Item 4      | Mine Safety Disclosures                                            | Required disclosures if applicable (typically not relevant for Apple).                                        |\n| Item 5      | Market for Registrant’s Common Equity, Related Stockholder Matters | Information on Apple’s stock, dividends, and related matters.                                                 |\n| Item 6      | [Reserved]                                                         | (Section may be reserved and not used.)                                                                       |\n| Item 7      | Management’s Discussion and Analysis of Financial Condition and Results of Operations | Analysis of financial results, trends, and management’s perspective.                                          |\n| Item 7A     | Quantitative and Qualitative Disclosures About Market Risk         | Discussion of market risks such as interest rate and foreign currency risks.                                  |\n| Item 8      | Financial Statements and Supplementary Data                        | Audited financial statements and related notes.                                                               |\n| Item 9      | Changes in and Disagreements with Accountants on Accounting and Financial Disclosure | Information on any changes or disagreements with accountants.                                                 |\n| Item 9A     | Controls and Procedures                                            | Details on disclosure controls, internal controls, and procedures.                                            |\n| Item 9B     | Other Information                                                  | Any other material information not previously disclosed.                                                      |\n| Item 9C     | Disclosure Regarding Foreign Jurisdictions that Prevent Inspections| Required disclosures if applicable.                                                                           |\n| Item 10     | Directors, Executive Officers and Corporate Governance             | Information about Apple’s leadership and governance practices.                                                |\n| Item 11     | Executive Compensation                                             | Details on compensation for Apple’s executives.                                                               |\n| Item 12     | Security Ownership of Certain Beneficial Owners and Management     | Information on ownership of Apple stock by management and major shareholders.                                 |\n| Item 13     | Certain Relationships and Related Transactions, and Director Independence | Details on related party transactions and director independence.                                              |\n| Item 14     | Principal Accountant Fees and Services                             | Information on fees paid to Apple’s independent auditors.                                                     |\n| Item 15     | Exhibits and Financial Statement Schedules                         | List of exhibits and schedules included in the filing.                                                        |\n| Item 16     | Form 10-K Summary                                                  | Optional summary of the 10-K filing.                                                                          |\n\nAdditionally, the filing contains forward-looking statements, certifications by the CEO and CFO, and references to where investors can find more information, such as Apple’s investor relations website and SEC filings [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`2`2`2`3`80) [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`15`1`1`7`80) [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`71`1`1`80`80) [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`58`1`1`80`80).',
-              metadata: {
-                mimetype: 'text/markdown',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: 'e4e10588-9567-48d6-80de-2d6557105a94',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T05:59:28.564+00:00',
-      },
-      history: [
-        {
-          messageID: '5282da46-d177-4a11-bf94-a080fda0e454',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'e4e10588-9567-48d6-80de-2d6557105a94',
-          timestamp: '2026-01-20T05:59:25.695892',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'test',
-            },
-          ],
-        },
-        {
-          messageID: 'b47c9a88-c752-476f-b33d-a1400c5f0c40',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'e4e10588-9567-48d6-80de-2d6557105a94',
-          timestamp: '2026-01-20T05:59:28.564529',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 2764,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: 'I could not find the financial information you requested. Please try rephrasing your query.',
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '95ae76cb-dc86-4cae-8262-2ba01066a9e5',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-20T06:04:03.660+00:00',
-      },
-      history: [
-        {
-          messageID: '27e52261-9531-4631-b843-ce62987904e0',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '95ae76cb-dc86-4cae-8262-2ba01066a9e5',
-          timestamp: '2026-01-20T06:03:58.796844',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'draw details?',
-            },
-          ],
-        },
-        {
-          messageID: 'cedd9965-9a17-45e6-b895-64e5fda36b52',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '95ae76cb-dc86-4cae-8262-2ba01066a9e5',
-          timestamp: '2026-01-20T06:04:03.660588',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 4732,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "Could you please clarify what details you would like me to draw? Are you looking for specific information from Apple's financial filings or do you need help with something else?",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '69c4092d-ba82-425c-9d7f-de7c054cc09b',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-21T07:36:44.983+00:00',
-      },
-      history: [
-        {
-          messageID: '1ae5ee7b-609b-4e33-bbb8-41788d07302e',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '69c4092d-ba82-425c-9d7f-de7c054cc09b',
-          timestamp: '2026-01-21T07:36:11.829973',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'draw table wise details?',
-            },
-          ],
-        },
-        {
-          messageID: 'ade0cb9d-5b02-491d-80bd-deb2817b6234',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '69c4092d-ba82-425c-9d7f-de7c054cc09b',
-          timestamp: '2026-01-21T07:36:44.983609',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 33054,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "Below is a table-wise breakdown of the main sections and key details from Apple Inc.'s latest 10-K filing for the fiscal year ended September 30, 2023:\n\n| Section                        | Details / Description                                                                                                   |\n|------------------------------- |------------------------------------------------------------------------------------------------------------------------|\n| Cover Page                     | - Annual Report pursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934<br>- Fiscal year ended: September 30, 2023<br>- Commission File Number: 001-36743<br>- Registrant: Apple Inc.<br>- State of Incorporation: California<br>- IRS Employer ID: 94-2404110<br>- Principal Executive Offices: One Apple Park Way, Cupertino, CA 95014<br>- Telephone: (408) 996-1010<br>- Securities registered: Common Stock (AAPL), various notes due 2024–2042 on Nasdaq<br>- Well-known seasoned issuer: Yes<br>- Large accelerated filer: Yes<br>- Internal control attestation: Yes [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`1`1`3`1`80)[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`1`2`3`1`80) |\n| Available Information          | - SEC filings available at investor.apple.com/investor-relations/sec-filings/default.aspx<br>- Additional information on Apple’s corporate and investor relations websites<br>- Press releases, financial performance, ESG matters, and annual meeting details<br>- Website URLs are inactive textual references only [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`15`1`1`7`80) |\n| Risk Factors                   | - Item 1A: Discussion of various risks facing the company (details not included in provided chunks)                     |\n| Exhibit and Financial Statement Schedules | - List of exhibits, including stock plans, award agreements, executive cash incentive plan, subsidiaries, certifications, and XBRL documents<br>- Management contracts and compensatory plans indicated<br>- Inline XBRL for financial statements and cover page<br>- Undertaking to furnish omitted instruments upon SEC request [_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`49`6`6`58`80) |\n\n**Note:** This breakdown is based on the available chunks and may not include all sections typically found in a full 10-K filing, such as Management’s Discussion and Analysis, Financial Statements, or Legal Proceedings, as those sections were not present in the provided context.",
-              metadata: {
-                mimetype: 'text/markdown',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '5491a8ad-f065-46bc-bfac-b47cf80a8cfa',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-21T07:45:30.201+00:00',
-      },
-      history: [
-        {
-          messageID: 'dc3a36b3-4ac4-4a82-94a9-88316f796d76',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '5491a8ad-f065-46bc-bfac-b47cf80a8cfa',
-          timestamp: '2026-01-21T07:44:40.541702',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'draw table wise details',
-            },
-          ],
-        },
-        {
-          messageID: 'f862175e-1dbe-4eb5-b587-a25a73b75d79',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '5491a8ad-f065-46bc-bfac-b47cf80a8cfa',
-          timestamp: '2026-01-21T07:45:30.201637',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 49558,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "Below are table-wise details extracted from Apple's latest 10-K filing, organized by topic and year where available. Each table is referenced with its source ID for citation.\n\n---\n\n### 1. Net Sales by Category (Products and Services)\n\n| Category                        | 2023      | Change | 2022      | Change | 2021      |\n|----------------------------------|-----------|--------|-----------|--------|-----------|\n| iPhone                          | $200,583  | (2)%   | $205,489  | 7%     | $191,973  |\n| Mac                             | $29,357   | (27)%  | $40,177   | 14%    | $35,190   |\n| iPad                            | $28,300   | (3)%   | $29,292   | (8)%   | $31,862   |\n| Wearables, Home and Accessories | $39,845   | (3)%   | $41,241   | 7%     | $38,367   |\n| Services                        | $85,200   | 9%     | $78,129   | 14%    | $68,425   |\n| **Total net sales**             | $383,285  | (3)%   | $394,328  | 8%     | $365,817  |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`29`1`1`25`80)\n\n---\n\n### 2. Net Sales by Reportable Segment\n\n| Segment             | 2023      | Change | 2022      | Change | 2021      |\n|---------------------|-----------|--------|-----------|--------|-----------|\n| Americas            | $162,560  | (4)%   | $169,658  | 11%    | $153,306  |\n| Europe              | $94,294   | (1)%   | $95,118   | 7%     | $89,307   |\n| Greater China       | $72,559   | (2)%   | $74,200   | 9%     | $68,366   |\n| Japan               | $24,257   | (7)%   | $25,977   | (9)%   | $28,482   |\n| Rest of Asia Pacific| $29,615   | 1%     | $29,375   | 11%    | $26,356   |\n| **Total net sales** | $383,285  | (3)%   | $394,328  | 8%     | $365,817  |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`28`1`2`24`80)\n\n---\n\n### 3. Gross Margin (Products and Services)\n\n|                        | 2023      | 2022      | 2021      |\n|------------------------|-----------|-----------|-----------|\n| Products Gross Margin  | $108,803  | $114,728  | $105,126  |\n| Services Gross Margin  | $60,345   | $56,054   | $47,710   |\n| **Total Gross Margin** | $169,148  | $170,782  | $152,836  |\n| Products GM %          | 36.5%     | 36.3%     | 35.3%     |\n| Services GM %          | 70.8%     | 71.7%     | 69.7%     |\n| **Total GM %**         | 44.1%     | 43.3%     | 41.8%     |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`30`1`1`26`80)\n\n---\n\n### 4. Property, Plant and Equipment, Net\n\n| Asset Class                              | 2023      | 2022      |\n|------------------------------------------|-----------|-----------|\n| Land and buildings                       | $23,446   | $22,126   |\n| Machinery, equipment, internal-use sw    | $78,314   | $81,060   |\n| Leasehold improvements                   | $12,839   | $11,271   |\n| **Gross property, plant and equipment**  | $114,599  | $114,457  |\n| Accumulated depreciation                 | ($70,884) | ($72,340) |\n| **Total property, plant and equipment**  | $43,715   | $42,117   |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`47`1`1`42`80)\n\n---\n\n### 5. Other Non-Current Assets\n\n|                        | 2023      | 2022      |\n|------------------------|-----------|-----------|\n| Deferred tax assets    | $17,852   | $15,375   |\n| Other non-current assets| $46,906  | $39,053   |\n| **Total**              | $64,758   | $54,428   |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`48`1`1`42`80)\n\n---\n\n### 6. Other Current Liabilities\n\n|                        | 2023      | 2022      |\n|------------------------|-----------|-----------|\n| Income taxes payable   | $8,819    | $6,552    |\n| Other current liabilities| $50,010 | $54,293   |\n| **Total**              | $58,829   | $60,845   |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`48`1`1`42`80)\n\n---\n\n### 7. Other Non-Current Liabilities\n\n|                        | 2023      | 2022      |\n|------------------------|-----------|-----------|\n| Long-term taxes payable| $15,457   | $16,657   |\n| Other non-current liabilities| $34,391| $32,485 |\n| **Total**              | $49,848   | $49,142   |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`48`1`1`42`80)\n\n---\n\n### 8. Other Income/(Expense), Net\n\n|                        | 2023      | 2022      | 2021      |\n|------------------------|-----------|-----------|-----------|\n| Interest & dividend income| $3,750 | $2,825    | $2,843    |\n| Interest expense       | ($3,933)  | ($2,931)  | ($2,645)  |\n| Other income/(expense) | ($382)    | ($228)    | $60       |\n| **Total OI&E, net**    | ($565)    | ($334)    | $258      |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`48`1`1`42`80)\n\n---\n\nIf you need further breakdowns or additional tables, please specify the area of interest.",
-              metadata: {
-                mimetype: 'text/markdown',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: 'aaba8744-b456-471c-92ce-28ec6ad35980',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-21T07:49:29.290+00:00',
-      },
-      history: [
-        {
-          messageID: 'cfb9088a-8fa5-409e-a820-269c1f66e958',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'aaba8744-b456-471c-92ce-28ec6ad35980',
-          timestamp: '2026-01-21T07:48:35.568047',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'draw a table wise details',
-            },
-          ],
-        },
-        {
-          messageID: '2d5813e4-28d7-484f-b14a-d197c9b2ffd5',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: 'aaba8744-b456-471c-92ce-28ec6ad35980',
-          timestamp: '2026-01-21T07:49:29.290302',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 53619,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "Below are table-wise details extracted from Apple's latest 10-K filing, organized by topic and including key figures for the most recent years available. Each table is referenced with its source ID for citation.\n\n---\n\n### 1. Net Sales by Category (Products and Services)\n\n| Category                        | 2023      | Change | 2022      | Change | 2021      |\n|----------------------------------|-----------|--------|-----------|--------|-----------|\n| iPhone                          | $200,583M | (2)%   | $205,489M | 7%     | $191,973M |\n| Mac                             | $29,357M  | (27)%  | $40,177M  | 14%    | $35,190M  |\n| iPad                            | $28,300M  | (3)%   | $29,292M  | (8)%   | $31,862M  |\n| Wearables, Home and Accessories | $39,845M  | (3)%   | $41,241M  | 7%     | $38,367M  |\n| Services                        | $85,200M  | 9%     | $78,129M  | 14%    | $68,425M  |\n| **Total Net Sales**             | $383,285M | (3)%   | $394,328M | 8%     | $365,817M |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`29`1`1`25`80)\n\n---\n\n### 2. Net Sales by Reportable Segment\n\n| Segment             | 2023      | Change | 2022      | Change | 2021      |\n|---------------------|-----------|--------|-----------|--------|-----------|\n| Americas            | $162,560M | (4)%   | $169,658M | 11%    | $153,306M |\n| Europe              | $94,294M  | (1)%   | $95,118M  | 7%     | $89,307M  |\n| Greater China       | $72,559M  | (2)%   | $74,200M  | 9%     | $68,366M  |\n| Japan               | $24,257M  | (7)%   | $25,977M  | (9)%   | $28,482M  |\n| Rest of Asia Pacific| $29,615M  | 1%     | $29,375M  | 11%    | $26,356M  |\n| **Total Net Sales** | $383,285M | (3)%   | $394,328M | 8%     | $365,817M |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`28`1`2`24`80)\n\n---\n\n### 3. Gross Margin (Products and Services)\n\n|                       | 2023      | 2022      | 2021      |\n|-----------------------|-----------|-----------|-----------|\n| Products Gross Margin | $108,803M | $114,728M | $105,126M |\n| Services Gross Margin | $60,345M  | $56,054M  | $47,710M  |\n| **Total Gross Margin**| $169,148M | $170,782M | $152,836M |\n| Products GM %         | 36.5%     | 36.3%     | 35.3%     |\n| Services GM %         | 70.8%     | 71.7%     | 69.7%     |\n| **Total GM %**        | 44.1%     | 43.3%     | 41.8%     |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`30`1`1`26`80)\n\n---\n\n### 4. Property, Plant and Equipment\n\n| Asset Class                        | 2023      | 2022      |\n|-------------------------------------|-----------|-----------|\n| Land and buildings                  | $23,446M  | $22,126M  |\n| Machinery, equipment & software     | $78,314M  | $81,060M  |\n| Leasehold improvements              | $12,839M  | $11,271M  |\n| **Gross PPE**                       | $114,599M | $114,457M |\n| Accumulated depreciation            | ($70,884M)| ($72,340M)|\n| **Total PPE, net**                  | $43,715M  | $42,117M  |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`47`1`1`42`80)\n\n---\n\n### 5. Other Non-Current Liabilities\n\n|                        | 2023      | 2022      |\n|------------------------|-----------|-----------|\n| Long-term taxes payable| $15,457M  | $16,657M  |\n| Other non-current liab.| $34,391M  | $32,485M  |\n| **Total**              | $49,848M  | $49,142M  |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`48`1`1`42`80)\n\n---\n\n### 6. Other Income/(Expense), Net\n\n|                        | 2023   | 2022   | 2021   |\n|------------------------|--------|--------|--------|\n| Interest & dividend inc| $3,750M| $2,825M| $2,843M|\n| Interest expense       |($3,933M)|($2,931M)|($2,645M)|\n| Other inc/(exp), net   |($382M) |($228M) | $60M   |\n| **Total OI&E, net**    |($565M) |($334M) | $258M  |\n\n[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/pdf_data_apple_10k__10-K-Q4-2023-As-Filed.pdf`48`1`1`42`80)\n\n---\n\nIf you need further breakdowns or additional tables, please specify the area of interest.",
-              metadata: {
-                mimetype: 'text/markdown',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '7a893d20-21de-47ec-a43c-0eaf38ac3eae',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-21T07:52:48.763+00:00',
-      },
-      history: [
-        {
-          messageID: '7ebd6005-089c-4c93-91c6-c45723ef994c',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '7a893d20-21de-47ec-a43c-0eaf38ac3eae',
-          timestamp: '2026-01-21T07:52:44.680758',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'a table?',
-            },
-          ],
-        },
-        {
-          messageID: '7aa5166c-fe02-40bf-8858-6a121f6a8994',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '7a893d20-21de-47ec-a43c-0eaf38ac3eae',
-          timestamp: '2026-01-21T07:52:48.763058',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 3978,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "Could you please specify which table or what kind of information you would like to see? For example, are you interested in Apple's financial tables, sales data, or something else?",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '12b92af8-84ab-49bd-8418-6ec9feab3fa2',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-21T07:53:48.849+00:00',
-      },
-      history: [
-        {
-          messageID: 'a1bbc693-d2b6-45ab-a385-29149b8dbbdb',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '12b92af8-84ab-49bd-8418-6ec9feab3fa2',
-          timestamp: '2026-01-21T07:52:54.085784',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'a table wise data?',
-            },
-          ],
-        },
-        {
-          messageID: 'ab27f162-6275-4283-8fe1-070462187bc8',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '12b92af8-84ab-49bd-8418-6ec9feab3fa2',
-          timestamp: '2026-01-21T07:53:48.849088',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 54631,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: 'Below are key financial tables and breakdowns from Apple’s latest 10-K filing, organized by category, segment, gross margin, assets, and liabilities:\n\n---\n\n### 1. Net Sales by Category (in millions)\n\n| Category                        | 2022      | 2021      | 2020      |\n|----------------------------------|-----------|-----------|-----------|\n| iPhone                          | $205,489  | $191,973  | $137,781  |\n| Mac                             | $40,177   | $35,190   | $28,622   |\n| iPad                            | $29,292   | $31,862   | $23,724   |\n| Wearables, Home & Accessories   | $41,241   | $38,367   | $30,620   |\n| Services                        | $78,129   | $68,425   | $53,768   |\n| **Total Net Sales**             | $394,328  | $365,817  | $274,515  |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`13`1`1`24`80)\n\n---\n\n### 2. Net Sales by Reportable Segment (in millions)\n\n| Segment             | 2022      | 2021      | 2020      |\n|---------------------|-----------|-----------|-----------|\n| Americas            | $169,658  | $153,306  | $124,556  |\n| Europe              | $95,118   | $89,307   | $68,640   |\n| Greater China       | $74,200   | $68,366   | $40,308   |\n| Japan               | $25,977   | $28,482   | $21,418   |\n| Rest of Asia Pacific| $29,375   | $26,356   | $19,593   |\n| **Total Net Sales** | $394,328  | $365,817  | $274,515  |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`14`1`2`25`80)\n\n---\n\n### 3. Segment Operating Income and Reconciliation (in millions)\n\n|                        | 2022      | 2021      | 2020      |\n|------------------------|-----------|-----------|-----------|\n| Segment Operating Income| $152,895  | $137,006  | $91,240   |\n| Research & Development  | (26,251)  | (21,914)  | (18,752)  |\n| Other Corporate Expenses| (7,207)   | (6,143)   | (6,200)   |\n| **Total Operating Income**| $119,437| $108,949  | $66,288   |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`39`1`2`52`80)\n\n---\n\n### 4. Net Sales and Long-Lived Assets by Geography (in millions)\n\n|                | 2022      | 2021      | 2020      |\n|----------------|-----------|-----------|-----------|\n| U.S. Sales     | $147,859  | $133,803  | $109,197  |\n| China Sales    | $74,200   | $68,366   | $40,308   |\n| Other Countries| $172,269  | $163,648  | $125,010  |\n| **Total Sales**| $394,328  | $365,817  | $274,515  |\n\n|                | 2022      | 2021      |\n|----------------|-----------|-----------|\n| U.S. Assets    | $31,119   | $28,203   |\n| China Assets   | $7,260    | $7,521    |\n| Other Countries| $3,738    | $3,716    |\n| **Total Assets**| $42,117  | $39,440   |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`39`1`2`52`80)\n\n---\n\n### 5. Property, Plant and Equipment, Net (in millions)\n\n| Category                              | 2022      | 2021      |\n|---------------------------------------|-----------|-----------|\n| Land and buildings                    | $22,126   | $20,041   |\n| Machinery, equipment & internal-use SW| $81,060   | $78,659   |\n| Leasehold improvements                | $11,271   | $11,023   |\n| Gross property, plant & equipment     | $114,457  | $109,723  |\n| Accumulated depreciation & amortization| ($72,340)| ($70,283) |\n| **Total property, plant & equipment** | $42,117   | $39,440   |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`32`1`1`44`80)\n\n---\n\n### 6. Other Non-Current Liabilities (in millions)\n\n| Category                  | 2022      | 2021      |\n|---------------------------|-----------|-----------|\n| Long-term taxes payable   | $16,657   | $24,689   |\n| Other non-current liabilities| $32,485| $28,636   |\n| **Total**                 | $49,142   | $53,325   |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`32`1`1`44`80)\n\n---\n\n### 7. Lease-Related Assets and Liabilities (in millions)\n\n| Lease-Related Assets      | 2022      | 2021      |\n|--------------------------|-----------|-----------|\n| Operating leases (ROU)    | $10,417   | $10,087   |\n| Finance leases (ROU)      | $952      | $861      |\n| **Total ROU assets**      | $11,369   | $10,948   |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`34`1`2`46`80)\n\n---\n\n### 8. Other Income/(Expense), Net (in millions)\n\n| Category                  | 2022      | 2021      | 2020      |\n|---------------------------|-----------|-----------|-----------|\n| Interest & dividend income| $2,825    | $2,843    | $3,763    |\n| Interest expense          | ($2,931)  | ($2,645)  | ($2,873)  |\n| Other income/(expense), net| ($228)   | $60       | ($87)     |\n| **Total OI&E, net**       | ($334)    | $258      | $803      |[_DW_REF_](9e319baf-f214-4730-82c3-08a255f64f80`s3a://dataworkz-genai-dev-lake/pdf_data/apple_sec_filing/_10-K-2022-(As-Filed).pdf`32`1`1`44`80)\n\n---\n\nThese tables provide a comprehensive overview of Apple’s financial performance and position as reported in its latest 10-K filing. For further details, refer to the full filing and notes to the consolidated financial statements.',
-              metadata: {
-                mimetype: 'text/markdown',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '47bbefe2-fe24-4544-8bdb-03fc7105f342',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-21T11:53:43.808+00:00',
-      },
-      history: [
-        {
-          messageID: '5f367d2d-4c70-499d-a977-65c361727a13',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '47bbefe2-fe24-4544-8bdb-03fc7105f342',
-          timestamp: '2026-01-21T11:53:34.915911',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'give me some info about you?',
-            },
-          ],
-        },
-        {
-          messageID: 'd1f5a035-3c3c-46b6-8fb4-b0e235dee9f0',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '47bbefe2-fe24-4544-8bdb-03fc7105f342',
-          timestamp: '2026-01-21T11:53:43.808086',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 8713,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: "I assist with queries related to Apple's financial information and 10-K filings. If you need details from Apple's official financial reports, statements, or filings, feel free to ask!",
-              metadata: {
-                mimetype: 'text/plain',
-              },
-            },
-          ],
-          metadata: {},
-        },
-      ],
-    },
-    {
-      id: '417edc64-8a75-4108-b7f4-476981f33ece',
-      conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-      status: {
-        state: 'completed',
-        timestamp: '2026-01-22T04:19:27.189+00:00',
-      },
-      history: [
-        {
-          messageID: 'b7f8c1f2-45f3-4c0a-a32e-f644b878b287',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '417edc64-8a75-4108-b7f4-476981f33ece',
-          timestamp: '2026-01-22T04:18:44.458468',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 0,
-          kind: 'message',
-          role: 'USER',
-          parts: [
-            {
-              kind: 'text',
-              text: 'draw table wise details',
-            },
-          ],
-        },
-        {
-          messageID: '1fb40e9d-a8b1-4385-bfc9-8de432210e37',
-          conversationID: 'b4238657-3085-472c-9765-aa6d1987be75',
-          taskID: '417edc64-8a75-4108-b7f4-476981f33ece',
-          timestamp: '2026-01-22T04:19:27.189847',
-          thumbsUpOrDown: 0,
-          timeToAnswer: 42624,
-          kind: 'message',
-          role: 'AGENT',
-          parts: [
-            {
-              kind: 'text',
-              text: 'Agent could not respond despite multiple attempts. You can possibly retry your question, word it differently or try asking it again after starting a new conversation.',
-              metadata: {
-                mimetype: 'text/plain',
+                      },
+                      {
+                        kind: 'data',
+                        data: {},
+                      },
+                    ],
+                    metadata: {},
+                  },
+                ],
               },
             },
           ],
@@ -1399,7 +584,7 @@ export const stepsResponse = {
               type: 'Tool Execution',
               name: 'GetRAReviewCommentsForDateRange',
               metadata: {},
-              status: 'completed',
+              status: 'pending',
             },
             '277966e9-23bd-4959-88ca-675ecb623d7e-af2d2c6f-12c6-4a9d-a770-a6942c788bb9': {
               executionId:
@@ -1447,7 +632,7 @@ export const stepsResponse = {
                   type: 'Scenario Selection',
                   name: 'ReviewAnalysis',
                   metadata: {},
-                  status: 'completed',
+                  status: 'pending',
                 },
                 {
                   planning: {

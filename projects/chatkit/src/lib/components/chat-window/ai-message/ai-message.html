@@ -1,8 +1,5 @@
 <div class="dw-ai-message-container">
   <div class="dw-ai-message" [class.dw-ai-message-highlighted]="isHighlighted()">
-    <div class="dw-ai-message-avatar">
-      <dw-agent-avatar-icon [size]="40"></dw-agent-avatar-icon>
-    </div>
     <div class="dw-ai-message-content">
       @if (!!messageError()) {
         <p class="dw-ai-message-error">
@@ -29,9 +26,6 @@
             <p>Unsupported part kind</p>
           }
         }
-        @if (hasHitlRequests()) {
-          <dw-hitl-section [taskId]="taskId()" [messageId]="messageId()" />
-        }
       }
     </div>
   </div>
@@ -39,3 +33,6 @@
     <dw-ai-message-footer [taskId]="taskId()" [messageId]="messageId()"></dw-ai-message-footer>
   }
 </div>
+@if (hasHitlRequests()) {
+  <dw-hitl-section [taskId]="taskId()" [messageId]="messageId()" />
+}

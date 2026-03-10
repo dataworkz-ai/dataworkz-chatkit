@@ -3,7 +3,6 @@ import { MarkdownViewer } from './markdown-viewer/markdown-viewer';
 import { AiMessageFooter } from './ai-message-footer/ai-message-footer';
 import { ChatWindowDataService } from '../../../services/chat-window.data';
 import { Skeleton } from '../../skeleton/skeleton';
-import { AgentAvatarIcon } from '../../icons';
 import { AiDataItem } from './ai-data-item/ai-data-item';
 import { AiFileItem } from './ai-file-item/ai-file-item';
 import { HitlSection } from './hitl-section/hitl-section';
@@ -15,7 +14,6 @@ import { HitlSection } from './hitl-section/hitl-section';
     AiMessageFooter,
     AiFileItem,
     Skeleton,
-    AgentAvatarIcon,
     AiDataItem,
     HitlSection,
   ],

@@ -3,11 +3,11 @@
     <div class="dw-hitl-card-header">
       @if (isPending()) {
         <span class="dw-hitl-status-icon dw-hitl-pending-icon">
-          <dw-circle-icon [size]="14" />
+          <span class="dw-hitl-dot"></span>
         </span>
       } @else {
         <span class="dw-hitl-status-icon dw-hitl-provided-icon">
-          <dw-check-circle-icon [size]="14" />
+          <dw-check-icon [size]="12" />
         </span>
       }
       <span class="dw-hitl-type-label">{{ typeLabel() }}:</span>
@@ -24,7 +24,9 @@
       @if (isApproval() && contextEntries().length) {
         <ul class="dw-hitl-context-list">
           @for (entry of contextEntries(); track entry.key) {
-            <li><strong>{{ entry.key }}:</strong> {{ entry.value }}</li>
+            <li>
+              <strong>{{ entry.key }}:</strong> {{ entry.value }}
+            </li>
           }
         </ul>
       }
@@ -45,7 +47,9 @@
               (input)="userInput.set($any($event.target).value)"
               (keydown)="onInputKeydown($event)"
             />
-            <button class="dw-hitl-btn dw-hitl-btn-confirm" (click)="onConfirmInput()">Confirm</button>
+            <button class="dw-hitl-btn dw-hitl-btn-confirm" (click)="onConfirmInput()">
+              Confirm
+            </button>
           </div>
         } @else if (isClarification()) {
           <div class="dw-hitl-clarification-group">
@@ -86,11 +90,16 @@
             }
           </div>
         }
-        <div class="dw-hitl-resolved-bubble">
-          {{ resolvedAnswerText() }}
-        </div>
+        @if (isApproval()) {
+          <div class="dw-hitl-resolved-action">
+            <span class="dw-hitl-resolved-btn">{{ resolvedAnswerText() }}</span>
+          </div>
+        } @else {
+          <div class="dw-hitl-resolved-bubble">
+            {{ resolvedAnswerText() }}
+          </div>
+        }
       }
     </div>
-
   </div>
 }

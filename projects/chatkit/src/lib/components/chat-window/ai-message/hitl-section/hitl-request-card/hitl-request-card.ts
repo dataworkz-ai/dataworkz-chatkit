@@ -1,12 +1,12 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { ChatWindowDataService } from '../../../../../services/chat-window.data';
 import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
-import { CheckCircleIcon, CircleIcon } from '../../../../icons';
+import { CheckIcon } from '../../../../icons';
 
 @Component({
   selector: 'dw-hitl-request-card',
   standalone: true,
-  imports: [CheckCircleIcon, CircleIcon],
+  imports: [CheckIcon],
   templateUrl: './hitl-request-card.html',
   styleUrl: './hitl-request-card.scss',
 })
@@ -18,7 +18,9 @@ export class HitlRequestCard {
   private readonly chatWindowDataService = inject(ChatWindowDataService);
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
 
-  readonly hitlItem = computed(() => this.chatWindowDataService.hitlRequestsMap()[this.requestId()]);
+  readonly hitlItem = computed(
+    () => this.chatWindowDataService.hitlRequestsMap()[this.requestId()],
+  );
   readonly request = computed(() => this.hitlItem()?.request);
   readonly resolution = computed(() => this.hitlItem()?.resolution);
   readonly isPending = computed(() => !this.resolution());

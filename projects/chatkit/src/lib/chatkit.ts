@@ -83,7 +83,7 @@ export class Chatkit {
 
     this.chatWindowEventsService.scrollComplete$.subscribe({
       next: () => {
-        this.viewProbe.emit();
+        this.scrollComplete.emit();
       },
     });
 

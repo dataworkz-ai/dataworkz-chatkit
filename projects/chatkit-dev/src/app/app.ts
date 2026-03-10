@@ -18,12 +18,10 @@ import {
   TChatkitFooter,
   THitlRequestItem,
 } from 'dw-chatkit';
-import {
-  LLMsResponse,
-  selectedAgentResponse,
-  selectedConversationResponse,
-  stepsResponse,
-} from './data';
+import { LLMsResponse } from './data/LLMsResponse';
+import { selectedAgentResponse } from './data/selectedAgentResponse';
+import { selectedConversationResponse } from './data/selectedConversationResponse';
+import { stepsResponse } from './data/stepsResponse';
 
 @Component({
   selector: 'dw-ref-link',

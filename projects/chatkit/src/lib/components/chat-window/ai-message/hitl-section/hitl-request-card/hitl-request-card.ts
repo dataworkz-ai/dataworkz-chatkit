@@ -10,11 +10,12 @@ import {
 import { ChatWindowDataService } from '../../../../../services/chat-window.data';
 import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
 import { CheckIcon } from '../../../../icons';
+import { SendArrowIcon } from '../../../../icons/search-icon';
 
 @Component({
   selector: 'dw-hitl-request-card',
   standalone: true,
-  imports: [CheckIcon],
+  imports: [CheckIcon, SendArrowIcon],
   templateUrl: './hitl-request-card.html',
   styleUrl: './hitl-request-card.scss',
 })

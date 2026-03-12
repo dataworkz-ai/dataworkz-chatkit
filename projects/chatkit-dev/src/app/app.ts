@@ -215,11 +215,18 @@ export class App {
     highlightMessageId: '',
   });
 
-  private readonly _chatkitFooter = signal<TChatkitFooter>({
-    userMessage: '',
+  userMessasgeSuggestions = signal<string[]>([
+    'Hello, how are you?',
+    'What is the weather like today?',
+  ]);
+
+  userMessage = signal<string>('');
+
+  private readonly _chatkitFooter = computed<TChatkitFooter>(() => ({
+    userMessage: this.userMessage(),
     sendDisabled: false,
     userFiles: ['madhu.mp3'],
-    userMessageSuggestions: ['Hello, how are you?', 'What is the weather like today?'],
+    userMessageSuggestions: this.userMessasgeSuggestions(),
     userFilesMap: {
       'madhu.mp3': {
         ingestStatus: {
@@ -274,7 +281,7 @@ export class App {
         },
       },
     },
-  });
+  }));
 
   readonly chatkitConfig = computed<TChatkitConfig>(() => ({
     chatkitCitation: this._chatkitCitation(),
@@ -295,12 +302,13 @@ export class App {
   }
 
   onUserMessageChange({ text }: { text: string }) {
-    this._chatkitFooter.update((prev) => {
-      return { ...prev, userMessage: text };
-    });
+    this.userMessage.set(text);
   }
 
   onSendMessage(text: string) {
+    this.userMessasgeSuggestions.update((prev) => {
+      return [...new Set([...prev, text].reverse())].reverse();
+    });
     const parts: TMessageTextPart[] = [
       {
         kind: 'text',
@@ -334,6 +342,8 @@ export class App {
         },
       };
     });
+
+    this.userMessage.set('');
 
     // window.setInterval(() => {
     //   this._messagesMap.update((prev) => {

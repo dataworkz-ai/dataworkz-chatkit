@@ -17,42 +17,91 @@
         <span class="dw-hitl-badge dw-hitl-badge-provided">Provided</span>
       }
     </div>
+    @if (typeSubLabel() && isPending()) {
+      <div class="dw-hitl-card-header" style="padding-left: 1.3rem">
+        <span class="dw-hitl-type-label">{{ typeSubLabel() }}</span>
+      </div>
+    }
 
     <div class="dw-hitl-content">
       <p class="dw-hitl-question">{{ request()!.question }}</p>
 
-      @if (contextDisplayEntries().length) {
-        <ul class="dw-hitl-context-list">
-          @for (entry of contextDisplayEntries(); track entry.key) {
-            <li>
-              <strong>{{ entry.key }}:</strong>
-              @if (entry.isObject) {
-                <pre class="dw-hitl-context-json">{{ entry.displayValue }}</pre>
-              } @else {
-                {{ entry.displayValue }}
-              }
-            </li>
+      @if (hasContextSection()) {
+        <div class="dw-hitl-section">
+          <div class="dw-hitl-section-heading">Context</div>
+          @if (contextDataIsString()) {
+            <p class="dw-hitl-context-text">{{ contextData() }}</p>
           }
-        </ul>
+          @if (contextDataEntries().length) {
+            <ul class="dw-hitl-context-list">
+              @for (entry of contextDataEntries(); track entry.key) {
+                <li>
+                  <strong>{{ entry.key }}:</strong>
+                  @if (entry.isObject) {
+                    <pre class="dw-hitl-context-json">{{ entry.displayValue }}</pre>
+                  } @else {
+                    {{ entry.displayValue }}
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+
+      @if (hasArgsSection()) {
+        <div class="dw-hitl-section">
+          <div class="dw-hitl-section-heading">Arguments</div>
+          @if (isPending() && isApprovalWithMods()) {
+            <div class="dw-hitl-args-group">
+              @for (entry of argsEntries(); track entry.key) {
+                <div class="dw-hitl-arg-entry">
+                  <label class="dw-hitl-arg-label">{{ entry.key }}:</label>
+                  <textarea
+                    rows="1"
+                    class="dw-hitl-text-input"
+                    [value]="entry.value"
+                    (input)="
+                      onArgChange(entry.key, $any($event.target).value); autoResizeTextarea($event)
+                    "
+                  ></textarea>
+                </div>
+              }
+            </div>
+          } @else if (isProvided() && isApprovalWithMods()) {
+            <div class="dw-hitl-args-group dw-hitl-args-provided">
+              @for (entry of providedArgsEntries(); track entry.key) {
+                <div class="dw-hitl-arg-entry">
+                  <label class="dw-hitl-arg-label">{{ entry.key }}:</label>
+                  <textarea
+                    rows="1"
+                    class="dw-hitl-text-input dw-hitl-text-input-disabled"
+                    [class.dw-hitl-arg-modified]="entry.isModified"
+                    [value]="entry.value"
+                    [title]="entry.tooltip"
+                    disabled
+                  ></textarea>
+                </div>
+              }
+            </div>
+          } @else {
+            <ul class="dw-hitl-context-list">
+              @for (entry of readonlyArgsEntries(); track entry.key) {
+                <li>
+                  <strong>{{ entry.key }}:</strong>
+                  @if (entry.isObject) {
+                    <pre class="dw-hitl-context-json">{{ entry.displayValue }}</pre>
+                  } @else {
+                    {{ entry.displayValue }}
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </div>
       }
 
       @if (isPending()) {
-        @if (isApprovalWithMods() && argsEntries().length) {
-          <div class="dw-hitl-args-group">
-            @for (entry of argsEntries(); track entry.key) {
-              <div class="dw-hitl-arg-entry">
-                <label class="dw-hitl-arg-label">{{ entry.key }}</label>
-                <input
-                  type="text"
-                  class="dw-hitl-text-input"
-                  [value]="entry.value"
-                  (input)="onArgChange(entry.key, $any($event.target).value)"
-                />
-              </div>
-            }
-          </div>
-        }
-
         @if (isApproval()) {
           <div class="dw-hitl-actions">
             <button class="dw-hitl-btn dw-hitl-btn-reject" (click)="onReject()">Reject</button>
@@ -60,39 +109,64 @@
           </div>
         } @else if (isInput()) {
           <div class="dw-hitl-input-group">
-            <input
-              type="text"
+            <textarea
+              rows="1"
               class="dw-hitl-text-input"
               placeholder="Your response..."
               [value]="userInput()"
-              (input)="userInput.set($any($event.target).value)"
-              (keydown)="onInputKeydown($event)"
-            />
+              (input)="userInput.set($any($event.target).value); autoResizeTextarea($event)"
+            ></textarea>
             <button class="dw-hitl-btn dw-hitl-btn-confirm" (click)="onConfirmInput()">
               Confirm
             </button>
           </div>
         } @else if (isClarification()) {
           <div class="dw-hitl-clarification-group">
-            @for (option of request()!.options; track option.optionId) {
+            @if (showOptionSearch()) {
+              <div class="dw-hitl-options-search">
+                <input
+                  type="text"
+                  class="dw-hitl-text-input"
+                  placeholder="Search"
+                  [value]="optionSearchQuery()"
+                  (input)="optionSearchQuery.set($any($event.target).value)"
+                />
+              </div>
+            }
+            <div class="dw-hitl-options-scroll">
+              @for (option of filteredFixedOptions(); track option.optionId) {
+                <label class="dw-hitl-radio-option">
+                  <input
+                    type="radio"
+                    [name]="'hitl-' + requestId()"
+                    [checked]="selectedOptionId() === option.optionId"
+                    (change)="onOptionSelect(option.optionId)"
+                  />
+                  <span>{{ option.label }}</span>
+                </label>
+              }
+            </div>
+            @if (clarifyOption(); as clarify) {
               <label class="dw-hitl-radio-option">
                 <input
                   type="radio"
                   [name]="'hitl-' + requestId()"
-                  [checked]="selectedOptionId() === option.optionId"
-                  (change)="onOptionSelect(option.optionId)"
+                  [checked]="isClarifySelected()"
+                  (change)="onOptionSelect('clarify')"
                 />
-                <span>{{ option.label }}</span>
+                <span>{{ clarify.label }}</span>
               </label>
-            }
-            @if (hasClarifyOption() && isClarifySelected()) {
-              <input
-                type="text"
-                class="dw-hitl-text-input dw-hitl-clarify-input"
-                placeholder="Provide details..."
-                [value]="clarifyInput()"
-                (input)="onClarifyInputChange($any($event.target).value)"
-              />
+              @if (isClarifySelected()) {
+                <textarea
+                  rows="1"
+                  class="dw-hitl-text-input dw-hitl-clarify-input"
+                  placeholder="Provide details..."
+                  [value]="clarifyInput()"
+                  (input)="
+                    onClarifyInputChange($any($event.target).value); autoResizeTextarea($event)
+                  "
+                ></textarea>
+              }
             }
             <button
               class="dw-hitl-btn dw-hitl-btn-confirm"
@@ -108,32 +182,27 @@
       @if (isProvided()) {
         @if (isClarification()) {
           <div class="dw-hitl-clarification-group dw-hitl-clarification-disabled">
-            @for (option of request()!.options; track option.optionId) {
+            <div class="dw-hitl-options-scroll">
+              @for (option of fixedOptions(); track option.optionId) {
+                <label class="dw-hitl-radio-option dw-hitl-radio-disabled">
+                  <input
+                    type="radio"
+                    disabled
+                    [checked]="resolution()?.selectedOption === option.optionId"
+                  />
+                  <span>{{ option.label }}</span>
+                </label>
+              }
+            </div>
+            @if (clarifyOption(); as clarify) {
               <label class="dw-hitl-radio-option dw-hitl-radio-disabled">
                 <input
                   type="radio"
                   disabled
-                  [checked]="resolution()?.selectedOption === option.optionId"
+                  [checked]="resolution()?.selectedOption === 'clarify'"
                 />
-                <span>{{ option.label }}</span>
+                <span>{{ clarify.label }}</span>
               </label>
-            }
-          </div>
-        }
-        @if (isApprovalWithMods()) {
-          <div class="dw-hitl-args-group dw-hitl-args-provided">
-            @for (entry of providedArgsEntries(); track entry.key) {
-              <div class="dw-hitl-arg-entry">
-                <label class="dw-hitl-arg-label">{{ entry.key }}</label>
-                <input
-                  type="text"
-                  class="dw-hitl-text-input dw-hitl-text-input-disabled"
-                  [class.dw-hitl-arg-modified]="entry.isModified"
-                  [value]="entry.value"
-                  [title]="entry.tooltip"
-                  disabled
-                />
-              </div>
             }
           </div>
         }

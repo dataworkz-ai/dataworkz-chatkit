@@ -46,7 +46,7 @@ $hitl-border: #d1d5db;
 .dw-hitl-type-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: $hitl-text;
+  color: #64748b;
 }
 
 .dw-hitl-badge {
@@ -70,6 +70,25 @@ $hitl-border: #d1d5db;
   border-left: 2px solid $hitl-blue;
   padding-left: 0.75rem;
   margin-left: 0.375rem;
+}
+
+.dw-hitl-section {
+  margin-top: 0.5rem;
+}
+
+.dw-hitl-section-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $hitl-text;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.375rem;
+}
+
+.dw-hitl-context-text {
+  font-size: 0.875rem;
+  color: $hitl-text;
+  margin: 0 0 0.375rem 0;
+  line-height: 1.5;
 }
 
 .dw-hitl-question {
@@ -126,9 +145,22 @@ $hitl-border: #d1d5db;
 }
 
 .dw-hitl-arg-label {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: $hitl-text;
+  display: flex;
+  align-items: baseline;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #374151;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 4.5px;
+    height: 4.5px;
+    min-width: 4.5px;
+    border-radius: 50%;
+    background: currentColor;
+    margin: 8px;
+  }
 }
 
 .dw-hitl-arg-value {
@@ -239,6 +271,17 @@ $hitl-border: #d1d5db;
   }
 }
 
+textarea.dw-hitl-text-input {
+  resize: vertical;
+  overflow-y: hidden;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+textarea.dw-hitl-text-input-disabled {
+  resize: none;
+}
+
 // Clarification required
 .dw-hitl-clarification-group {
   display: flex;
@@ -279,6 +322,20 @@ $hitl-border: #d1d5db;
 
 .dw-hitl-clarification-disabled {
   opacity: 0.7;
+}
+
+.dw-hitl-options-scroll {
+  max-height: 210px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dw-hitl-options-search {
+  .dw-hitl-text-input {
+    width: 100%;
+  }
 }
 
 .dw-hitl-clarify-input {

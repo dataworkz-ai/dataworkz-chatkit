@@ -274,7 +274,7 @@ export const selectedConversationResponse = {
           parts: [{ kind: 'text', text: '' }],
           metadata: {
             hitlRequests: [
-              // 1. APPROVAL_REQUIRED — with context (string values + JSON object value)
+              // 1. APPROVAL_REQUIRED — contextData as STRING, NO args
               {
                 requestId: 'pending-approval',
                 type: 'APPROVAL_REQUIRED',
@@ -283,10 +283,8 @@ export const selectedConversationResponse = {
                 question:
                   'The agent wants to delete 47 customer records from the staging database. Do you approve this action?',
                 context: {
-                  database: 'staging_db',
-                  table: 'customers',
-                  recordCount: '47',
-                  filter: { status: 'inactive', lastLogin: { $lt: '2025-01-01' } },
+                  contextData:
+                    'The agent identified 47 inactive customer records in the staging database that have not logged in since January 2025.',
                 },
                 options: [
                   { optionId: 'approve', label: 'Approve', metadata: {} },
@@ -294,7 +292,7 @@ export const selectedConversationResponse = {
                 ],
                 createdAt: '2026-03-08T10:00:00Z',
               },
-              // 2. APPROVAL_WITH_MODIFICATIONS — with args + random context keys
+              // 2. APPROVAL_WITH_MODIFICATIONS — contextData as OBJECT + args (editable)
               {
                 requestId: 'pending-approval-mods',
                 type: 'APPROVAL_WITH_MODIFICATIONS',
@@ -303,9 +301,12 @@ export const selectedConversationResponse = {
                 question:
                   'The agent wants to send an email. Please review and modify the parameters if needed.',
                 context: {
-                  reason: "Follow-up to last week's meeting",
-                  triggeredBy: 'scheduledWorkflow',
-                  priority: 'high',
+                  contextData: {
+                    sender: 'agent@company.com',
+                    emailThread: 'RE: Monthly Report',
+                    previousRecipient: 'john@example.com',
+                    attachments: ['report.pdf'],
+                  },
                   args: {
                     to: 'john@example.com',
                     subject: 'Monthly Report - March 2026',
@@ -320,7 +321,7 @@ export const selectedConversationResponse = {
                 ],
                 createdAt: '2026-03-08T10:01:00Z',
               },
-              // 3. INPUT_REQUIRED — with context
+              // 3. INPUT_REQUIRED — args only (read-only), NO contextData
               {
                 requestId: 'pending-input',
                 type: 'INPUT_REQUIRED',
@@ -328,28 +329,36 @@ export const selectedConversationResponse = {
                 toolName: 'Update Config',
                 question: 'What should the maximum retry count be for failed API calls?',
                 context: {
-                  currentValue: '3',
-                  service: 'payment-gateway',
-                  config: { retryDelay: '1000ms', backoffMultiplier: 2 },
+                  args: {
+                    retryCount: '3',
+                    retryDelay: '1000ms',
+                    backoffMultiplier: '2',
+                    timeout: '30000ms',
+                  },
                 },
                 options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
                 createdAt: '2026-03-08T10:02:00Z',
               },
-              // 4. CLARIFICATION_REQUIRED — with clarify option + context
+              // 4. CLARIFICATION_REQUIRED — NO context at all (no heading shown)
               {
                 requestId: 'pending-clarification',
                 type: 'CLARIFICATION_REQUIRED',
                 toolId: 'report-tool',
                 toolName: 'Generate Report',
-                question: 'Which database should the migration run against?',
-                context: {
-                  currentStep: 'Database Migration',
-                  availableEnvironments: 'staging, production, dev',
-                },
+                question: 'There are 4 vendors matching the name Aman Sharma. Provide the correct vendor ID to proceed-',
                 options: [
-                  { optionId: 'opt-staging', label: 'Staging', metadata: {} },
-                  { optionId: 'opt-production', label: 'Production', metadata: {} },
-                  { optionId: 'opt-dev', label: 'Dev', metadata: {} },
+                  { optionId: 'opt-1', label: 'Aman Sharma - 1274632', metadata: {} },
+                  { optionId: 'opt-2', label: 'Aman K Sharma - 3287345', metadata: {} },
+                  { optionId: 'opt-3', label: 'A Raman Sharma - 3245346', metadata: {} },
+                  { optionId: 'opt-4', label: 'Sharma Aman - 2849555', metadata: {} },
+                  { optionId: 'opt-5', label: 'Aman Sharma D - 4582931', metadata: {} },
+                  { optionId: 'opt-6', label: 'Aman R Sharma - 1938475', metadata: {} },
+                  { optionId: 'opt-7', label: 'Aman Sharma (Inactive) - 5738291', metadata: {} },
+                  { optionId: 'opt-8', label: 'Aman Sharma Corp - 8492710', metadata: {} },
+                  { optionId: 'opt-9', label: 'Aman Sharma LLC - 6281934', metadata: {} },
+                  { optionId: 'opt-10', label: 'A Sharma Enterprises - 7593021', metadata: {} },
+                  { optionId: 'opt-11', label: 'Aman Sharma & Sons - 3948172', metadata: {} },
+                  { optionId: 'opt-12', label: 'Aman Sharma Trading - 2058463', metadata: {} },
                   { optionId: 'clarify', label: 'Other (provide details)', metadata: {} },
                 ],
                 createdAt: '2026-03-08T10:03:00Z',
@@ -410,7 +419,7 @@ export const selectedConversationResponse = {
           parts: [{ kind: 'text', text: 'All actions have been completed successfully.' }],
           metadata: {
             hitlRequests: [
-              // 1. APPROVAL_REQUIRED — resolved
+              // 1. APPROVAL_REQUIRED — resolved — contextData as STRING, NO args
               {
                 requestId: 'resolved-approval',
                 type: 'APPROVAL_REQUIRED',
@@ -418,9 +427,8 @@ export const selectedConversationResponse = {
                 toolName: 'Deploy Service',
                 question: 'The agent wants to deploy version 2.4.1 to production. Do you approve?',
                 context: {
-                  service: 'payment-gateway',
-                  version: '2.4.1',
-                  environment: 'production',
+                  contextData:
+                    'Deploying version 2.4.1 of the payment-gateway service to the production environment.',
                 },
                 options: [
                   { optionId: 'approve', label: 'Approve', metadata: {} },
@@ -428,7 +436,7 @@ export const selectedConversationResponse = {
                 ],
                 createdAt: '2026-03-08T09:00:00Z',
               },
-              // 2. APPROVAL_WITH_MODIFICATIONS — resolved with modifiedArgs
+              // 2. APPROVAL_WITH_MODIFICATIONS — resolved — contextData as OBJECT + args
               {
                 requestId: 'resolved-approval-mods',
                 type: 'APPROVAL_WITH_MODIFICATIONS',
@@ -437,7 +445,10 @@ export const selectedConversationResponse = {
                 question:
                   'The agent wants to send an email. Review and modify the parameters if needed.',
                 context: {
-                  reason: 'Quarterly review follow-up',
+                  contextData: {
+                    sender: 'agent@company.com',
+                    emailThread: 'RE: Monthly Report',
+                  },
                   args: {
                     to: 'john@example.com',
                     subject: 'Monthly Report - March 2026',
@@ -452,7 +463,7 @@ export const selectedConversationResponse = {
                 ],
                 createdAt: '2026-03-08T09:01:00Z',
               },
-              // 3. INPUT_REQUIRED — resolved
+              // 3. INPUT_REQUIRED — resolved — args only (read-only)
               {
                 requestId: 'resolved-input',
                 type: 'INPUT_REQUIRED',
@@ -460,25 +471,36 @@ export const selectedConversationResponse = {
                 toolName: 'Update Config',
                 question: 'What should the maximum retry count be for failed API calls?',
                 context: {
-                  currentValue: '3',
-                  service: 'payment-gateway',
+                  args: {
+                    retryCount: '3',
+                    retryDelay: '1000ms',
+                    backoffMultiplier: '2',
+                    timeout: '30000ms',
+                  },
                 },
                 options: [{ optionId: 'provide', label: 'Provide Input', metadata: {} }],
                 createdAt: '2026-03-08T09:02:00Z',
               },
-              // 4. CLARIFICATION_REQUIRED with clarify — resolved with userInput
+              // 4. CLARIFICATION_REQUIRED — resolved — NO context at all
               {
                 requestId: 'resolved-clarification',
                 type: 'CLARIFICATION_REQUIRED',
                 toolId: 'migration-tool',
                 toolName: 'Run Migration',
                 question: 'Which database should the migration run against?',
-                context: {
-                  currentStep: 'Database Migration',
-                },
                 options: [
-                  { optionId: 'opt-staging', label: 'Staging', metadata: {} },
-                  { optionId: 'opt-production', label: 'Production', metadata: {} },
+                  { optionId: 'opt-1', label: 'Aman Sharma - 1274632', metadata: {} },
+                  { optionId: 'opt-2', label: 'Aman K Sharma - 3287345', metadata: {} },
+                  { optionId: 'opt-3', label: 'A Raman Sharma - 3245346', metadata: {} },
+                  { optionId: 'opt-4', label: 'Sharma Aman - 2849555', metadata: {} },
+                  { optionId: 'opt-5', label: 'Aman Sharma D - 4582931', metadata: {} },
+                  { optionId: 'opt-6', label: 'Aman R Sharma - 1938475', metadata: {} },
+                  { optionId: 'opt-7', label: 'Aman Sharma (Inactive) - 5738291', metadata: {} },
+                  { optionId: 'opt-8', label: 'Aman Sharma Corp - 8492710', metadata: {} },
+                  { optionId: 'opt-9', label: 'Aman Sharma LLC - 6281934', metadata: {} },
+                  { optionId: 'opt-10', label: 'A Sharma Enterprises - 7593021', metadata: {} },
+                  { optionId: 'opt-11', label: 'Aman Sharma & Sons - 3948172', metadata: {} },
+                  { optionId: 'opt-12', label: 'Aman Sharma Trading - 2058463', metadata: {} },
                   { optionId: 'clarify', label: 'Other (provide details)', metadata: {} },
                 ],
                 createdAt: '2026-03-08T09:03:00Z',

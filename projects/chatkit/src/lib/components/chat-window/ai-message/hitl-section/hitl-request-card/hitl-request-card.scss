@@ -333,8 +333,20 @@ textarea.dw-hitl-text-input-disabled {
 }
 
 .dw-hitl-options-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .dw-hitl-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
   .dw-hitl-text-input {
     width: 100%;
+    padding-left: 2rem;
   }
 }
 

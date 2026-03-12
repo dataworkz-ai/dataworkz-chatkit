@@ -31,12 +31,8 @@ export class Footer {
 
   constructor() {
     effect(() => {
-      if (
-        !this.sessionSuggestions.length ||
-        this.sessionSuggestions.length < this.userMessageSuggestions().length
-      ) {
-        this.sessionSuggestions = [...this.userMessageSuggestions()];
-      }
+      this.sessionSuggestions = [...this.userMessageSuggestions()];
+      this.suggestionIndex = -1;
     });
   }
 
@@ -112,7 +108,7 @@ export class Footer {
   private resetSuggestions = () => {
     this.suggestionIndex = -1;
     this.originalUserText = '';
-    this.sessionSuggestions = this.userMessageSuggestions();
+    this.sessionSuggestions = [...this.userMessageSuggestions()];
   };
 
   onSend() {

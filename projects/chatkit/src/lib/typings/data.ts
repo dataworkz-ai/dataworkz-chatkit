@@ -132,7 +132,10 @@ export type THitlRequest = {
   toolId: string | null;
   toolName: string | null;
   question: string;
-  context: Record<string, any>;
+  context?: {
+    contextData?: string | Record<string, any>;
+    args?: Record<string, any>;
+  };
   options: THitlOption[];
   createdAt: string;
 };

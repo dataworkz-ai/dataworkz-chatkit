@@ -1,4 +1,12 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  afterEveryRender,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { ChatWindowDataService } from '../../../../../services/chat-window.data';
 import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
 import { CheckIcon } from '../../../../icons';
@@ -17,6 +25,24 @@ export class HitlRequestCard {
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
+  private readonly elementRef = inject(ElementRef);
+
+  constructor() {
+    afterEveryRender(() => {
+      const el = this.elementRef.nativeElement as HTMLElement;
+      const unsized = el.querySelectorAll<HTMLTextAreaElement>('textarea:not([data-auto-sized])');
+      if (unsized.length === 0) return;
+      // Defer to allow browser layout to complete (textareas need their final width)
+      setTimeout(() => {
+        unsized.forEach((ta) => {
+          if (ta.offsetWidth > 50) {
+            this.resizeTextarea(ta);
+            ta.dataset['autoSized'] = '1';
+          }
+        });
+      });
+    });
+  }
 
   readonly hitlItem = computed(
     () => this.chatWindowDataService.hitlRequestsMap()[this.requestId()],
@@ -40,6 +66,15 @@ export class HitlRequestCard {
     }
   });
 
+  readonly typeSubLabel = computed(() => {
+    switch (this.request()?.type) {
+      case 'APPROVAL_WITH_MODIFICATIONS':
+        return 'Modify values and approve as needed.';
+      default:
+        return '';
+    }
+  });
+
   readonly isApproval = computed(
     () =>
       this.request()?.type === 'APPROVAL_REQUIRED' ||
@@ -51,28 +86,42 @@ export class HitlRequestCard {
   readonly isInput = computed(() => this.request()?.type === 'INPUT_REQUIRED');
   readonly isClarification = computed(() => this.request()?.type === 'CLARIFICATION_REQUIRED');
 
-  // Context entries — excludes 'args' key for APPROVAL_WITH_MODIFICATIONS
-  readonly contextDisplayEntries = computed(() => {
-    const ctx = this.request()?.context || {};
-    return Object.entries(ctx)
-      .filter(([key]) => !(this.isApprovalWithMods() && key === 'args'))
-      .map(([key, value]) => ({
-        key,
-        isObject: typeof value === 'object' && value !== null,
-        displayValue:
-          typeof value === 'object' && value !== null
-            ? JSON.stringify(value, null, 2)
-            : String(value),
-      }));
+  // Context section: contextData only (string or Record<string, any>)
+  readonly contextData = computed(() => this.request()?.context?.contextData);
+  readonly contextDataIsString = computed(() => typeof this.contextData() === 'string');
+
+  readonly contextDataEntries = computed(() => {
+    const data = this.contextData();
+    if (!data || typeof data !== 'object') return [];
+    return Object.entries(data).map(([key, value]) => ({
+      key,
+      isObject: typeof value === 'object' && value !== null,
+      displayValue:
+        typeof value === 'object' && value !== null
+          ? JSON.stringify(value, null, 2)
+          : String(value),
+    }));
   });
 
-  // Args editing for APPROVAL_WITH_MODIFICATIONS
+  readonly hasContextSection = computed(() => !!this.contextData());
+
+  // Args — available for all types, editable only for APPROVAL_WITH_MODIFICATIONS
   readonly originalArgs = computed(() => {
-    const req = this.request();
-    if (req?.type === 'APPROVAL_WITH_MODIFICATIONS') {
-      return (req.context?.['args'] as Record<string, any>) || {};
-    }
-    return {};
+    return (this.request()?.context?.['args'] as Record<string, any>) || {};
+  });
+
+  readonly hasArgsSection = computed(() => Object.keys(this.originalArgs()).length > 0);
+
+  readonly readonlyArgsEntries = computed(() => {
+    const args = this.originalArgs();
+    return Object.entries(args).map(([key, value]) => ({
+      key,
+      isObject: typeof value === 'object' && value !== null,
+      displayValue:
+        typeof value === 'object' && value !== null
+          ? JSON.stringify(value, null, 2)
+          : String(value),
+    }));
   });
 
   // Track which original arg keys are object types (need JSON editing)
@@ -150,6 +199,23 @@ export class HitlRequestCard {
     return true;
   });
 
+  // Separated options: fixed options vs clarify option
+  readonly fixedOptions = computed(
+    () => this.request()?.options?.filter((o) => o.optionId !== 'clarify') ?? [],
+  );
+  readonly clarifyOption = computed(
+    () => this.request()?.options?.find((o) => o.optionId === 'clarify') ?? null,
+  );
+
+  // Search for fixed options
+  readonly optionSearchQuery = signal('');
+  readonly showOptionSearch = computed(() => this.fixedOptions().length > 8);
+  readonly filteredFixedOptions = computed(() => {
+    const query = this.optionSearchQuery().toLowerCase().trim();
+    if (!query) return this.fixedOptions();
+    return this.fixedOptions().filter((o) => o.label.toLowerCase().includes(query));
+  });
+
   onApprove() {
     if (this.isApprovalWithMods()) {
       const original = this.originalArgs();
@@ -213,9 +279,32 @@ export class HitlRequestCard {
     }
   }
 
-  onInputKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.onConfirmInput();
+  autoResizeTextarea(event: Event) {
+    const el = event.target as HTMLTextAreaElement;
+    this.resizeTextarea(el);
+  }
+
+  private resizeTextarea(el: HTMLTextAreaElement) {
+    el.style.height = 'auto';
+    const cs = getComputedStyle(el);
+    let lineHeight = parseFloat(cs.lineHeight);
+    if (isNaN(lineHeight)) {
+      lineHeight = parseFloat(cs.fontSize) * 1.4;
+    }
+    const paddingY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    const minHeight = Math.ceil(lineHeight + paddingY);
+    const maxHeight = Math.ceil(lineHeight * 4 + paddingY);
+
+    // Clamp manual resize range to 1–4 rows
+    el.style.minHeight = minHeight + 'px';
+    el.style.maxHeight = maxHeight + 'px';
+
+    if (el.scrollHeight > maxHeight) {
+      el.style.height = maxHeight + 'px';
+      el.style.overflowY = 'auto';
+    } else {
+      el.style.height = el.scrollHeight + 'px';
+      el.style.overflowY = 'hidden';
     }
   }
 

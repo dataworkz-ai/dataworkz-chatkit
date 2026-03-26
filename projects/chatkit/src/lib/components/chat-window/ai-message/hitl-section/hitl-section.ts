@@ -22,4 +22,11 @@ export class HitlSection {
 
   readonly requestCount = computed(() => this.hitlRequestIds().length);
   readonly hasRequests = computed(() => this.requestCount() > 0);
+
+  readonly isHighlighted = computed(() => {
+    return (
+      this.chatWindowDataService.chatkitProps().highlightMessageId === this.messageId() &&
+      this.hasRequests()
+    );
+  });
 }

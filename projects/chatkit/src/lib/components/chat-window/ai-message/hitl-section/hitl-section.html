@@ -1,5 +1,5 @@
 @if (hasRequests()) {
-  <div class="dw-hitl-section">
+  <div class="dw-hitl-section" [class.dw-hitl-section-highlighted]="isHighlighted()">
     <div class="dw-hitl-header">
       User response required-
       <strong>{{ requestCount() }} request(s)</strong>

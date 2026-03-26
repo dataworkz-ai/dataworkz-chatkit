@@ -271,7 +271,10 @@ export const selectedConversationResponse = {
         {
           messageID: 'hitl-agent-pending',
           role: 'AGENT',
-          parts: [{ kind: 'text', text: '' }],
+          parts: [
+            { kind: 'text', text: '' },
+            { kind: 'data', data: { test: '123' } },
+          ],
           metadata: {
             hitlRequests: [
               // 1. APPROVAL_REQUIRED — contextData as STRING, NO args
@@ -345,7 +348,8 @@ export const selectedConversationResponse = {
                 type: 'CLARIFICATION_REQUIRED',
                 toolId: 'report-tool',
                 toolName: 'Generate Report',
-                question: 'There are 4 vendors matching the name Aman Sharma. Provide the correct vendor ID to proceed-',
+                question:
+                  'There are 4 vendors matching the name Aman Sharma. Provide the correct vendor ID to proceed-',
                 options: [
                   { optionId: 'opt-1', label: 'Aman Sharma - 1274632', metadata: {} },
                   { optionId: 'opt-2', label: 'Aman K Sharma - 3287345', metadata: {} },

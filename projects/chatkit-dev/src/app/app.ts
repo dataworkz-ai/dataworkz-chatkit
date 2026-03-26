@@ -212,7 +212,7 @@ export class App {
   private readonly _chatkitProps = signal<TChatkitProps>({
     placeholder: 'Ask me anything...',
     selectedLLMId: LLMsResponse.find((llm) => llm.defaultLLM)?.identifier || '',
-    highlightMessageId: '',
+    highlightMessageId: 'hitl-agent-pending',
   });
 
   userMessasgeSuggestions = signal<string[]>([

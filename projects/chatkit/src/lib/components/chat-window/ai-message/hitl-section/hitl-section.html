@@ -1,8 +1,15 @@
 @if (hasRequests()) {
   <div class="dw-hitl-section" [class.dw-hitl-section-highlighted]="isHighlighted()">
     <div class="dw-hitl-header">
-      User response required-
-      <strong>{{ requestCount() }} request(s)</strong>
+      <span class="dw-hitl-header-text">
+        User response required-
+        <strong>{{ requestCount() }} request(s)</strong>
+      </span>
+      @if (hasPendingRequests()) {
+        <button class="dw-hitl-cancel-btn" (click)="onCancel()">
+          <dw-stop-icon></dw-stop-icon>
+        </button>
+      }
     </div>
     @for (requestId of hitlRequestIds(); track requestId) {
       <dw-hitl-request-card [taskId]="taskId()" [requestId]="requestId" [messageId]="messageId()" />

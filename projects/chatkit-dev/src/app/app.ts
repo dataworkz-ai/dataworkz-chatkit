@@ -212,7 +212,7 @@ export class App {
   private readonly _chatkitProps = signal<TChatkitProps>({
     placeholder: 'Ask me anything...',
     selectedLLMId: LLMsResponse.find((llm) => llm.defaultLLM)?.identifier || '',
-    highlightMessageId: 'hitl-agent-pending',
+    // highlightMessageId: 'hitl-agent-pending',
   });
 
   userMessasgeSuggestions = signal<string[]>([
@@ -406,6 +406,23 @@ export class App {
           resolution: data.resolution,
         },
       };
+    });
+  }
+
+  onHitlCancel(data: { taskId: string; messageId: string }) {
+    console.log('onHitlCancel', data);
+    // Set all pending requests for this message to 'cancelled'
+    const msg = this._messagesMap()[data.messageId]?.value;
+    if (!msg?.hitlRequestIds?.length) return;
+    this._hitlRequestsMap.update((prev) => {
+      const updated = { ...prev };
+      for (const requestId of msg?.hitlRequestIds || []) {
+        updated[requestId] = {
+          request: updated[requestId]?.request,
+          resolution: 'cancelled',
+        };
+      }
+      return updated;
     });
   }
 }

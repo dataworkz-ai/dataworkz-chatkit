@@ -150,7 +150,7 @@ export type THitlResolution = {
 
 export type THitlRequestItem = {
   request: THitlRequest;
-  resolution?: THitlResolution;
+  resolution?: THitlResolution | 'cancelled';
 };
 
 export type TChatkitData = {

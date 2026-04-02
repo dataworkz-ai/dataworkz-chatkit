@@ -27,4 +27,8 @@ export class ChatWindowEventsService {
     requestId: string;
     resolution: THitlResolution;
   }>();
+  readonly hitlCancel$ = new Subject<{
+    taskId: string;
+    messageId: string;
+  }>();
 }

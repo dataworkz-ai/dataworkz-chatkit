@@ -1,8 +1,12 @@
 @if (request()) {
-  <div class="dw-hitl-card" [class.dw-hitl-card-provided]="isProvided()">
+  <div class="dw-hitl-card" [class.dw-hitl-card-provided]="isProvided() || isCancelled()">
     <div class="dw-hitl-card-header">
       @if (isPending()) {
         <span class="dw-hitl-status-icon dw-hitl-pending-icon">
+          <span class="dw-hitl-dot"></span>
+        </span>
+      } @else if (isCancelled()) {
+        <span class="dw-hitl-status-icon dw-hitl-cancelled-icon">
           <span class="dw-hitl-dot"></span>
         </span>
       } @else {
@@ -13,6 +17,8 @@
       <span class="dw-hitl-type-label">{{ typeLabel() }}:</span>
       @if (isPending()) {
         <span class="dw-hitl-badge dw-hitl-badge-pending">Pending</span>
+      } @else if (isCancelled()) {
+        <span class="dw-hitl-badge dw-hitl-badge-cancelled">Cancelled</span>
       } @else {
         <span class="dw-hitl-badge dw-hitl-badge-provided">Provided</span>
       }
@@ -79,6 +85,20 @@
                     [class.dw-hitl-arg-modified]="entry.isModified"
                     [value]="entry.value"
                     [title]="entry.tooltip"
+                    disabled
+                  ></textarea>
+                </div>
+              }
+            </div>
+          } @else if (isCancelled() && isApprovalWithMods()) {
+            <div class="dw-hitl-args-group dw-hitl-args-provided">
+              @for (entry of readonlyArgsEntries(); track entry.key) {
+                <div class="dw-hitl-arg-entry">
+                  <label class="dw-hitl-arg-label">{{ entry.key }}:</label>
+                  <textarea
+                    rows="1"
+                    class="dw-hitl-text-input dw-hitl-text-input-disabled"
+                    [value]="entry.displayValue"
                     disabled
                   ></textarea>
                 </div>
@@ -189,7 +209,7 @@
                   <input
                     type="radio"
                     disabled
-                    [checked]="resolution()?.selectedOption === option.optionId"
+                    [checked]="resolvedResolution()?.selectedOption === option.optionId"
                   />
                   <span>{{ option.label }}</span>
                 </label>
@@ -200,7 +220,7 @@
                 <input
                   type="radio"
                   disabled
-                  [checked]="resolution()?.selectedOption === 'clarify'"
+                  [checked]="resolvedResolution()?.selectedOption === 'clarify'"
                 />
                 <span>{{ clarify.label }}</span>
               </label>
@@ -214,6 +234,43 @@
         } @else {
           <div class="dw-hitl-resolved-bubble">
             {{ resolvedAnswerText() }}
+          </div>
+        }
+      }
+
+      @if (isCancelled()) {
+        @if (isApproval()) {
+          <div class="dw-hitl-actions">
+            <button class="dw-hitl-btn dw-hitl-btn-reject" disabled>Reject</button>
+            <button class="dw-hitl-btn dw-hitl-btn-approve" disabled>Approve</button>
+          </div>
+        } @else if (isInput()) {
+          <div class="dw-hitl-input-group">
+            <textarea
+              rows="1"
+              class="dw-hitl-text-input dw-hitl-text-input-disabled"
+              placeholder="Your response..."
+              disabled
+            ></textarea>
+            <button class="dw-hitl-btn dw-hitl-btn-confirm" disabled>Confirm</button>
+          </div>
+        } @else if (isClarification()) {
+          <div class="dw-hitl-clarification-group dw-hitl-clarification-disabled">
+            <div class="dw-hitl-options-scroll">
+              @for (option of fixedOptions(); track option.optionId) {
+                <label class="dw-hitl-radio-option dw-hitl-radio-disabled">
+                  <input type="radio" disabled />
+                  <span>{{ option.label }}</span>
+                </label>
+              }
+            </div>
+            @if (clarifyOption(); as clarify) {
+              <label class="dw-hitl-radio-option dw-hitl-radio-disabled">
+                <input type="radio" disabled />
+                <span>{{ clarify.label }}</span>
+              </label>
+            }
+            <button class="dw-hitl-btn dw-hitl-btn-confirm" disabled>Confirm</button>
           </div>
         }
       }

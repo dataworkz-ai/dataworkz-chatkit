@@ -50,8 +50,17 @@ export class HitlRequestCard {
   );
   readonly request = computed(() => this.hitlItem()?.request);
   readonly resolution = computed(() => this.hitlItem()?.resolution);
+  readonly isCancelled = computed(() => this.resolution() === 'cancelled');
   readonly isPending = computed(() => !this.resolution());
-  readonly isProvided = computed(() => !!this.resolution());
+  readonly isProvided = computed(() => {
+    const res = this.resolution();
+    return !!res && res !== 'cancelled';
+  });
+  /** Resolution as object (excludes 'cancelled' string) — safe for property access in template */
+  readonly resolvedResolution = computed(() => {
+    const res = this.resolution();
+    return typeof res === 'object' ? res : undefined;
+  });
 
   readonly typeLabel = computed(() => {
     switch (this.request()?.type) {
@@ -153,7 +162,7 @@ export class HitlRequestCard {
   readonly providedArgsEntries = computed(() => {
     const original = this.originalArgs();
     const res = this.resolution();
-    const modified = res?.modifiedArgs || {};
+    const modified = (typeof res === 'object' ? res?.modifiedArgs : undefined) || {};
     // Merge: start with originals, override with modified values
     const merged = { ...original, ...modified };
     return Object.entries(merged).map(([key, value]) => {
@@ -177,7 +186,7 @@ export class HitlRequestCard {
 
   readonly resolvedAnswerText = computed(() => {
     const res = this.resolution();
-    if (!res) return '';
+    if (!res || typeof res === 'string') return '';
     if (res.userInput) return res.userInput;
     const option = this.request()?.options?.find((o) => o.optionId === res.selectedOption);
     return option?.label || res.selectedOption;

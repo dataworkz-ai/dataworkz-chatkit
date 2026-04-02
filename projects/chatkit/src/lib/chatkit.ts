@@ -86,6 +86,12 @@ export class Chatkit {
         this.hitlResolve.emit(value);
       },
     });
+
+    this.chatWindowEventsService.hitlCancel$.subscribe({
+      next: (value) => {
+        this.hitlCancel.emit(value);
+      },
+    });
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -150,5 +156,9 @@ export class Chatkit {
     messageId: string;
     requestId: string;
     resolution: THitlResolution;
+  }>();
+  @Output() hitlCancel = new EventEmitter<{
+    taskId: string;
+    messageId: string;
   }>();
 }

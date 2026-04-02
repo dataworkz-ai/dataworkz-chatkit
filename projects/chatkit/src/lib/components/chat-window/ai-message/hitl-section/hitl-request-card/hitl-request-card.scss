@@ -66,6 +66,15 @@ $hitl-border: #d1d5db;
   color: $hitl-blue;
 }
 
+.dw-hitl-badge-cancelled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.dw-hitl-cancelled-icon {
+  color: #6b7280;
+}
+
 .dw-hitl-content {
   border-left: 2px solid $hitl-blue;
   padding-left: 0.75rem;

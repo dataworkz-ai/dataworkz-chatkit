@@ -1,0 +1,260 @@
+// Color configuration variables
+$step-text-color: #374151;
+$step-border-color: #d1d5db;
+$step-completed-color: #16a34a;
+$step-in-progress-color: #6b7280;
+$step-failed-color: #dc2626;
+$step-pending-color: #2375D3;
+$step-thought-bg: #f9fafb;
+$steps-background: #fff;
+
+:host {
+  display: block;
+}
+
+.dw-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: $steps-background;
+}
+
+.dw-step-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+
+  &.dw-step-nested {
+    margin-left: 1rem;
+    padding-left: 0.75rem;
+  }
+}
+
+.dw-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: $step-text-color;
+
+  &-clickable {
+    cursor: pointer;
+  }
+
+  .dw-step-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+
+    &-completed {
+      color: $step-completed-color;
+    }
+
+    &-in-progress {
+      color: $step-in-progress-color;
+    }
+
+    &-failed {
+      color: $step-failed-color;
+    }
+
+    &-pending {
+      color: $step-pending-color;
+    }
+
+    .dw-step-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: currentColor;
+    }
+  }
+
+  .dw-step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $step-in-progress-color;
+  }
+
+  .dw-step-title {
+    font-weight: 500;
+    color: $step-text-color;
+    flex-shrink: 0;
+  }
+
+  .dw-step-label {
+    color: $step-text-color;
+    flex-shrink: 0;
+  }
+
+  .dw-step-name {
+    font-weight: 500;
+    color: $step-text-color;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Failed state - MUST come after default definitions to override them
+  &-failed {
+    color: $step-failed-color;
+
+    .dw-step-title,
+    .dw-step-label,
+    .dw-step-name,
+    .dw-step-icon {
+      color: $step-failed-color;
+    }
+  }
+
+  // Pending state
+  &-pending {
+    color: $step-pending-color;
+
+    .dw-step-title,
+    .dw-step-label,
+    .dw-step-name,
+    .dw-step-icon {
+      color: $step-pending-color;
+    }
+  }
+}
+
+.dw-step-pending-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #dc2626;
+  background-color: #fee2e2;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  white-space: nowrap;
+}
+
+.dw-step-thought-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    .dw-thought-label {
+      color: $step-text-color;
+    }
+  }
+
+  .dw-thought-label {
+    font-size: 0.8125rem;
+    color: $step-in-progress-color;
+    transition: color 0.15s ease;
+  }
+
+  .dw-thought-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $step-in-progress-color;
+    transform: rotate(-90deg);
+    transition: transform 0.2s ease;
+
+    &-expanded {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+// Failed state for thought trigger - applied when sibling header has failed class
+.dw-step-item:has(.dw-step-header-failed) {
+  .dw-step-thought-trigger {
+    .dw-thought-label {
+      color: $step-failed-color;
+    }
+    .dw-thought-arrow {
+      color: $step-failed-color;
+    }
+    &:hover .dw-thought-label {
+      color: $step-failed-color;
+    }
+  }
+
+  .dw-step-thought-content p {
+    color: $step-failed-color;
+  }
+}
+
+.dw-step-thought-content {
+  margin: 0.25rem 0.75rem 0.25rem 1.75rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid $step-border-color;
+  border-radius: 0 0.25rem 0.25rem 0;
+
+  p {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: $step-text-color;
+    line-height: 1.5;
+  }
+}
+
+.dw-iteration {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+
+  .dw-iteration-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: $step-text-color;
+  }
+}
+
+.dw-execution-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $step-in-progress-color;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  &-expanded {
+    transform: rotate(0deg);
+  }
+}
+
+.dw-nested-executions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  margin-left: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid $step-border-color;
+
+  // Override nested margin for items inside this container
+  .dw-step-item.dw-step-nested {
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+.steps-not-found {
+  font-size: 14px;
+}
+
+.dw-steps-loader {
+  padding: 0.75rem 0rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 90%;
+  margin: auto;
+}

@@ -1,0 +1,110 @@
+:host {
+  display: inline-block;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.dw-file-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background-color: #f1f5f9;
+  border-radius: 0.5rem;
+  max-width: 100%;
+  min-width: 0;
+  cursor: default;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+
+  .dw-file-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .dw-file-item-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25rem;
+    cursor: pointer;
+    max-width: 150px;
+  }
+
+  .dw-file-item-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+
+    dw-loader-icon {
+      animation: dw-spin 1s linear infinite;
+      color: #64748b;
+    }
+
+    dw-error-info-icon {
+      color: #ef4444;
+    }
+
+    .dw-file-item-status-success {
+      color: #22c55e;
+    }
+  }
+
+  .dw-file-item-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 0.25rem;
+
+    &:hover {
+      background-color: #e2e8f0;
+      color: #0f172a;
+    }
+  }
+
+  &.dw-file-item-error {
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
+  }
+
+  .dw-file-item-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .dw-file-item-ingest-progress {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+@keyframes dw-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

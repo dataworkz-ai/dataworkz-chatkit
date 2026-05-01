@@ -1,0 +1,36 @@
+.dw-hitl-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+
+  &.dw-hitl-section-highlighted {
+    background-color: #cee0f5;
+    margin: 1rem;
+    border-radius: 1rem;
+  }
+}
+
+.dw-hitl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.dw-hitl-cancel-btn {
+  border-radius: 0.375rem;
+  padding: 0px;
+  height: unset;
+  border: none;
+  margin: 0px;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  background-color: white;
+
+  &:hover {
+    background: #f9fafb;
+  }
+}

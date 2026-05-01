@@ -1,0 +1,75 @@
+.dw-progress-bar-container {
+  width: 100%;
+  height: 2px;
+  background-color: transparent;
+  overflow: hidden;
+  position: relative;
+
+  &.vertical {
+    width: 4px;
+    height: 100%;
+
+    .dw-progress-bar-fill {
+      width: 100%;
+      height: 100%;
+
+      &.progress {
+        background: linear-gradient(
+          180deg,
+          #9ca3af 0%,
+          #9ca3af 35%,
+          #e5e7eb 50%,
+          #9ca3af 65%,
+          #9ca3af 100%
+        );
+        background-size: 100% 300%;
+        animation: shimmer-vertical 1.2s infinite ease-in-out;
+      }
+    }
+  }
+
+  .dw-progress-bar-fill {
+    height: 100%;
+    width: 100%;
+    transition: background-color 0.3s ease;
+
+    &.progress {
+      background: linear-gradient(
+        90deg,
+        #9ca3af 0%,
+        #9ca3af 35%,
+        #e5e7eb 50%,
+        #9ca3af 65%,
+        #9ca3af 100%
+      );
+      background-size: 300% 100%;
+      animation: shimmer-horizontal 1.2s infinite ease-in-out;
+    }
+
+    &.success {
+      background-color: #22c55e; // green-500
+    }
+
+    &.error {
+      background-color: #ef4444; // red-500
+    }
+  }
+}
+
+@keyframes shimmer-horizontal {
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -150% 0;
+  }
+}
+
+@keyframes shimmer-vertical {
+  0% {
+    background-position: 0 150%;
+  }
+  100% {
+    background-position: 0 -150%;
+  }
+}

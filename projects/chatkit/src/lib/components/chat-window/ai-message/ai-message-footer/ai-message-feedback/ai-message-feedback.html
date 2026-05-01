@@ -1,0 +1,63 @@
+<dw-popover [position]="popoverPosition()" align="right" #feedbackPopover>
+  <button
+    trigger
+    class="footer-feedback-btn"
+    [class.not-clickable]="!isPopoverEnabled()"
+    [disabled]="!isPopoverEnabled()"
+    (click)="onToggle(feedbackPopover); $event.stopPropagation()"
+  >
+    @if (type() === 'up') {
+      @if (isActive()) {
+        <dw-thumbs-up-filled-icon [size]="18" />
+      } @else {
+        <dw-thumbs-up-icon [size]="18" />
+      }
+    } @else {
+      @if (isActive()) {
+        <dw-thumbs-down-filled-icon [size]="18" />
+      } @else {
+        <dw-thumbs-down-icon [size]="18" />
+      }
+    }
+  </button>
+
+  <div content class="footer-feedback-popover">
+    @if (feedbackPopover.isOpen()) {
+      <div class="feedback-reasons-title">Provide feedback</div>
+
+      <textarea
+        class="feedback-textarea"
+        placeholder="Tell us more (optional)..."
+        [value]="additionalFeedback()?.feedbackText || ''"
+        (change)="onFeedbackTextChange($event)"
+        name="feedbackText"
+        rows="3"
+      ></textarea>
+
+      @if (type() === 'down') {
+        <div class="feedback-checkboxes">
+          <label class="feedback-checkbox-item">
+            <input
+              type="checkbox"
+              [checked]="additionalFeedback()?.thisIsntTrue"
+              (click)="onThisIsntTrue($event)"
+            />
+            <span>This isn't true</span>
+          </label>
+          <label class="feedback-checkbox-item">
+            <input
+              type="checkbox"
+              [checked]="additionalFeedback()?.thisIsntHelpful"
+              (click)="onThisIsntHelpful($event)"
+            />
+            <span>This isn't helpful</span>
+          </label>
+        </div>
+      }
+
+      <button class="feedback-submit-btn" (click)="onSubmitFeedback(feedbackPopover)">
+        Submit
+      </button>
+    }
+  </div>
+</dw-popover>

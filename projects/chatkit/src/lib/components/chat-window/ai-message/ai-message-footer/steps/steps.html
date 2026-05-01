@@ -1,0 +1,269 @@
+<div class="dw-steps">
+  @if (stepPlanItemsLoading()) {
+    <div class="dw-steps-loader">
+      @for (_ of [].constructor(3); track _) {
+        <dw-skeleton height="8px" />
+      }
+    </div>
+  } @else if (stepPlanItems().length > 0) {
+    @for (item of stepPlanItems(); track $index) {
+      <ng-container
+        *ngTemplateOutlet="planItemTemplate; context: { $implicit: item, index: $index }"
+      />
+    }
+
+    <!-- Template for TStepPlanItem -->
+    <ng-template #planItemTemplate let-item let-index="index">
+      <!-- Scenario Selection Step -->
+      @if (isScenarioSelection(item)) {
+        <div class="dw-step-item">
+          <div class="dw-step-header" [class.dw-step-header-failed]="item.status === 'failed'" [class.dw-step-header-pending]="item.status === 'pending'">
+            <span
+              class="dw-step-status"
+              [class.dw-step-status-completed]="item.status === 'completed'"
+              [class.dw-step-status-in-progress]="item.status === 'in_progress'"
+              [class.dw-step-status-failed]="item.status === 'failed'"
+              [class.dw-step-status-pending]="item.status === 'pending'"
+            >
+              @if (item.status === 'completed') {
+                <dw-check-circle-icon />
+              } @else if (item.status === 'in_progress') {
+                <dw-loader-icon />
+              } @else if (item.status === 'failed') {
+                <dw-error-info-icon />
+              } @else if (item.status === 'pending') {
+                <span class="dw-step-dot"></span>
+              } @else {
+                <dw-circle-icon />
+              }
+            </span>
+            <span class="dw-step-title">Scenario Selected:</span>
+            <span class="dw-step-name">{{ item.name }}</span>
+            @if (item.status === 'pending') {
+              <span class="dw-step-pending-label">Pending</span>
+            }
+          </div>
+          <!-- Collapsible Thought -->
+          @if (asScenarioSelection(item).llmThought) {
+            <div class="dw-step-thought-trigger" (click)="toggleThought('scenario-' + index)">
+              <span class="dw-thought-label">Thought</span>
+              <span
+                class="dw-thought-arrow"
+                [class.dw-thought-arrow-expanded]="isThoughtExpanded('scenario-' + index)"
+              >
+                <dw-chevron-icon [size]="12" />
+              </span>
+            </div>
+            @if (isThoughtExpanded('scenario-' + index)) {
+              <div class="dw-step-thought-content">
+                <p>{{ asScenarioSelection(item).llmThought }}</p>
+              </div>
+            }
+          }
+        </div>
+      }
+
+      <!-- Iteration Step -->
+      @if (isIteration(item)) {
+        <div class="dw-iteration">
+          <div class="dw-iteration-title">{{ item.name }}</div>
+
+          <!-- Planning Step -->
+          @if (item.planning) {
+            <div class="dw-step-item dw-step-nested">
+              <div
+                class="dw-step-header"
+                [class.dw-step-header-failed]="item.planning.status === 'failed'"
+                [class.dw-step-header-pending]="item.planning.status === 'pending'"
+              >
+                <span
+                  class="dw-step-status"
+                  [class.dw-step-status-completed]="item.planning.status === 'completed'"
+                  [class.dw-step-status-in-progress]="item.planning.status === 'in_progress'"
+                  [class.dw-step-status-failed]="item.planning.status === 'failed'"
+                  [class.dw-step-status-pending]="item.planning.status === 'pending'"
+                >
+                  @if (item.planning.status === 'completed') {
+                    <dw-check-circle-icon />
+                  } @else if (item.planning.status === 'in_progress') {
+                    <dw-loader-icon />
+                  } @else if (item.planning.status === 'failed') {
+                    <dw-error-info-icon />
+                  } @else if (item.planning.status === 'pending') {
+                    <span class="dw-step-dot"></span>
+                  } @else {
+                    <dw-circle-icon />
+                  }
+                </span>
+                <span class="dw-step-label">Planning:</span>
+                <span class="dw-step-name">{{ item.planning.name }}</span>
+                @if (item.planning.status === 'pending') {
+                  <span class="dw-step-pending-label">Pending</span>
+                }
+              </div>
+              <!-- Collapsible Thought -->
+              @if (item.planning.llmThought) {
+                <div class="dw-step-thought-trigger" (click)="toggleThought('planning-' + index)">
+                  <span class="dw-thought-label">Thought</span>
+                  <span
+                    class="dw-thought-arrow"
+                    [class.dw-thought-arrow-expanded]="isThoughtExpanded('planning-' + index)"
+                  >
+                    <dw-chevron-icon [size]="12" />
+                  </span>
+                </div>
+                @if (isThoughtExpanded('planning-' + index)) {
+                  <div class="dw-step-thought-content">
+                    <p>{{ item.planning.llmThought }}</p>
+                  </div>
+                }
+              }
+            </div>
+          }
+
+          <!-- Executions -->
+          @for (execution of item.executions; track execution.executionId) {
+            <ng-container
+              *ngTemplateOutlet="executionTemplate; context: { $implicit: execution, depth: 0 }"
+            />
+          }
+
+          <!-- Agent Response -->
+          @if (item.agentResponse) {
+            <div class="dw-step-item dw-step-nested">
+              <div
+                class="dw-step-header"
+                [class.dw-step-header-failed]="item.agentResponse.status === 'failed'"
+                [class.dw-step-header-pending]="item.agentResponse.status === 'pending'"
+              >
+                <span
+                  class="dw-step-status"
+                  [class.dw-step-status-completed]="item.agentResponse.status === 'completed'"
+                  [class.dw-step-status-in-progress]="item.agentResponse.status === 'in_progress'"
+                  [class.dw-step-status-failed]="item.agentResponse.status === 'failed'"
+                  [class.dw-step-status-pending]="item.agentResponse.status === 'pending'"
+                >
+                  @if (item.agentResponse.status === 'completed') {
+                    <dw-check-circle-icon />
+                  } @else if (item.agentResponse.status === 'in_progress') {
+                    <dw-loader-icon />
+                  } @else if (item.agentResponse.status === 'failed') {
+                    <dw-error-info-icon />
+                  } @else if (item.agentResponse.status === 'pending') {
+                    <span class="dw-step-dot"></span>
+                  } @else {
+                    <dw-circle-icon />
+                  }
+                </span>
+                <span class="dw-step-icon">
+                  <dw-response-icon />
+                </span>
+                <span class="dw-step-title">Response</span>
+                @if (item.agentResponse.status === 'pending') {
+                  <span class="dw-step-pending-label">Pending</span>
+                }
+              </div>
+              <!-- Collapsible Thought -->
+              @if (item.agentResponse.llmThought) {
+                <div class="dw-step-thought-trigger" (click)="toggleThought('response-' + index)">
+                  <span class="dw-thought-label">Thought</span>
+                  <span
+                    class="dw-thought-arrow"
+                    [class.dw-thought-arrow-expanded]="isThoughtExpanded('response-' + index)"
+                  >
+                    <dw-chevron-icon [size]="12" />
+                  </span>
+                </div>
+                @if (isThoughtExpanded('response-' + index)) {
+                  <div class="dw-step-thought-content">
+                    <p>{{ item.agentResponse.llmThought }}</p>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    </ng-template>
+
+    <!-- Recursive Template for Tool Executions -->
+    <ng-template #executionTemplate let-execution let-depth="depth">
+      <div class="dw-step-item dw-step-nested">
+        <div
+          class="dw-step-header"
+          [class.dw-step-header-clickable]="hasNestedExecutions(execution)"
+          [class.dw-step-header-failed]="execution.status === 'failed'"
+          [class.dw-step-header-pending]="execution.status === 'pending'"
+          (click)="hasNestedExecutions(execution) && toggleExecution(execution.executionId)"
+        >
+          <span
+            class="dw-step-status"
+            [class.dw-step-status-completed]="execution.status === 'completed'"
+            [class.dw-step-status-in-progress]="execution.status === 'in_progress'"
+            [class.dw-step-status-failed]="execution.status === 'failed'"
+            [class.dw-step-status-pending]="execution.status === 'pending'"
+          >
+            @if (execution.status === 'completed') {
+              <dw-check-circle-icon />
+            } @else if (execution.status === 'in_progress') {
+              <dw-loader-icon />
+            } @else if (execution.status === 'failed') {
+              <dw-error-info-icon />
+            } @else if (execution.status === 'pending') {
+              <span class="dw-step-dot"></span>
+            } @else {
+              <dw-circle-icon />
+            }
+          </span>
+          <span class="dw-step-icon">
+            <dw-tool-icon [toolType]="execution.toolType" />
+          </span>
+          <span class="dw-step-label">Executing Tool:</span>
+          <span class="dw-step-name">{{ execution.name }}</span>
+          @if (execution.status === 'pending') {
+            <span class="dw-step-pending-label">Pending</span>
+          }
+          @if (hasNestedExecutions(execution)) {
+            <span
+              class="dw-execution-arrow"
+              [class.dw-execution-arrow-expanded]="isExecutionExpanded(execution.executionId)"
+            >
+              <dw-chevron-icon [size]="12" />
+            </span>
+          }
+        </div>
+        <!-- Nested Child Executions or Children -->
+        @if (hasNestedExecutions(execution) && isExecutionExpanded(execution.executionId)) {
+          <div class="dw-nested-executions">
+            @if (!isToolExecution(execution)) {
+              <!-- TStepExecution has executions record -->
+              @for (
+                childExec of getExecutionsArray(asExecution(execution).executions);
+                track childExec.executionId
+              ) {
+                <ng-container
+                  *ngTemplateOutlet="
+                    executionTemplate;
+                    context: { $implicit: childExec, depth: depth + 1 }
+                  "
+                />
+              }
+            } @else {
+              <!-- TStepToolExecution has children array -->
+              @for (childItem of asToolExecution(execution).children; track $index) {
+                <ng-container
+                  *ngTemplateOutlet="
+                    planItemTemplate;
+                    context: { $implicit: childItem, index: execution.executionId + '-' + $index }
+                  "
+                />
+              }
+            }
+          </div>
+        }
+      </div>
+    </ng-template>
+  } @else {
+    <i class="steps-not-found">Steps not found</i>
+  }
+</div>

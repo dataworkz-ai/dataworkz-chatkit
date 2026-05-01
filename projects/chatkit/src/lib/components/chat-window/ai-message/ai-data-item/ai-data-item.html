@@ -1,0 +1,17 @@
+<div class="dw-ai-data-item">
+  <div class="dw-ai-data-actions">
+    @if (copySuccess()) {
+      <span class="dw-copy-feedback">Copied!</span>
+    }
+    <button class="dw-ai-data-action" (click)="downloadJson()" title="Download JSON">
+      <dw-download-icon [size]="16" />
+    </button>
+    <button class="dw-ai-data-action" (click)="copyToClipboard()" title="Copy to Clipboard">
+      <dw-copy-icon [size]="16" />
+    </button>
+  </div>
+
+  <div class="dw-ai-data-content">
+    <pre><code>{{ formattedJson() }}</code></pre>
+  </div>
+</div>

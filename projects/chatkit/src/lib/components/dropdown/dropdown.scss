@@ -1,0 +1,164 @@
+// Color configuration variables
+$dropdown-bg: #ffffff;
+$dropdown-border-color: #d1d5db;
+$dropdown-border-color-focus: #6b7280;
+$dropdown-text-color: #374151;
+$dropdown-placeholder-color: #9ca3af;
+$dropdown-item-hover-bg: #f3f4f6;
+$dropdown-item-selected-bg: #e5e7eb;
+$dropdown-item-selected-color: #111827;
+$dropdown-shadow:
+  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$dropdown-border-radius: 6px;
+
+:host {
+  display: inline-block;
+  min-width: 200px;
+  overflow: visible;
+}
+
+.dw-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+
+  &-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $dropdown-text-color;
+    white-space: nowrap;
+  }
+
+  &-select-wrapper {
+    position: relative;
+  }
+
+  &-trigger {
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    background: $dropdown-bg;
+    border: 1px solid $dropdown-border-color;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $dropdown-item-hover-bg;
+    }
+  }
+
+  &-open &-trigger {
+    background-color: $dropdown-item-hover-bg;
+  }
+
+  &-value {
+    color: $dropdown-text-color;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+
+  &-placeholder {
+    color: $dropdown-placeholder-color;
+  }
+
+  &-loading &-trigger {
+    cursor: not-allowed;
+    opacity: 0.7;
+
+    &:hover {
+      background-color: $dropdown-bg;
+    }
+  }
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.25rem;
+    color: $dropdown-placeholder-color;
+  }
+
+  &-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+
+    &-up {
+      transform: rotate(180deg);
+    }
+  }
+
+  &-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: $dropdown-bg;
+    border: 1px solid $dropdown-border-color;
+    border-radius: $dropdown-border-radius;
+    box-shadow: $dropdown-shadow;
+    max-height: 200px;
+    overflow-y: auto;
+    animation: dw-dropdown-fade-in 0.15s ease-out;
+    width: fit-content;
+
+    &-bottom {
+      top: calc(100% + 4px);
+    }
+
+    &-top {
+      bottom: calc(100% + 4px);
+    }
+  }
+
+  &-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0;
+  }
+
+  &-item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: $dropdown-text-color;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: $dropdown-item-hover-bg;
+    }
+
+    &-selected {
+      background-color: $dropdown-item-selected-bg;
+      color: $dropdown-item-selected-color;
+      font-weight: 500;
+    }
+  }
+
+  &-empty {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: $dropdown-placeholder-color;
+    text-align: center;
+  }
+}
+
+@keyframes dw-dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

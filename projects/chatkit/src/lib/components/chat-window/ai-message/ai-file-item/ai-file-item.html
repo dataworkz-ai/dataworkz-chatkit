@@ -1,0 +1,29 @@
+<div class="dw-ai-file-item">
+  @if (isImage()) {
+    <div class="dw-ai-image-container">
+      <img [src]="fileUrl()" [alt]="fileName()" />
+
+      <div class="dw-ai-file-actions">
+        @if (copySuccess()) {
+          <span class="dw-copy-feedback">Copied!</span>
+        }
+        <button class="dw-ai-file-action" (click)="downloadFile($event)" title="Download">
+          <dw-download-icon [size]="16" />
+        </button>
+        <button class="dw-ai-file-action" (click)="copyToClipboard()" title="Copy Data URI">
+          <dw-copy-icon [size]="16" />
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="dw-ai-generic-file">
+      <dw-file-icon [size]="20" [fileName]="fileName()" />
+      <span>{{ fileName() }}</span>
+      <div class="dw-ai-file-actions">
+        <button class="dw-ai-file-action" (click)="downloadFile($event)" title="Download">
+          <dw-download-icon [size]="16" />
+        </button>
+      </div>
+    </div>
+  }
+</div>

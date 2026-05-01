@@ -1,0 +1,14 @@
+{
+  "name": "dw-chatkit",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "@angular/common": "^20.3.15",
+    "@angular/core": "^20.3.15"
+  },
+  "dependencies": {
+    "marked": "^17.0.1",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

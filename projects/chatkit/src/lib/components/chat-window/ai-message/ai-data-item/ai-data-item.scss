@@ -1,0 +1,110 @@
+.dw-ai-data-item {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  margin: 0.75rem 0;
+  border: 1px solid #e2e8f0;
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .dw-ai-data-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: auto;
+
+    .dw-copy-feedback {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #10b981;
+      background-color: #ecfdf5;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      border: 1px solid #d1fae5;
+      animation: fadeInOut 1s ease-in-out forwards;
+    }
+
+    .dw-ai-data-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px);
+      border-radius: 0.375rem;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+      \u0026:hover {
+        color: #64748b;
+        background-color: #ffffff;
+        transform: scale(1.05);
+      }
+
+      \u0026:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  .dw-ai-data-content {
+    padding: 1rem 1.25rem;
+    max-height: 10rem;
+    max-width: 100%;
+    overflow: auto;
+    background-color: #ffffff;
+
+    pre {
+      margin: 0;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Operator Mono', monospace;
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      color: #334155;
+      white-space: pre-wrap; // Wrap by default since it's scrollable height-wise
+    }
+
+    /* Custom Scrollbar */
+    \u0026::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    \u0026::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    \u0026::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    \u0026::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+}

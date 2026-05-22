@@ -5,27 +5,40 @@ import {
   ElementRef,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
-import { ChatWindowDataService } from '../../../../../services/chat-window.data';
-import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
-import { CheckIcon } from '../../../../icons';
+import {
+  THitlAutoResolutionEvent,
+  THitlAutoResolutionRule,
+  THitlRequestItem,
+  THitlResolution,
+} from '../../../../../typings/data';
+import { TItemState } from '../../../../../typings/common';
+import { CheckIcon, BoltIcon, UsersIcon, CloseIcon, ArrowRightIcon, LoaderIcon } from '../../../../icons';
 import { SendArrowIcon } from '../../../../icons/search-icon';
 
 @Component({
   selector: 'dw-hitl-request-card',
   standalone: true,
-  imports: [CheckIcon, SendArrowIcon],
+  imports: [CheckIcon, SendArrowIcon, BoltIcon, UsersIcon, CloseIcon, ArrowRightIcon, LoaderIcon],
   templateUrl: './hitl-request-card.html',
   styleUrl: './hitl-request-card.scss',
 })
 export class HitlRequestCard {
-  readonly taskId = input.required<string>();
   readonly requestId = input.required<string>();
-  readonly messageId = input.required<string>();
+  readonly hitlItem = input.required<THitlRequestItem>();
 
-  private readonly chatWindowDataService = inject(ChatWindowDataService);
-  private readonly chatWindowEventsService = inject(ChatWindowEventsService);
+  readonly autoResolutionMap = input<Record<string, TItemState<string>>>({});
+  readonly autoResolutionRulesMap = input<Record<string, THitlAutoResolutionRule>>({});
+  readonly showAutoResolution = input<boolean>(false);
+
+  readonly resolve = output<{
+    requestId: string;
+    resolution: THitlResolution;
+  }>();
+  readonly autoResolution = output<THitlAutoResolutionEvent>();
+
   private readonly elementRef = inject(ElementRef);
 
   constructor() {
@@ -33,7 +46,6 @@ export class HitlRequestCard {
       const el = this.elementRef.nativeElement as HTMLElement;
       const unsized = el.querySelectorAll<HTMLTextAreaElement>('textarea:not([data-auto-sized])');
       if (unsized.length === 0) return;
-      // Defer to allow browser layout to complete (textareas need their final width)
       setTimeout(() => {
         unsized.forEach((ta) => {
           if (ta.offsetWidth > 50) {
@@ -45,9 +57,6 @@ export class HitlRequestCard {
     });
   }
 
-  readonly hitlItem = computed(
-    () => this.chatWindowDataService.hitlRequestsMap()[this.requestId()],
-  );
   readonly request = computed(() => this.hitlItem()?.request);
   readonly resolution = computed(() => this.hitlItem()?.resolution);
   readonly isCancelled = computed(() => this.resolution() === 'cancelled');
@@ -56,7 +65,6 @@ export class HitlRequestCard {
     const res = this.resolution();
     return !!res && res !== 'cancelled';
   });
-  /** Resolution as object (excludes 'cancelled' string) — safe for property access in template */
   readonly resolvedResolution = computed(() => {
     const res = this.resolution();
     return typeof res === 'object' ? res : undefined;
@@ -96,7 +104,6 @@ export class HitlRequestCard {
   readonly isInput = computed(() => this.request()?.type === 'INPUT_REQUIRED');
   readonly isClarification = computed(() => this.request()?.type === 'CLARIFICATION_REQUIRED');
 
-  // Context section: contextData only (string or Record<string, any>)
   readonly contextData = computed(() => this.request()?.context?.contextData);
   readonly contextDataIsString = computed(() => typeof this.contextData() === 'string');
 
@@ -115,7 +122,6 @@ export class HitlRequestCard {
 
   readonly hasContextSection = computed(() => !!this.contextData());
 
-  // Args — available for all types, editable only for APPROVAL_WITH_MODIFICATIONS
   readonly originalArgs = computed(() => {
     return (this.request()?.context?.['args'] as Record<string, any>) || {};
   });
@@ -134,7 +140,6 @@ export class HitlRequestCard {
     }));
   });
 
-  // Track which original arg keys are object types (need JSON editing)
   readonly originalArgIsObject = computed(() => {
     const args = this.originalArgs();
     const map: Record<string, boolean> = {};
@@ -147,7 +152,6 @@ export class HitlRequestCard {
   readonly editedArgs = signal<Record<string, any> | null>(null);
   readonly currentArgs = computed(() => this.editedArgs() ?? this.originalArgs());
 
-  // Serialize values for display in textboxes — objects become JSON strings
   readonly argsEntries = computed(() =>
     Object.entries(this.currentArgs()).map(([key, value]) => ({
       key,
@@ -158,12 +162,10 @@ export class HitlRequestCard {
     })),
   );
 
-  // For provided state: show all original args with modifiedArgs overrides, as disabled inputs
   readonly providedArgsEntries = computed(() => {
     const original = this.originalArgs();
     const res = this.resolution();
     const modified = (typeof res === 'object' ? res?.modifiedArgs : undefined) || {};
-    // Merge: start with originals, override with modified values
     const merged = { ...original, ...modified };
     return Object.entries(merged).map(([key, value]) => {
       const isModified = key in modified;
@@ -192,12 +194,10 @@ export class HitlRequestCard {
     return option?.label || res.selectedOption;
   });
 
-  // Signals for user interaction
   readonly userInput = signal('');
   readonly selectedOptionId = signal<string | null>(null);
   readonly clarifyInput = signal('');
 
-  // Clarification free text support
   readonly hasClarifyOption = computed(
     () => !!this.request()?.options?.some((o) => o.optionId === 'clarify'),
   );
@@ -209,7 +209,6 @@ export class HitlRequestCard {
     return true;
   });
 
-  // Separated options: fixed options vs clarify option
   readonly fixedOptions = computed(
     () => this.request()?.options?.filter((o) => o.optionId !== 'clarify') ?? [],
   );
@@ -217,7 +216,6 @@ export class HitlRequestCard {
     () => this.request()?.options?.find((o) => o.optionId === 'clarify') ?? null,
   );
 
-  // Search for fixed options
   readonly optionSearchQuery = signal('');
   readonly showOptionSearch = computed(() => this.fixedOptions().length > 8);
   readonly filteredFixedOptions = computed(() => {
@@ -232,7 +230,6 @@ export class HitlRequestCard {
       const current = this.currentArgs();
       const isObjectMap = this.originalArgIsObject();
 
-      // Build modifiedArgs with only changed keys
       const modifiedArgs: Record<string, any> = {};
       for (const [key, value] of Object.entries(current)) {
         const origValue = original[key];
@@ -243,7 +240,6 @@ export class HitlRequestCard {
         const curStr = String(value);
 
         if (curStr !== origStr) {
-          // For object-type args, try to parse back to object; fallback to string
           if (isObjectMap[key]) {
             try {
               modifiedArgs[key] = JSON.parse(curStr);
@@ -256,7 +252,6 @@ export class HitlRequestCard {
         }
       }
 
-      // Only send modifiedArgs if there are actual changes
       this.emitResolution(
         'approve',
         undefined,
@@ -305,7 +300,6 @@ export class HitlRequestCard {
     const minHeight = Math.ceil(lineHeight + paddingY);
     const maxHeight = Math.ceil(lineHeight * 4 + paddingY);
 
-    // Clamp manual resize range to 1–4 rows
     el.style.minHeight = minHeight + 'px';
     el.style.maxHeight = maxHeight + 'px';
 
@@ -335,14 +329,78 @@ export class HitlRequestCard {
     this.selectedOptionId.set('clarify');
   }
 
+  // Auto-resolution state
+  readonly isAutoResolved = computed(() => !!this.resolvedResolution()?.sourceRuleId);
+  readonly appliedRuleName = computed(() => {
+    const ruleId = this.resolvedResolution()?.sourceRuleId;
+    if (!ruleId) return null;
+    return this.autoResolutionRulesMap()[ruleId]?.name || null;
+  });
+  readonly autoExpanded = signal(false);
+  readonly conditionsText = signal('');
+  readonly skipValidation = signal(false);
+
+  readonly saveState = computed<TItemState<string> | undefined>(
+    () => this.autoResolutionMap()[this.requestId()],
+  );
+  readonly isSaved = computed(() => !!this.saveState()?.value);
+  readonly savedRuleId = computed(() => this.saveState()?.value || null);
+
+  readonly canSave = computed(() => !this.saveState()?.loading);
+
+  onAutoExpandToggle() {
+    this.autoExpanded.update((v) => !v);
+  }
+
+  onConditionsChange(value: string) {
+    this.conditionsText.set(value);
+  }
+
+  onSkipValidationChange(value: boolean) {
+    this.skipValidation.set(value);
+  }
+
+  onSaveRule() {
+    if (!this.canSave()) return;
+    const req = this.request();
+    const res = this.resolvedResolution();
+    if (!req || !res) return;
+    this.autoResolution.emit({
+      request: req,
+      resolution: res,
+      type: 'save',
+      payload: {
+        condition: this.conditionsText().trim() || undefined,
+        skipValidation: this.skipValidation() || undefined,
+      },
+    });
+  }
+
+  onViewRule() {
+    const req = this.request();
+    const res = this.resolvedResolution();
+    if (!req || !res) return;
+    const ruleId = this.savedRuleId() || res.sourceRuleId;
+    this.autoResolution.emit({
+      request: req,
+      resolution: res,
+      type: 'viewRule',
+      payload: { ruleId: ruleId || undefined },
+    });
+  }
+
+  onCancelAutoResolve() {
+    this.autoExpanded.set(false);
+    this.conditionsText.set('');
+    this.skipValidation.set(false);
+  }
+
   private emitResolution(
     selectedOption: string,
     userInput?: string,
     modifiedArgs?: Record<string, any>,
   ) {
-    this.chatWindowEventsService.hitlResolve$.next({
-      taskId: this.taskId(),
-      messageId: this.messageId(),
+    this.resolve.emit({
       requestId: this.requestId(),
       resolution: {
         requestId: this.requestId(),

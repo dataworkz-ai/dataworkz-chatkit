@@ -1,1 +1,7 @@
-export const LLMsResponse = [];
+export const LLMsResponse = [
+  {
+    defaultLLM: '',
+    identifier: '',
+    name: '',
+  },
+];

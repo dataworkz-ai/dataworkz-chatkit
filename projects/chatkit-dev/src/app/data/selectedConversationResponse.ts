@@ -7,5 +7,33 @@ export const selectedConversationResponse = {
   conversationTitle: '',
   conversationStartTs: '',
   conversationEndTs: '',
-  tasks: [],
+  tasks: [
+    {
+      id: '',
+      conversationID: '',
+      status: {
+        state: '',
+        timestamp: '',
+      },
+      history: [
+        {
+          messageID: '',
+          conversationID: '',
+          taskID: '',
+          timestamp: '',
+          thumbsUpOrDown: 0,
+          timeToAnswer: 0,
+          kind: '',
+          role: '',
+          parts: [
+            {
+              kind: '',
+              text: '',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  agentDetails: {},
 };

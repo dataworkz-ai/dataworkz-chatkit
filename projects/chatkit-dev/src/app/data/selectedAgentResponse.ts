@@ -1,1 +1,3 @@
-export const selectedAgentResponse = {};
+export const selectedAgentResponse = {
+  description: '',
+};

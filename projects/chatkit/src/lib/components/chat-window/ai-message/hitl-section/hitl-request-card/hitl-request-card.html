@@ -19,6 +19,8 @@
         <span class="dw-hitl-badge dw-hitl-badge-pending">Pending</span>
       } @else if (isCancelled()) {
         <span class="dw-hitl-badge dw-hitl-badge-cancelled">Cancelled</span>
+      } @else if (isAutoResolved()) {
+        <span class="dw-hitl-badge dw-hitl-badge-provided">Auto-resolved</span>
       } @else {
         <span class="dw-hitl-badge dw-hitl-badge-provided">Provided</span>
       }
@@ -235,6 +237,108 @@
           <div class="dw-hitl-resolved-bubble">
             {{ resolvedAnswerText() }}
           </div>
+        }
+      }
+
+      @if (isProvided()) {
+        @if (isAutoResolved()) {
+          <!-- Auto-resolved: show rule reference card -->
+          <div class="dw-ar-rule-card">
+            <div class="dw-ar-rule-card-row">
+              <dw-bolt-icon [size]="12" />
+              <span class="dw-ar-rule-card-text">
+                Applied via rule:
+                @if (appliedRuleName()) {
+                  <strong>"{{ appliedRuleName() }}"</strong>
+                }
+              </span>
+              <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
+                View rule <dw-arrow-right-icon [size]="10" />
+              </button>
+            </div>
+          </div>
+        } @else if (isSaved()) {
+          <!-- Rule just saved: show confirmation -->
+          <div class="dw-ar-saved-row">
+            <span class="dw-ar-saved-text">
+              <dw-bolt-icon [size]="11" />
+              Auto-resolution rule saved
+            </span>
+            <span class="dw-ar-saved-separator">·</span>
+            <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
+              View rule <dw-arrow-right-icon [size]="10" />
+            </button>
+          </div>
+        } @else if (showAutoResolution()) {
+          @if (autoExpanded()) {
+            <!-- Expanded auto-resolve panel -->
+            <div class="dw-ar-panel">
+              <div class="dw-ar-panel-header">
+                <dw-bolt-icon [size]="14" />
+                <span class="dw-ar-panel-title">Auto-resolve next time</span>
+                <div class="dw-ar-panel-spacer"></div>
+                <button class="dw-ar-close-btn" (click)="onCancelAutoResolve()">
+                  <dw-close-icon [size]="12" />
+                </button>
+              </div>
+
+              <div class="dw-ar-scope-info">
+                <dw-users-icon [size]="14" />
+                <span
+                  >This rule will be applied for this agent across all users whenever this question
+                  is asked.</span
+                >
+              </div>
+
+              <div class="dw-ar-conditions">
+                <div class="dw-ar-conditions-label">
+                  <span class="dw-ar-conditions-label-text">Add conditions</span>
+                  <span class="dw-ar-conditions-optional">optional</span>
+                </div>
+                <textarea
+                  class="dw-ar-conditions-input"
+                  rows="3"
+                  [value]="conditionsText()"
+                  (input)="onConditionsChange($any($event.target).value)"
+                  placeholder='e.g. "when vendor is FirstTierConsultants and project code = P322 and invoice_date is before April 2026"'
+                ></textarea>
+              </div>
+
+              <div class="dw-ar-panel-actions">
+                <label class="dw-ar-skip-validation">
+                  <input
+                    type="checkbox"
+                    [checked]="skipValidation()"
+                    (change)="onSkipValidationChange($any($event.target).checked)"
+                  />
+                  <span>Skip rule validation</span>
+                </label>
+                <div class="dw-ar-panel-actions-spacer"></div>
+                <button class="dw-ar-cancel-btn" (click)="onCancelAutoResolve()">Cancel</button>
+                <button
+                  class="dw-ar-save-btn"
+                  [disabled]="!canSave() || saveState()?.loading"
+                  (click)="onSaveRule()"
+                >
+                  @if (saveState()?.loading) {
+                    <dw-loader-icon />
+                    Saving...
+                  } @else {
+                    <dw-bolt-icon [size]="11" />
+                    Save rule
+                  }
+                </button>
+              </div>
+            </div>
+          } @else {
+            <!-- Collapsed: show pill button -->
+            <div class="dw-ar-compact-row">
+              <button class="dw-ar-trigger-btn" (click)="onAutoExpandToggle()">
+                <dw-bolt-icon [size]="11" />
+                Auto-resolve next time
+              </button>
+            </div>
+          }
         }
       }
 

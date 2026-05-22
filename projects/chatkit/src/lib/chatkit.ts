@@ -3,7 +3,13 @@ import { ChatWindow } from './components/chat-window/chat-window';
 import { ChatWindowDataService } from './services/chat-window.data';
 import { ChatWindowEventsService } from './services/chat-window.events';
 import { TChatkitConfig } from './typings/config';
-import { TMessageFile, TChatkitData, TAdditionalFeedback, THitlResolution } from './typings/data';
+import {
+  TMessageFile,
+  TChatkitData,
+  TAdditionalFeedback,
+  THitlAutoResolutionEvent,
+  THitlResolution,
+} from './typings/data';
 
 @Component({
   selector: 'dw-chatkit',
@@ -92,6 +98,12 @@ export class Chatkit {
         this.hitlCancel.emit(value);
       },
     });
+
+    this.chatWindowEventsService.hitlAutoResolution$.subscribe({
+      next: (value) => {
+        this.hitlAutoResolution.emit(value);
+      },
+    });
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -133,6 +145,10 @@ export class Chatkit {
     this.chatWindowDataService.setStepPlanItemsMap(chatkitData?.stepPlanItemsMap || {});
     this.chatWindowDataService.setStepPlanItemsOpenMap(chatkitData?.stepPlanItemsOpenMap || {});
     this.chatWindowDataService.setHitlRequestsMap(chatkitData?.hitlRequestsMap || {});
+    this.chatWindowDataService.setAutoResolutionMap(chatkitData?.autoResolutionMap || {});
+    this.chatWindowDataService.setAutoResolutionRulesMap(
+      chatkitData?.autoResolutionRulesMap || {},
+    );
   }
 
   @Output() sendMessage = new EventEmitter<string>();
@@ -161,4 +177,5 @@ export class Chatkit {
     taskId: string;
     messageId: string;
   }>();
+  @Output() hitlAutoResolution = new EventEmitter<THitlAutoResolutionEvent>();
 }

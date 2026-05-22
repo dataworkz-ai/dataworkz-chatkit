@@ -146,11 +146,27 @@ export type THitlResolution = {
   modifiedArgs?: Record<string, any>;
   userInput?: string;
   resolvedAt?: string;
+  sourceRuleId?: string;
 };
 
 export type THitlRequestItem = {
   request: THitlRequest;
   resolution?: THitlResolution | 'cancelled';
+};
+
+export type THitlAutoResolutionEvent = {
+  request: THitlRequest;
+  resolution: THitlResolution;
+  type: 'save' | 'viewRule';
+  payload?: {
+    condition?: string;
+    ruleId?: string;
+    skipValidation?: boolean;
+  };
+};
+
+export type THitlAutoResolutionRule = {
+  name: string;
 };
 
 export type TChatkitData = {
@@ -159,6 +175,8 @@ export type TChatkitData = {
   stepPlanItemsMap?: Record<string, TItemState<TStepPlanItem[]>>;
   stepPlanItemsOpenMap?: Record<string, boolean>;
   hitlRequestsMap?: Record<string, THitlRequestItem>;
+  autoResolutionMap?: Record<string, TItemState<string>>;
+  autoResolutionRulesMap?: Record<string, THitlAutoResolutionRule>;
   LLMs?: TItemState<TChatkitLLMItem[]>;
   chatkitAgent?: TItemState<TChatkitAgent>;
 };

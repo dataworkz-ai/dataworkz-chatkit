@@ -5,6 +5,7 @@ import {
   TChatkitConversationTask,
   TChatkitConversationTaskMessage,
   TChatkitLLMItem,
+  THitlAutoResolutionRule,
   THitlRequestItem,
   TStepPlanItem,
 } from '../typings/data';
@@ -45,6 +46,8 @@ export class ChatWindowDataService {
   private readonly _stepPlanItemsMap = signal<Record<string, TItemState<TStepPlanItem[]>>>({});
   private readonly _stepPlanItemsOpenMap = signal<Record<string, boolean>>({});
   private readonly _hitlRequestsMap = signal<Record<string, THitlRequestItem>>({});
+  private readonly _autoResolutionMap = signal<Record<string, TItemState<string>>>({});
+  private readonly _autoResolutionRulesMap = signal<Record<string, THitlAutoResolutionRule>>({});
 
   // readonly getters
   readonly chatkitFlags = computed<TChatkitFlags>(() => this._chatkitFlags());
@@ -66,6 +69,12 @@ export class ChatWindowDataService {
   );
   readonly hitlRequestsMap = computed<Record<string, THitlRequestItem>>(() =>
     this._hitlRequestsMap(),
+  );
+  readonly autoResolutionMap = computed<Record<string, TItemState<string>>>(() =>
+    this._autoResolutionMap(),
+  );
+  readonly autoResolutionRulesMap = computed<Record<string, THitlAutoResolutionRule>>(() =>
+    this._autoResolutionRulesMap(),
   );
   readonly chatkitFooter = computed<TChatkitFooter>(() => this._chatkitFooter());
   readonly chatkitScroll = computed<TChatkitScroll | undefined>(() => this._chatkitScroll());
@@ -100,6 +109,12 @@ export class ChatWindowDataService {
   }
   setHitlRequestsMap(value: Record<string, THitlRequestItem>) {
     this._hitlRequestsMap.set(value);
+  }
+  setAutoResolutionMap(value: Record<string, TItemState<string>>) {
+    this._autoResolutionMap.set(value);
+  }
+  setAutoResolutionRulesMap(value: Record<string, THitlAutoResolutionRule>) {
+    this._autoResolutionRulesMap.set(value);
   }
   setChatkitFooter(value: TChatkitFooter) {
     this._chatkitFooter.set(value);

@@ -1,3 +1,17 @@
+@if (hasAutoResolvedHitlRequests()) {
+  <dw-hitl-section
+    headerLabel="Auto-resolved"
+    [hitlRequestIds]="autoResolvedHitlRequestIds()"
+    [hitlRequestsMap]="hitlRequestsMap()"
+    [isHighlighted]="isHitlHighlighted()"
+    [autoResolutionMap]="autoResolutionMap()"
+    [autoResolutionRulesMap]="autoResolutionRulesMap()"
+    [showAutoResolution]="showAutoResolution()"
+    (cancel)="onHitlCancel()"
+    (resolve)="onHitlResolve($event)"
+    (autoResolution)="onHitlAutoResolution($event)"
+  />
+}
 <div class="dw-ai-message-container">
   <div class="dw-ai-message" [class.dw-ai-message-highlighted]="isHighlighted()">
     <div class="dw-ai-message-content">
@@ -33,6 +47,16 @@
     <dw-ai-message-footer [taskId]="taskId()" [messageId]="messageId()"></dw-ai-message-footer>
   }
 </div>
-@if (hasHitlRequests()) {
-  <dw-hitl-section [taskId]="taskId()" [messageId]="messageId()" />
+@if (hasNonAutoResolvedHitlRequests()) {
+  <dw-hitl-section
+    [hitlRequestIds]="nonAutoResolvedHitlRequestIds()"
+    [hitlRequestsMap]="hitlRequestsMap()"
+    [isHighlighted]="isHitlHighlighted()"
+    [autoResolutionMap]="autoResolutionMap()"
+    [autoResolutionRulesMap]="autoResolutionRulesMap()"
+    [showAutoResolution]="showAutoResolution()"
+    (cancel)="onHitlCancel()"
+    (resolve)="onHitlResolve($event)"
+    (autoResolution)="onHitlAutoResolution($event)"
+  />
 }

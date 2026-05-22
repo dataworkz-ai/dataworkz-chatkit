@@ -15,6 +15,9 @@ export type TChatkitFlags = {
     probe?: boolean;
     feedback?: boolean;
   };
+  hitl?: {
+    autoResolution?: boolean;
+  };
 };
 
 export type TChatkitScroll = {

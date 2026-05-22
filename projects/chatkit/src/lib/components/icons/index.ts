@@ -22,3 +22,6 @@ export { CloseIcon } from './close-icon';
 export { CopyIcon } from './copy-icon';
 export { DownloadIcon } from './download-icon';
 export { CheckIcon } from './check-icon';
+export { BoltIcon } from './bolt-icon';
+export { UsersIcon } from './users-icon';
+export { WarningCircleIcon } from './warning-circle-icon';

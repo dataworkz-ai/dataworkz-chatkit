@@ -1,6 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { TAdditionalFeedback, THitlResolution, TMessageFile } from '../typings/data';
+import {
+  TAdditionalFeedback,
+  THitlAutoResolutionEvent,
+  THitlResolution,
+  TMessageFile,
+} from '../typings/data';
 
 @Injectable()
 export class ChatWindowEventsService {
@@ -31,4 +36,5 @@ export class ChatWindowEventsService {
     taskId: string;
     messageId: string;
   }>();
+  readonly hitlAutoResolution$ = new Subject<THitlAutoResolutionEvent>();
 }

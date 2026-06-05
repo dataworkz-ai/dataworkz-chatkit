@@ -147,6 +147,7 @@ export type THitlResolution = {
   userInput?: string;
   resolvedAt?: string;
   sourceRuleId?: string;
+  resolutionThought?: string;
 };
 
 export type THitlRequestItem = {
@@ -167,6 +168,7 @@ export type THitlAutoResolutionEvent = {
 
 export type THitlAutoResolutionRule = {
   name: string;
+  link?: string;
 };
 
 export type TChatkitData = {

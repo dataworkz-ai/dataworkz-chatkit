@@ -15,13 +15,30 @@ import {
   THitlResolution,
 } from '../../../../../typings/data';
 import { TItemState } from '../../../../../typings/common';
-import { CheckIcon, BoltIcon, UsersIcon, CloseIcon, ArrowRightIcon, LoaderIcon } from '../../../../icons';
+import {
+  CheckIcon,
+  BoltIcon,
+  UsersIcon,
+  CloseIcon,
+  ArrowRightIcon,
+  LoaderIcon,
+  ChevronIcon,
+} from '../../../../icons';
 import { SendArrowIcon } from '../../../../icons/search-icon';
 
 @Component({
   selector: 'dw-hitl-request-card',
   standalone: true,
-  imports: [CheckIcon, SendArrowIcon, BoltIcon, UsersIcon, CloseIcon, ArrowRightIcon, LoaderIcon],
+  imports: [
+    CheckIcon,
+    SendArrowIcon,
+    BoltIcon,
+    UsersIcon,
+    CloseIcon,
+    ArrowRightIcon,
+    LoaderIcon,
+    ChevronIcon,
+  ],
   templateUrl: './hitl-request-card.html',
   styleUrl: './hitl-request-card.scss',
 })
@@ -331,10 +348,22 @@ export class HitlRequestCard {
 
   // Auto-resolution state
   readonly isAutoResolved = computed(() => !!this.resolvedResolution()?.sourceRuleId);
+  readonly resolutionThought = computed(() => this.resolvedResolution()?.resolutionThought || null);
+  readonly thoughtExpanded = signal(false);
+
+  onThoughtToggle() {
+    this.thoughtExpanded.update((v) => !v);
+  }
+
   readonly appliedRuleName = computed(() => {
     const ruleId = this.resolvedResolution()?.sourceRuleId;
     if (!ruleId) return null;
     return this.autoResolutionRulesMap()[ruleId]?.name || null;
+  });
+  readonly appliedRuleLink = computed(() => {
+    const ruleId = this.resolvedResolution()?.sourceRuleId;
+    if (!ruleId) return null;
+    return this.autoResolutionRulesMap()[ruleId]?.link || null;
   });
   readonly autoExpanded = signal(false);
   readonly conditionsText = signal('');

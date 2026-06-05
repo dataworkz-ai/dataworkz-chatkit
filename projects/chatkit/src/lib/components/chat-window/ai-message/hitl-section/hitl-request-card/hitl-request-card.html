@@ -252,10 +252,32 @@
                   <strong>"{{ appliedRuleName() }}"</strong>
                 }
               </span>
-              <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
-                View rule <dw-arrow-right-icon [size]="10" />
-              </button>
+              @if (appliedRuleLink()) {
+                <a class="dw-ar-view-rule-btn" [href]="appliedRuleLink()" target="_blank" rel="noopener noreferrer">
+                  View rule <dw-arrow-right-icon [size]="10" />
+                </a>
+              } @else {
+                <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
+                  View rule <dw-arrow-right-icon [size]="10" />
+                </button>
+              }
             </div>
+            @if (resolutionThought()) {
+              <button class="dw-ar-thought-toggle" (click)="onThoughtToggle()">
+                <dw-chevron-icon
+                  [size]="12"
+                  [class.dw-ar-thought-chevron-expanded]="thoughtExpanded()"
+                  class="dw-ar-thought-chevron"
+                />
+                <span>Why was this applied?</span>
+              </button>
+              @if (thoughtExpanded()) {
+                <div class="dw-ar-thought-body">
+                  <div class="dw-ar-thought-label">LLM THOUGHT</div>
+                  <div class="dw-ar-thought-text">{{ resolutionThought() }}</div>
+                </div>
+              }
+            }
           </div>
         } @else if (isSaved()) {
           <!-- Rule just saved: show confirmation -->
@@ -265,9 +287,15 @@
               Auto-resolution rule saved
             </span>
             <span class="dw-ar-saved-separator">·</span>
-            <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
-              View rule <dw-arrow-right-icon [size]="10" />
-            </button>
+            @if (appliedRuleLink()) {
+              <a class="dw-ar-view-rule-btn" [href]="appliedRuleLink()" target="_blank" rel="noopener noreferrer">
+                View rule <dw-arrow-right-icon [size]="10" />
+              </a>
+            } @else {
+              <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
+                View rule <dw-arrow-right-icon [size]="10" />
+              </button>
+            }
           </div>
         } @else if (showAutoResolution()) {
           @if (autoExpanded()) {

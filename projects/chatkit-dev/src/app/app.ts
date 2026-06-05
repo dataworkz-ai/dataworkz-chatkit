@@ -112,8 +112,9 @@ export class App {
               parts: message.parts as (TMessageTextPart | TMessageDataPart)[],
               hitlRequestIds: [
                 ...(message.metadata?.hitlRequests?.map((r: any) => r.requestId) || []),
-                ...(message.metadata?.autoResolvedHITLs?.map((r: any) => r.request.requestId) ||
-                  []),
+                ...(message.metadata?.autoResolvableHITLRequests?.map(
+                  (r: any) => r.request.requestId,
+                ) || []),
               ],
             },
           };
@@ -151,7 +152,7 @@ export class App {
               })(),
             };
           });
-          message?.metadata?.autoResolvedHITLs?.forEach?.((autoResolved: any) => {
+          message?.metadata?.autoResolvableHITLRequests?.forEach?.((autoResolved: any) => {
             res[autoResolved.request.requestId] = {
               request: autoResolved.request,
               resolution: autoResolved.resolution,

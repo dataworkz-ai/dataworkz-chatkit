@@ -1,28 +1,35 @@
 <div class="dw-chat-window-footer-send">
   <div class="dw-chat-window-footer-send-files">
     @for (file of userFiles(); track file) {
-      <dw-user-file-item [filename]="file"></dw-user-file-item>
+      <dw-user-file-item
+        [filename]="file"
+        [fileStatus]="userFilesMap()[file]"
+        (remove)="onRemoveUserFile($event)"
+        (fileClick)="onSelectFile($event)"
+      ></dw-user-file-item>
     }
   </div>
-  <div class="dw-chat-window-footer-input-wrapper">
-    <textarea
-      #textareaRef
-      [value]="userText()"
-      (input)="onInputChange($event)"
-      (keydown)="onKeyDown($event)"
-      class="footer-send-textarea"
-      [placeholder]="placeholder()"
-      rows="3"
-    ></textarea>
-    <button
-      class="footer-send-button"
-      [class.footer-send-button-active]="!disableSend()"
-      [disabled]="disableSend()"
-      (click)="onSend()"
-    >
-      <dw-send-arrow-icon />
-    </button>
-  </div>
+  @if (showTextInput()) {
+    <div class="dw-chat-window-footer-input-wrapper">
+      <textarea
+        #textareaRef
+        [value]="userText()"
+        (input)="onInputChange($event)"
+        (keydown)="onKeyDown($event)"
+        class="footer-send-textarea"
+        [placeholder]="placeholder()"
+        rows="3"
+      ></textarea>
+      <button
+        class="footer-send-button"
+        [class.footer-send-button-active]="!disableSend()"
+        [disabled]="disableSend()"
+        (click)="onSend()"
+      >
+        <dw-send-arrow-icon />
+      </button>
+    </div>
+  }
 </div>
 
 <div class="dw-chat-window-footer-options">

@@ -11,6 +11,7 @@ import {
 import {
   THitlAutoResolutionEvent,
   THitlAutoResolutionRule,
+  THitlAutoResolutionScope,
   THitlRequestItem,
   THitlResolution,
 } from '../../../../../typings/data';
@@ -18,6 +19,7 @@ import { TItemState } from '../../../../../typings/common';
 import {
   CheckIcon,
   BoltIcon,
+  UserIcon,
   UsersIcon,
   CloseIcon,
   ArrowRightIcon,
@@ -25,6 +27,16 @@ import {
   ChevronIcon,
 } from '../../../../icons';
 import { SendArrowIcon } from '../../../../icons/search-icon';
+import { Dropdown } from '../../../../dropdown/dropdown';
+import { MarkdownViewer } from '../../markdown-viewer/markdown-viewer';
+import { NgTemplateOutlet } from '@angular/common';
+import { Popover } from '../../../../popover/popover';
+
+type TAutoResolutionConfig = {
+  condition?: string;
+  skipValidation?: boolean;
+  scope: THitlAutoResolutionScope;
+};
 
 @Component({
   selector: 'dw-hitl-request-card',
@@ -33,11 +45,16 @@ import { SendArrowIcon } from '../../../../icons/search-icon';
     CheckIcon,
     SendArrowIcon,
     BoltIcon,
+    UserIcon,
     UsersIcon,
     CloseIcon,
     ArrowRightIcon,
     LoaderIcon,
     ChevronIcon,
+    Dropdown,
+    MarkdownViewer,
+    Popover,
+    NgTemplateOutlet,
   ],
   templateUrl: './hitl-request-card.html',
   styleUrl: './hitl-request-card.scss',
@@ -49,6 +66,7 @@ export class HitlRequestCard {
   readonly autoResolutionMap = input<Record<string, TItemState<string>>>({});
   readonly autoResolutionRulesMap = input<Record<string, THitlAutoResolutionRule>>({});
   readonly showAutoResolution = input<boolean>(false);
+  readonly blockAutoResolutionAgentLevel = input<boolean>(false);
 
   readonly resolve = output<{
     requestId: string;
@@ -86,6 +104,9 @@ export class HitlRequestCard {
     const res = this.resolution();
     return typeof res === 'object' ? res : undefined;
   });
+  readonly canCreateAutoResolutionRule = computed(
+    () => this.showAutoResolution() && this.request()?.autoResolvable !== false,
+  );
 
   readonly typeLabel = computed(() => {
     switch (this.request()?.type) {
@@ -365,21 +386,48 @@ export class HitlRequestCard {
     if (!ruleId) return null;
     return this.autoResolutionRulesMap()[ruleId]?.link || null;
   });
-  readonly autoExpanded = signal(false);
+  readonly appliedRuleScope = computed(() => {
+    const ruleId = this.resolvedResolution()?.sourceRuleId;
+    if (!ruleId) return null;
+    return this.autoResolutionRulesMap()[ruleId]?.scope || null;
+  });
+  readonly appliedRuleScopeLabel = computed(() => {
+    const scope = this.appliedRuleScope();
+    if (scope === 'ALL_USERS_OF_AGENT') return 'Always for this Agent';
+    if (scope === 'USER') return 'Only for me';
+    return null;
+  });
+
+  // "Remember my choice": draft values edited in the popover
   readonly conditionsText = signal('');
   readonly skipValidation = signal(false);
+  readonly selectedScope = signal<THitlAutoResolutionScope>('USER');
+  readonly scopeOptions = computed(() => {
+    const options = [{ value: 'USER', label: 'Only for me' }];
+    if (!this.blockAutoResolutionAgentLevel()) {
+      options.push({ value: 'ALL_USERS_OF_AGENT', label: 'Always for this agent' });
+    }
+    return options;
+  });
+
+  // Confirmed config; the checkbox is checked only when this is set
+  readonly rememberedConfig = signal<TAutoResolutionConfig | null>(null);
+  readonly rememberChoice = computed(() => !!this.rememberedConfig());
+  readonly rememberPopoverPosition = signal<'top' | 'bottom'>('top');
+
+  // Resolution sent along with the last rule creation, kept for retry
+  private readonly lastRuleResolution = signal<THitlResolution | null>(null);
 
   readonly saveState = computed<TItemState<string> | undefined>(
     () => this.autoResolutionMap()[this.requestId()],
   );
-  readonly isSaved = computed(() => !!this.saveState()?.value);
+  readonly isSaving = computed(() => !!this.saveState()?.loading);
+  readonly isSaved = computed(() => !this.isSaving() && !!this.saveState()?.value);
+  readonly isSaveFailed = computed(
+    () => !this.isSaving() && !this.saveState()?.value && !!this.saveState()?.error,
+  );
   readonly savedRuleId = computed(() => this.saveState()?.value || null);
-
-  readonly canSave = computed(() => !this.saveState()?.loading);
-
-  onAutoExpandToggle() {
-    this.autoExpanded.update((v) => !v);
-  }
+  readonly canRetrySave = computed(() => !!this.rememberedConfig() && !!this.lastRuleResolution());
 
   onConditionsChange(value: string) {
     this.conditionsText.set(value);
@@ -389,20 +437,49 @@ export class HitlRequestCard {
     this.skipValidation.set(value);
   }
 
-  onSaveRule() {
-    if (!this.canSave()) return;
-    const req = this.request();
-    const res = this.resolvedResolution();
-    if (!req || !res) return;
-    this.autoResolution.emit({
-      request: req,
-      resolution: res,
-      type: 'save',
-      payload: {
-        condition: this.conditionsText().trim() || undefined,
-        skipValidation: this.skipValidation() || undefined,
-      },
+  onScopeChange(value: string) {
+    this.selectedScope.set(value as THitlAutoResolutionScope);
+  }
+
+  onRememberChoiceClick(event: Event, popover: Popover) {
+    event.stopPropagation();
+    const checkbox = event.target as HTMLInputElement;
+
+    if (this.rememberChoice()) {
+      // Checked -> unchecked: drop the confirmed config and clear the popover fields
+      this.rememberedConfig.set(null);
+      this.resetDraft();
+      popover.close();
+    } else if (popover.isOpen()) {
+      popover.close();
+    } else {
+      this.resetDraft();
+      this.rememberPopoverPosition.set(this.getPopoverPosition());
+      popover.open();
+    }
+
+    // The checkbox only reflects rememberedConfig (checked only after Confirm).
+    // Sync the DOM directly; preventDefault() would revert it after change detection.
+    checkbox.checked = this.rememberChoice();
+  }
+
+  onConfirmRememberChoice(popover: Popover) {
+    this.rememberedConfig.set({
+      condition: this.conditionsText().trim() || undefined,
+      skipValidation: this.skipValidation() || undefined,
+      scope: this.selectedScope(),
     });
+    popover.close();
+  }
+
+  onCancelRememberChoice(popover: Popover) {
+    popover.close();
+    this.resetDraft();
+  }
+
+  onRetrySaveRule() {
+    const resolution = this.lastRuleResolution();
+    if (resolution) this.emitSaveRule(resolution);
   }
 
   onViewRule() {
@@ -418,10 +495,37 @@ export class HitlRequestCard {
     });
   }
 
-  onCancelAutoResolve() {
-    this.autoExpanded.set(false);
-    this.conditionsText.set('');
-    this.skipValidation.set(false);
+  private resetDraft() {
+    const config = this.rememberedConfig();
+    this.conditionsText.set(config?.condition ?? '');
+    this.skipValidation.set(!!config?.skipValidation);
+    this.selectedScope.set(config?.scope ?? 'USER');
+  }
+
+  private getPopoverPosition(): 'top' | 'bottom' {
+    const el = this.elementRef.nativeElement as HTMLElement;
+    const trigger = el.querySelector('.dw-ar-remember') ?? el;
+    const rect = trigger.getBoundingClientRect();
+    const chatWindow =
+      el.closest('.dw-chat-window-messages') || el.closest('dw-chat-window');
+    if (chatWindow) {
+      const chatRect = chatWindow.getBoundingClientRect();
+      return rect.top - chatRect.top > chatRect.height / 2 ? 'top' : 'bottom';
+    }
+    return rect.top > window.innerHeight / 2 ? 'top' : 'bottom';
+  }
+
+  private emitSaveRule(resolution: THitlResolution) {
+    const req = this.request();
+    const config = this.rememberedConfig();
+    if (!req || !config) return;
+    this.lastRuleResolution.set(resolution);
+    this.autoResolution.emit({
+      request: req,
+      resolution,
+      type: 'save',
+      payload: config,
+    });
   }
 
   private emitResolution(
@@ -429,14 +533,15 @@ export class HitlRequestCard {
     userInput?: string,
     modifiedArgs?: Record<string, any>,
   ) {
-    this.resolve.emit({
+    const resolution: THitlResolution = {
       requestId: this.requestId(),
-      resolution: {
-        requestId: this.requestId(),
-        selectedOption,
-        userInput,
-        modifiedArgs,
-      },
-    });
+      selectedOption,
+      userInput,
+      modifiedArgs,
+    };
+    this.resolve.emit({ requestId: this.requestId(), resolution });
+    if (this.rememberChoice() && this.canCreateAutoResolutionRule()) {
+      this.emitSaveRule(resolution);
+    }
   }
 }

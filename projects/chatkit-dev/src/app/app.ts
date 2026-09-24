@@ -17,6 +17,8 @@ import {
   TChatkitProps,
   TChatkitFooter,
   THitlRequestItem,
+  THitlAutoResolutionRule,
+  THitlAutoResolutionEvent,
 } from 'dw-chatkit';
 import { LLMsResponse } from './data/LLMsResponse';
 import { selectedAgentResponse } from './data/selectedAgentResponse';
@@ -65,16 +67,95 @@ export class CitationLink {
 })
 export class App {
   constructor() {
-    // const messageIds = ['9b1bd561-233a-4814-b1a1-db36d9363817'];
-    // let idx = 0;
-    // window.setInterval(() => {
-    //   this._chatkitProps.update((prev) => {
-    //     return {
-    //       ...prev,
-    //       highlightMessageId: messageIds[idx++ % messageIds.length],
-    //     };
-    //   });
-    // }, 2000);
+    // Set cancelled HITL requests
+    const cancelledIds = [
+      'cancelled-approval',
+      'cancelled-approval-mods',
+      'cancelled-input',
+      'cancelled-clarify',
+    ];
+    this._hitlRequestsMap.update((prev) => {
+      const updated = { ...prev };
+      for (const id of cancelledIds) {
+        if (updated[id]) {
+          updated[id] = { ...updated[id], resolution: 'cancelled' };
+        }
+      }
+      return updated;
+    });
+
+    // Simulate dynamic status updates
+    this._simulateStatusProgress();
+  }
+
+  private _simulateStatusProgress() {
+    let tick = 0;
+    setInterval(() => {
+      tick++;
+      this._stepPlanItemsMap.update((prev) => {
+        const updated: Record<string, TItemState<TStepPlanItem[]>> = {};
+        for (const [key, itemState] of Object.entries(prev)) {
+          const plan = JSON.parse(JSON.stringify(itemState.value)) as any[];
+          for (const item of plan) {
+            if (item.type !== 'Iteration' || !item.executions) continue;
+            for (const exec of item.executions) {
+              if (!exec.executions) continue;
+              for (const [k, entry] of Object.entries(exec.executions) as any[]) {
+                if (entry.type !== 'Status') continue;
+                // Update body label dynamically
+                const bodies: Record<string, string[]> = {
+                  'extraction-progress': [
+                    'Extracting fields from invoice',
+                    'Reading line items',
+                    'Parsing vendor details',
+                    'Extracting amounts',
+                    'Finalizing extraction',
+                  ],
+                  'validation-check': [
+                    'Running validation rules',
+                    'Checking required fields',
+                    'Validating amounts',
+                    'Cross-referencing PO numbers',
+                    'Verifying tax calculations',
+                    'Checking duplicates',
+                    'Validating dates',
+                    'Final validation pass',
+                  ],
+                  'db-lookup': [
+                    'Looking up vendor records',
+                    'Querying invoices table',
+                    'Matching purchase orders',
+                    'Verifying payment history',
+                  ],
+                  'processing': [
+                    'Processing batch',
+                    'Aggregating results',
+                    'Computing totals',
+                    'Generating summary',
+                  ],
+                };
+                const bodyList = bodies[entry.name];
+                if (bodyList) {
+                  entry.body = bodyList[tick % bodyList.length];
+                }
+                // Update progress if determinate
+                if (entry.progress?.total) {
+                  const total = parseInt(entry.progress.total, 10);
+                  if (!isNaN(total)) {
+                    entry.progress = {
+                      ...entry.progress,
+                      current: tick % (total + 1),
+                    };
+                  }
+                }
+              }
+            }
+          }
+          updated[key] = { ...itemState, value: plan };
+        }
+        return updated;
+      });
+    }, 2000);
   }
 
   private readonly _chatkitAgent = signal<TItemState<TChatkitAgent>>({
@@ -165,6 +246,31 @@ export class App {
     ),
   );
 
+
+  private readonly _autoResolutionRulesMap = signal<Record<string, THitlAutoResolutionRule>>({
+    'rule-auto-notify': {
+      name: 'Auto-approve Slack notifications to #finance-team',
+      link: 'https://example.com/rules/rule-auto-notify',
+      scope: 'ALL_USERS_OF_AGENT',
+    },
+    'rule-ticket-priority': {
+      name: 'Escalate invoice discrepancy tickets to high priority',
+      link: 'https://example.com/rules/rule-ticket-priority',
+      scope: 'USER',
+    },
+    'rule-threshold': {
+      name: 'Auto-processing threshold is $5,000 for consulting vendors',
+      scope: 'ALL_USERS_OF_AGENT',
+    },
+    'rule-route-finance': {
+      name: 'Route consulting invoices to Finance',
+      link: 'https://example.com/rules/rule-route-finance',
+      scope: 'USER',
+    },
+  });
+
+  private readonly _autoResolutionMap = signal<Record<string, TItemState<string>>>({});
+
   private readonly _stepPlanItemsMap = signal<Record<string, TItemState<TStepPlanItem[]>>>(
     selectedConversationResponse.tasks.reduce(
       (res: Record<string, TItemState<TStepPlanItem[]>>, cur) => {
@@ -198,6 +304,8 @@ export class App {
     LLMs: this._LLMs(),
     chatkitAgent: this._chatkitAgent(),
     hitlRequestsMap: this._hitlRequestsMap(),
+    autoResolutionRulesMap: this._autoResolutionRulesMap(),
+    autoResolutionMap: this._autoResolutionMap(),
   }));
 
   private readonly _chatkitCitation = signal<TChatkitCitation>({
@@ -217,6 +325,9 @@ export class App {
       feedback: true,
       probe: true,
       steps: true,
+    },
+    hitl: {
+      autoResolution: {},
     },
   });
 
@@ -435,5 +546,25 @@ export class App {
       }
       return updated;
     });
+  }
+
+  onHitlAutoResolution(data: THitlAutoResolutionEvent) {
+    console.log('onHitlAutoResolution', data);
+    if (data.type !== 'save') return;
+    const requestId = data.resolution.requestId;
+    this._autoResolutionMap.update((prev) => ({
+      ...prev,
+      [requestId]: { loading: true, error: '', value: '' },
+    }));
+    // Mock rule creation; a condition containing "fail" simulates an error
+    setTimeout(() => {
+      const failed = !!data.payload?.condition?.toLowerCase().includes('fail');
+      this._autoResolutionMap.update((prev) => ({
+        ...prev,
+        [requestId]: failed
+          ? { loading: false, error: 'Mock rule creation failed', value: '' }
+          : { loading: false, error: '', value: `rule-${requestId}` },
+      }));
+    }, 1500);
   }
 }

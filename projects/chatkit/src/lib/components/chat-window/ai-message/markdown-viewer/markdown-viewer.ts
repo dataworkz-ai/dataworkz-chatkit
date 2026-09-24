@@ -56,34 +56,46 @@ import { TChatkitCitation } from '../../../../typings/config';
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px rgba(18, 18, 23, 0.04);
       }
 
       th,
       td {
-        padding: 6px 10px;
-        border: 1px solid #6da3e2;
-        border-right: none;
-        border-bottom: none;
+        padding: 11px 16px;
+        border: none;
         text-align: left;
         font-size: 14px;
         font-weight: 400;
         white-space: nowrap;
       }
 
-      tr td:last-child,
-      tr th:last-child {
-        border-right: 1px solid #6da3e2;
-      }
-
-      tbody tr:last-child td {
-        border-bottom: 1px solid #6da3e2;
-      }
-
       thead th {
-        background-color: #6da3e2;
-        color: #111928;
+        background-color: #d6e5ff;
+        color: #113dc2;
         font-weight: 600;
         font-size: 12px;
+        letter-spacing: 0.02em;
+        border-right: 1px solid #b0ccff;
+      }
+
+      thead tr th:last-child {
+        border-right: none;
+      }
+
+      tbody tr {
+        background-color: #ffffff;
+        transition: background 0.1s;
+      }
+
+      tbody tr:hover {
+        background-color: #ecf3ff;
+      }
+
+      tbody td {
+        color: #334155;
+        border-top: 1px solid #f1f5f9;
+        font-variant-numeric: tabular-nums;
       }
 
       /* Round corners */
@@ -136,7 +148,7 @@ export class MarkdownViewer {
     dummyInnerHTML = replaceCitationRefs(dummyInnerHTML, uniqueIdentifier || '', (match, idx) => {
       this.links[idx] = match;
       const spanTag = `<span class="dw-ref-slot" data-ref-idx="${idx}"></span>`;
-      return `[ ${spanTag} ]`;
+      return spanTag;
     });
 
     let mdHTML = await marked.parse(dummyInnerHTML);

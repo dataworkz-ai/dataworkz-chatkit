@@ -7,6 +7,7 @@ import {
   TStepPlanItem,
   TStepScenarioSelection,
   TStepToolExecution,
+  TStepToolStatus,
 } from '../../../../../typings/data';
 import {
   LoaderIcon,
@@ -46,6 +47,9 @@ export class Steps {
   // Track expanded state for execution accordions (default: expanded)
   readonly expandedExecutions = signal<Record<string, boolean>>({});
 
+  // Track expanded state for status accordions (default: collapsed)
+  readonly expandedStatuses = signal<Record<string, boolean>>({});
+
   readonly stepPlanItems = computed(() => {
     return this.chatWindowDataService.stepPlanItemsMap()[this.messageId]?.value ?? [];
   });
@@ -72,6 +76,17 @@ export class Steps {
     }));
   }
 
+  toggleStatus(id: string) {
+    this.expandedStatuses.update((current) => ({
+      ...current,
+      [id]: !current[id],
+    }));
+  }
+
+  isStatusExpanded(id: string): boolean {
+    return this.expandedStatuses()[id] ?? true;
+  }
+
   isExecutionExpanded(id: string): boolean {
     // Default to true (expanded) if not explicitly set
     return this.expandedExecutions()[id] ?? true;
@@ -79,7 +94,10 @@ export class Steps {
 
   hasNestedExecutions(execution: TStepExecution | TStepToolExecution): boolean {
     if ('executions' in execution && execution.executions) {
-      return Object.keys(execution.executions).length > 0;
+      return (
+        this.getChildExecutions(execution.executions).length > 0 ||
+        this.getStatusEntries(execution.executions).length > 0
+      );
     }
     if ('children' in execution && execution.children) {
       return execution.children.length > 0;
@@ -87,11 +105,31 @@ export class Steps {
     return false;
   }
 
-  getExecutionsArray(
-    executions: Record<string, TStepToolExecution> | undefined,
+  getChildExecutions(
+    executions: Record<string, TStepToolExecution | TStepToolStatus> | undefined,
   ): TStepToolExecution[] {
     if (!executions) return [];
-    return Object.values(executions);
+    return Object.values(executions).filter(
+      (e): e is TStepToolExecution => e.type === 'Tool Execution',
+    );
+  }
+
+  getStatusEntries(
+    executions: Record<string, TStepToolExecution | TStepToolStatus> | undefined,
+  ): TStepToolStatus[] {
+    if (!executions) return [];
+    return Object.values(executions).filter((e): e is TStepToolStatus => e.type === 'Status');
+  }
+
+  hasStatusEntries(execution: TStepExecution): boolean {
+    return this.getStatusEntries(execution.executions).length > 0;
+  }
+
+  getProgressPercent(progress: { current?: number; total?: string }): number | null {
+    if (progress.current == null || progress.total == null) return null;
+    const total = parseFloat(progress.total);
+    if (isNaN(total) || total <= 0) return null;
+    return Math.min((progress.current / total) * 100, 100);
   }
 
   isToolExecution(item: TStepExecution | TStepToolExecution): item is TStepToolExecution {

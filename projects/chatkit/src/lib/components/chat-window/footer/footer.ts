@@ -1,10 +1,10 @@
-import { Component, computed, effect, ElementRef, inject, ViewChild } from '@angular/core';
-import { ChatWindowEventsService } from '../../../services/chat-window.events';
-import { ChatWindowDataService } from '../../../services/chat-window.data';
+import { Component, effect, ElementRef, input, output, ViewChild } from '@angular/core';
 import { Dropdown } from '../../dropdown/dropdown';
 import { Popover } from '../../popover/popover';
 import { SendArrowIcon, PaperclipIcon, DocumentIcon, UploadIcon } from '../../icons';
 import { UserFileItem } from './user-file-item/user-file-item';
+import { TChatkitLLMItem, TMessageFile } from '../../../typings/data';
+import { TUserFile } from '../../../typings/config';
 
 @Component({
   selector: 'dw-chat-footer',
@@ -25,6 +25,31 @@ export class Footer {
   @ViewChild('textareaRef') textareaRef?: ElementRef<HTMLTextAreaElement>;
   @ViewChild(Popover) popover?: Popover;
 
+  readonly userText = input<string>('');
+  readonly userFiles = input<string[]>([]);
+  readonly userFilesMap = input<Record<string, TUserFile>>({});
+  readonly userMessageSuggestions = input<string[]>([]);
+  readonly placeholder = input<string>('Type here...');
+  readonly selectedLLMId = input<string>('');
+  readonly LLMs = input<TChatkitLLMItem[]>([]);
+  readonly LLMsLoading = input<boolean>(false);
+  readonly LLMsErrored = input<boolean>(false);
+  readonly disableSend = input<boolean>(false);
+  readonly showAttachment = input<boolean>(false);
+  readonly showAttachmentComputer = input<boolean>(false);
+  readonly showAttachmentDataStore = input<boolean>(false);
+  readonly showLLMSelector = input<boolean>(false);
+  readonly acceptedTypes = input<string>('');
+  readonly showTextInput = input<boolean>(true);
+
+  readonly sendMessage = output<string>();
+  readonly userMessageChange = output<{ event: Event; text: string }>();
+  readonly selectLLM = output<string>();
+  readonly selectDataStore = output<void>();
+  readonly selectComputerUpload = output<File[]>();
+  readonly removeUserFile = output<string>();
+  readonly selectFile = output<TMessageFile | undefined>();
+
   private suggestionIndex = -1;
   private originalUserText = '';
   private sessionSuggestions: string[] = [];
@@ -36,73 +61,8 @@ export class Footer {
     });
   }
 
-  readonly userText = computed(() => {
-    return this.chatWindowDataService.chatkitFooter().userMessage || '';
-  });
-
-  readonly userFiles = computed(() => {
-    return this.chatWindowDataService.chatkitFooter().userFiles || [];
-  });
-
-  readonly userFilesMap = computed(() => {
-    return this.chatWindowDataService.chatkitFooter().userFilesMap || {};
-  });
-
-  readonly userMessageSuggestions = computed(() => {
-    return this.chatWindowDataService.chatkitFooter().userMessageSuggestions || [];
-  });
-
-  readonly placeholder = computed(() => {
-    return this.chatWindowDataService.chatkitProps().placeholder || 'Type here...';
-  });
-
-  private readonly chatWindowEventsService = inject(ChatWindowEventsService);
-
-  private readonly chatWindowDataService = inject(ChatWindowDataService);
-
-  readonly selectedLLMId = computed(() => {
-    return this.chatWindowDataService.chatkitProps().selectedLLMId || '';
-  });
-
-  readonly LLMs = computed(() => {
-    return this.chatWindowDataService.LLMs().value;
-  });
-
-  readonly LLMsLoading = computed(() => {
-    return this.chatWindowDataService.LLMs().loading;
-  });
-
-  readonly LLMsErrored = computed(() => {
-    return !!this.chatWindowDataService.LLMs().error;
-  });
-
-  readonly disableSend = computed(() => {
-    return !!this.chatWindowDataService.chatkitFooter()?.sendDisabled;
-  });
-
-  readonly showAttachment = computed(() => {
-    return !!this.chatWindowDataService.chatkitFlags()?.footer?.attachment;
-  });
-
-  readonly showAttachmentComputer = computed(() => {
-    return !!this.chatWindowDataService.chatkitFlags()?.footer?.attachment?.computer;
-  });
-
-  readonly showAttachmentDataStore = computed(() => {
-    return !!this.chatWindowDataService.chatkitFlags()?.footer?.attachment?.dataStore;
-  });
-
-  readonly showLLMSelector = computed(() => {
-    return !!this.chatWindowDataService.chatkitFlags()?.footer?.llmSelector;
-  });
-
-  readonly acceptedTypes = computed(() => {
-    const types = this.chatWindowDataService.chatkitProps().allowedFileTypes || [];
-    return types.join(',');
-  });
-
   onLLMChange(value: string) {
-    this.chatWindowEventsService.selectLLM$.next(value);
+    this.selectLLM.emit(value);
   }
 
   private resetSuggestions = () => {
@@ -115,7 +75,7 @@ export class Footer {
     if (this.disableSend()) {
       return;
     }
-    this.chatWindowEventsService.sendMessage$.next(this.userText());
+    this.sendMessage.emit(this.userText());
     this.resetSuggestions();
   }
 
@@ -130,7 +90,7 @@ export class Footer {
       this.sessionSuggestions[this.suggestionIndex] = text;
     }
 
-    this.chatWindowEventsService.userMessageChange$.next({
+    this.userMessageChange.emit({
       event,
       text,
     });
@@ -181,7 +141,7 @@ export class Footer {
   }
 
   private updateMessageFromSuggestion(text: string, caretPosition: 'start' | 'end') {
-    this.chatWindowEventsService.userMessageChange$.next({
+    this.userMessageChange.emit({
       event: new Event('input'),
       text,
     });
@@ -200,7 +160,7 @@ export class Footer {
   };
 
   onSelectDataStore() {
-    this.chatWindowEventsService.selectDataStore$.next();
+    this.selectDataStore.emit();
     this.popover?.close();
   }
 
@@ -213,9 +173,16 @@ export class Footer {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const filesArray = Array.from(input.files);
-      this.chatWindowEventsService.selectComputerUpload$.next(filesArray);
-      // Reset input to allow selecting the same file again
+      this.selectComputerUpload.emit(filesArray);
       input.value = '';
     }
+  }
+
+  onRemoveUserFile(filename: string) {
+    this.removeUserFile.emit(filename);
+  }
+
+  onSelectFile(file: TMessageFile | undefined) {
+    this.selectFile.emit(file);
   }
 }

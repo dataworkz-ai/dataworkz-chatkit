@@ -230,6 +230,71 @@ $steps-background: #fff;
   }
 }
 
+.dw-status-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.375rem 0.625rem;
+  background-color: #f8faff;
+  border: 1px solid #dbeafe;
+  border-radius: 0.375rem;
+
+  .dw-status-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: $step-in-progress-color;
+    line-height: 1.4;
+  }
+
+  .dw-status-title {
+    font-weight: 500;
+    color: $step-text-color;
+    flex-shrink: 0;
+  }
+
+  .dw-status-separator {
+    color: $step-in-progress-color;
+    flex-shrink: 0;
+  }
+
+  .dw-status-body {
+    color: $step-in-progress-color;
+    white-space: nowrap;
+  }
+
+  .dw-status-progress-bar {
+    width: 5rem;
+    flex-shrink: 0;
+    height: 6px;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .dw-status-progress-fill {
+    height: 100%;
+    background-color: $step-pending-color;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .dw-status-progress-indeterminate {
+    width: 40%;
+    animation: indeterminate-progress 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes indeterminate-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
 .dw-nested-executions {
   display: flex;
   flex-direction: column;

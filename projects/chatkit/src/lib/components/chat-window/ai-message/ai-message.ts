@@ -85,6 +85,10 @@ export class AiMessage {
   readonly showAutoResolution = computed(
     () => !!this.chatWindowDataService.chatkitFlags()?.hitl?.autoResolution,
   );
+  readonly blockAutoResolutionAgentLevel = computed(
+    () =>
+      !!this.chatWindowDataService.chatkitFlags()?.hitl?.autoResolution?.blockAgentLevel,
+  );
 
   readonly isHitlHighlighted = computed(() => {
     return (

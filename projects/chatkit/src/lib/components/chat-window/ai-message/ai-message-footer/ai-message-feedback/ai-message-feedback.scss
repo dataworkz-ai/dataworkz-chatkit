@@ -9,7 +9,8 @@
   justify-content: center;
   border: none;
   background: transparent;
-  color: #1d4ed8;
+  // Azure Electric — text-primary
+  color: #2463f5;
   cursor: pointer;
   transition: color 0.2s ease;
 
@@ -47,8 +48,8 @@
 
     &:focus {
       outline: none;
-      border-color: #1d4ed8;
-      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.1);
+      border-color: #2463f5;
+      box-shadow: 0 0 0 2px rgba(36, 99, 245, 0.2);
     }
   }
 
@@ -77,13 +78,22 @@
     width: 100%;
     margin-top: 4px;
     padding: 8px;
-    background: #1d4ed8;
+    // Azure Electric — primary gradient
+    background: linear-gradient(135deg, #4d84ff, #144ce6);
     color: white;
     border: none;
     border-radius: 6px;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.2s;
+    transition:
+      background 0.2s,
+      box-shadow 0.2s;
+    box-shadow: 0 4px 12px -5px rgba(36, 99, 245, 0.55);
+
+    &:hover {
+      background: linear-gradient(135deg, #2463f5, #113dc2);
+      box-shadow: 0 6px 16px -6px rgba(36, 99, 245, 0.6);
+    }
   }
 }

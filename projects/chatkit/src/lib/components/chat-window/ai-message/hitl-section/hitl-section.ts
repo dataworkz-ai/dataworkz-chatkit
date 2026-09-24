@@ -23,6 +23,7 @@ export class HitlSection {
   readonly autoResolutionMap = input<Record<string, TItemState<string>>>({});
   readonly autoResolutionRulesMap = input<Record<string, THitlAutoResolutionRule>>({});
   readonly showAutoResolution = input<boolean>(false);
+  readonly blockAutoResolutionAgentLevel = input<boolean>(false);
   readonly headerLabel = input<string>('User response required');
 
   readonly cancel = output<void>();

@@ -3,6 +3,7 @@ import { ChatWindowDataService } from '../../../services/chat-window.data';
 import { FileItem } from '../../file-item/file-item';
 import { ChatWindowEventsService } from '../../../services/chat-window.events';
 import { TMessageFile } from '../../../typings/data';
+import { formatMessageTimestamp } from '../utils';
 
 @Component({
   selector: 'dw-user-message',
@@ -18,6 +19,13 @@ export class UserMessage {
 
   readonly parts = computed(() => {
     return this.chatWindowDataService.messagesMap()[this.messageId]?.value?.parts || [];
+  });
+
+  readonly timestampLabel = computed(() => {
+    if (!this.chatWindowDataService.chatkitFlags()?.message?.timestamps) return '';
+    return formatMessageTimestamp(
+      this.chatWindowDataService.messagesMap()[this.messageId]?.value?.timestamp,
+    );
   });
 
   onClick(file: TMessageFile) {

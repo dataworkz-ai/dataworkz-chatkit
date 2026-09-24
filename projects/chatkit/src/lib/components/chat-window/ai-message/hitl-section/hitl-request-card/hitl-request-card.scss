@@ -421,8 +421,19 @@ textarea.dw-hitl-text-input-disabled {
   margin-top: 0;
   border: none;
   box-shadow: none;
-  width: min(26rem, calc(100vw - 4rem));
+  // Grow to fit the actions row (longer scope labels), capped to the viewport
+  width: max-content;
+  min-width: min(26rem, calc(100vw - 4rem));
+  max-width: calc(100vw - 4rem);
   box-sizing: border-box;
+
+  .dw-ar-panel-actions {
+    flex-wrap: wrap;
+  }
+
+  .dw-ar-panel-actions-spacer {
+    min-width: 0.5rem;
+  }
 }
 
 // Auto-resolution: saved confirmation row

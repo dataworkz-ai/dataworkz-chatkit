@@ -1,7 +1,7 @@
-import { Component, computed, inject, input, output } from '@angular/core';
-import { ChatWindowDataService } from '../../../../services/chat-window.data';
+import { Component, computed, input, output } from '@angular/core';
 import { FileItem } from '../../../file-item/file-item';
-import { ChatWindowEventsService } from '../../../../services/chat-window.events';
+import { TUserFile } from '../../../../typings/config';
+import { TMessageFile } from '../../../../typings/data';
 
 @Component({
   selector: 'dw-user-file-item',
@@ -11,14 +11,11 @@ import { ChatWindowEventsService } from '../../../../services/chat-window.events
   styleUrl: './user-file-item.scss',
 })
 export class UserFileItem {
-  private readonly chatWindowDataService = inject(ChatWindowDataService);
-  private readonly chatWindowEventsService = inject(ChatWindowEventsService);
-
   filename = input.required<string>();
+  fileStatus = input<TUserFile | undefined>(undefined);
 
-  private readonly fileStatus = computed(() => {
-    return this.chatWindowDataService.chatkitFooter().userFilesMap?.[this.filename()];
-  });
+  readonly remove = output<string>();
+  readonly fileClick = output<TMessageFile | undefined>();
 
   readonly messageFile = computed(() => this.fileStatus()?.messageFile);
   readonly ingestStatus = computed(() => this.fileStatus()?.ingestStatus);
@@ -26,10 +23,10 @@ export class UserFileItem {
   readonly documentStatus = computed(() => this.fileStatus()?.documentStatus);
 
   onRemove() {
-    this.chatWindowEventsService.removeUserFile$.next(this.filename());
+    this.remove.emit(this.filename());
   }
 
   onClick() {
-    this.chatWindowEventsService.selectFile$.next(this.messageFile());
+    this.fileClick.emit(this.messageFile());
   }
 }

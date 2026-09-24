@@ -9,6 +9,7 @@ export type TChatkitFlags = {
       dataStore?: boolean;
     };
     llmSelector?: boolean;
+    textInput?: boolean;
   };
   agentMessage?: {
     steps?: boolean;
@@ -16,7 +17,9 @@ export type TChatkitFlags = {
     feedback?: boolean;
   };
   hitl?: {
-    autoResolution?: boolean;
+    autoResolution?: {
+      blockAgentLevel?: boolean;
+    }
   };
 };
 

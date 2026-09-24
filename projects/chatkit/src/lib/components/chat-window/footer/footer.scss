@@ -61,12 +61,15 @@
     }
 
     &-active {
-      background-color: #2563eb;
+      // Azure Electric — primary gradient (see designs/azure-button-system)
+      background: linear-gradient(135deg, #4d84ff, #144ce6);
       color: white;
       cursor: pointer;
+      box-shadow: 0 4px 12px -5px rgba(36, 99, 245, 0.55);
 
       &:hover {
-        background-color: #1d4ed8;
+        background: linear-gradient(135deg, #2463f5, #113dc2);
+        box-shadow: 0 6px 16px -6px rgba(36, 99, 245, 0.6);
       }
     }
 

@@ -12,6 +12,7 @@ export type TStepBase = {
 export type TStepScenarioSelection = TStepBase & {
   type: 'Scenario Selection';
   llmThought: string;
+  statusMessage?: string;
 };
 
 export type TStepPlanning = TStepBase & {
@@ -25,6 +26,18 @@ export type TStepToolExecution = TStepBase & {
   toolType: string;
   type: 'Tool Execution';
   children?: TStepPlanItem[];
+  statusMessage?: string;
+};
+
+export type TStepToolStatus = TStepBase & {
+  body: string;
+  key?: string;
+  name?: string;
+  severity?: 'info' | 'warn' | 'error';
+  title?: string;
+  ts: number;
+  type: 'Status';
+  progress?: { current: number; total: string };
 };
 
 export type TStepExecution = TStepBase & {
@@ -32,7 +45,8 @@ export type TStepExecution = TStepBase & {
   executionId: string;
   toolId: string;
   toolType: string;
-  executions?: Record<string, TStepToolExecution>;
+  executions?: Record<string, TStepToolExecution | TStepToolStatus>;
+  statusMessage?: string;
 };
 
 export type TStepAgentResponse = TStepBase & {
@@ -106,6 +120,7 @@ export type TMessageFile = {
   file?: string;
   filePath?: string;
   ingestUuid?: string;
+  ingestName?: string;
 };
 
 export type TChatkitConversationTask = {
@@ -127,6 +142,7 @@ export type THitlOption = {
 };
 
 export type THitlRequest = {
+  autoResolvable?: boolean;
   requestId: string;
   type: THitlRequestType;
   toolId: string | null;
@@ -155,6 +171,8 @@ export type THitlRequestItem = {
   resolution?: THitlResolution | 'cancelled';
 };
 
+export type THitlAutoResolutionScope = 'ALL_USERS_OF_AGENT' | 'USER';
+
 export type THitlAutoResolutionEvent = {
   request: THitlRequest;
   resolution: THitlResolution;
@@ -163,12 +181,14 @@ export type THitlAutoResolutionEvent = {
     condition?: string;
     ruleId?: string;
     skipValidation?: boolean;
+    scope?: THitlAutoResolutionScope;
   };
 };
 
 export type THitlAutoResolutionRule = {
   name: string;
   link?: string;
+  scope?: THitlAutoResolutionScope;
 };
 
 export type TChatkitData = {

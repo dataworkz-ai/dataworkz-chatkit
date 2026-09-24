@@ -32,13 +32,21 @@
     }
 
     <div class="dw-hitl-content">
-      <p class="dw-hitl-question">{{ request()!.question }}</p>
+      <dw-markdown-viewer
+        class="dw-hitl-question"
+        [messageId]="requestId()"
+        [content]="request()!.question"
+      ></dw-markdown-viewer>
 
       @if (hasContextSection()) {
         <div class="dw-hitl-section">
           <div class="dw-hitl-section-heading">Context</div>
           @if (contextDataIsString()) {
-            <p class="dw-hitl-context-text">{{ contextData() }}</p>
+            <dw-markdown-viewer
+              class="dw-hitl-context-text"
+              [messageId]="requestId()"
+              [content]="$any(contextData())"
+            ></dw-markdown-viewer>
           }
           @if (contextDataEntries().length) {
             <ul class="dw-hitl-context-list">
@@ -128,6 +136,7 @@
           <div class="dw-hitl-actions">
             <button class="dw-hitl-btn dw-hitl-btn-reject" (click)="onReject()">Reject</button>
             <button class="dw-hitl-btn dw-hitl-btn-approve" (click)="onApprove()">Approve</button>
+            <ng-container [ngTemplateOutlet]="rememberChoiceTpl" />
           </div>
         } @else if (isInput()) {
           <div class="dw-hitl-input-group">
@@ -138,9 +147,12 @@
               [value]="userInput()"
               (input)="userInput.set($any($event.target).value); autoResizeTextarea($event)"
             ></textarea>
-            <button class="dw-hitl-btn dw-hitl-btn-confirm" (click)="onConfirmInput()">
-              Confirm
-            </button>
+            <div class="dw-hitl-actions dw-hitl-actions-inline">
+              <button class="dw-hitl-btn dw-hitl-btn-confirm" (click)="onConfirmInput()">
+                Confirm
+              </button>
+              <ng-container [ngTemplateOutlet]="rememberChoiceTpl" />
+            </div>
           </div>
         } @else if (isClarification()) {
           <div class="dw-hitl-clarification-group">
@@ -191,15 +203,19 @@
                 ></textarea>
               }
             }
-            <button
-              class="dw-hitl-btn dw-hitl-btn-confirm"
-              [disabled]="!isClarificationValid()"
-              (click)="onConfirmClarification()"
-            >
-              Confirm
-            </button>
+            <div class="dw-hitl-actions dw-hitl-actions-inline">
+              <button
+                class="dw-hitl-btn dw-hitl-btn-confirm"
+                [disabled]="!isClarificationValid()"
+                (click)="onConfirmClarification()"
+              >
+                Confirm
+              </button>
+              <ng-container [ngTemplateOutlet]="rememberChoiceTpl" />
+            </div>
           </div>
         }
+
       }
 
       @if (isProvided()) {
@@ -262,22 +278,48 @@
                 </button>
               }
             </div>
-            @if (resolutionThought()) {
-              <button class="dw-ar-thought-toggle" (click)="onThoughtToggle()">
-                <dw-chevron-icon
-                  [size]="12"
-                  [class.dw-ar-thought-chevron-expanded]="thoughtExpanded()"
-                  class="dw-ar-thought-chevron"
-                />
-                <span>Why was this applied?</span>
-              </button>
-              @if (thoughtExpanded()) {
+            @if (resolutionThought() || appliedRuleScopeLabel()) {
+              <div class="dw-ar-rule-card-footer">
+                @if (resolutionThought()) {
+                  <button class="dw-ar-thought-toggle" (click)="onThoughtToggle()">
+                    <dw-chevron-icon
+                      [size]="12"
+                      [class.dw-ar-thought-chevron-expanded]="thoughtExpanded()"
+                      class="dw-ar-thought-chevron"
+                    />
+                    <span>Why was this applied?</span>
+                  </button>
+                }
+                @if (appliedRuleScopeLabel()) {
+                  <div class="dw-ar-rule-scope">
+                    @if (appliedRuleScope() === 'ALL_USERS_OF_AGENT') {
+                      <dw-users-icon [size]="12" />
+                    } @else {
+                      <dw-user-icon [size]="12" />
+                    }
+                    <span>{{ appliedRuleScopeLabel() }}</span>
+                  </div>
+                }
+              </div>
+              @if (resolutionThought() && thoughtExpanded()) {
                 <div class="dw-ar-thought-body">
                   <div class="dw-ar-thought-label">LLM THOUGHT</div>
                   <div class="dw-ar-thought-text">{{ resolutionThought() }}</div>
                 </div>
               }
             }
+          </div>
+        }
+      }
+
+      @if (!isAutoResolved()) {
+        @if (isSaving()) {
+          <!-- Rule creation in progress -->
+          <div class="dw-ar-saved-row">
+            <span class="dw-ar-saved-text dw-ar-saving-text">
+              <dw-loader-icon [size]="12" />
+              Creating auto-resolution rule...
+            </span>
           </div>
         } @else if (isSaved()) {
           <!-- Rule just saved: show confirmation -->
@@ -297,76 +339,18 @@
               </button>
             }
           </div>
-        } @else if (showAutoResolution()) {
-          @if (autoExpanded()) {
-            <!-- Expanded auto-resolve panel -->
-            <div class="dw-ar-panel">
-              <div class="dw-ar-panel-header">
-                <dw-bolt-icon [size]="14" />
-                <span class="dw-ar-panel-title">Auto-resolve next time</span>
-                <div class="dw-ar-panel-spacer"></div>
-                <button class="dw-ar-close-btn" (click)="onCancelAutoResolve()">
-                  <dw-close-icon [size]="12" />
-                </button>
-              </div>
-
-              <div class="dw-ar-scope-info">
-                <dw-users-icon [size]="14" />
-                <span
-                  >This rule will be applied for this agent across all users whenever this question
-                  is asked.</span
-                >
-              </div>
-
-              <div class="dw-ar-conditions">
-                <div class="dw-ar-conditions-label">
-                  <span class="dw-ar-conditions-label-text">Add conditions</span>
-                  <span class="dw-ar-conditions-optional">optional</span>
-                </div>
-                <textarea
-                  class="dw-ar-conditions-input"
-                  rows="3"
-                  [value]="conditionsText()"
-                  (input)="onConditionsChange($any($event.target).value)"
-                  placeholder='e.g. "when vendor is FirstTierConsultants and project code = P322 and invoice_date is before April 2026"'
-                ></textarea>
-              </div>
-
-              <div class="dw-ar-panel-actions">
-                <label class="dw-ar-skip-validation">
-                  <input
-                    type="checkbox"
-                    [checked]="skipValidation()"
-                    (change)="onSkipValidationChange($any($event.target).checked)"
-                  />
-                  <span>Skip rule validation</span>
-                </label>
-                <div class="dw-ar-panel-actions-spacer"></div>
-                <button class="dw-ar-cancel-btn" (click)="onCancelAutoResolve()">Cancel</button>
-                <button
-                  class="dw-ar-save-btn"
-                  [disabled]="!canSave() || saveState()?.loading"
-                  (click)="onSaveRule()"
-                >
-                  @if (saveState()?.loading) {
-                    <dw-loader-icon />
-                    Saving...
-                  } @else {
-                    <dw-bolt-icon [size]="11" />
-                    Save rule
-                  }
-                </button>
-              </div>
-            </div>
-          } @else {
-            <!-- Collapsed: show pill button -->
-            <div class="dw-ar-compact-row">
-              <button class="dw-ar-trigger-btn" (click)="onAutoExpandToggle()">
-                <dw-bolt-icon [size]="11" />
-                Auto-resolve next time
-              </button>
-            </div>
-          }
+        } @else if (isSaveFailed()) {
+          <!-- Rule creation failed -->
+          <div class="dw-ar-saved-row">
+            <span class="dw-ar-saved-text dw-ar-failed-text" [title]="saveState()?.error || ''">
+              <dw-close-icon [size]="11" />
+              Couldn't create auto-resolution rule
+            </span>
+            @if (canRetrySave()) {
+              <span class="dw-ar-saved-separator">·</span>
+              <button class="dw-ar-view-rule-btn" (click)="onRetrySaveRule()">Retry</button>
+            }
+          </div>
         }
       }
 
@@ -409,3 +393,73 @@
     </div>
   </div>
 }
+
+<ng-template #rememberChoiceTpl>
+  @if (canCreateAutoResolutionRule()) {
+    <div class="dw-ar-remember">
+      <dw-popover [position]="rememberPopoverPosition()" align="right" #rememberPopover>
+        <label trigger class="dw-ar-remember-label">
+          <input
+            type="checkbox"
+            [checked]="rememberChoice()"
+            (click)="onRememberChoiceClick($event, rememberPopover)"
+          />
+          <span>Remember my choice</span>
+        </label>
+
+        <div content class="dw-ar-panel dw-ar-panel-popover">
+          @if (rememberPopover.isOpen()) {
+            <div class="dw-ar-panel-header">
+              <dw-bolt-icon [size]="14" />
+              <span class="dw-ar-panel-title">Auto-resolve next time</span>
+              <div class="dw-ar-panel-spacer"></div>
+              <button class="dw-ar-close-btn" (click)="onCancelRememberChoice(rememberPopover)">
+                <dw-close-icon [size]="12" />
+              </button>
+            </div>
+
+            <div class="dw-ar-conditions">
+              <div class="dw-ar-conditions-label">
+                <span class="dw-ar-conditions-label-text">Add conditions</span>
+                <span class="dw-ar-conditions-optional">optional</span>
+              </div>
+              <textarea
+                class="dw-ar-conditions-input"
+                rows="3"
+                [value]="conditionsText()"
+                (input)="onConditionsChange($any($event.target).value)"
+                placeholder='e.g. "when vendor is FirstTierConsultants and project code = P322 and invoice_date is before April 2026"'
+              ></textarea>
+            </div>
+
+            <div class="dw-ar-panel-actions">
+              <dw-dropdown
+                class="dw-ar-scope-dropdown"
+                [options]="scopeOptions()"
+                [value]="selectedScope()"
+                (valueChange)="onScopeChange($event)"
+              >
+                <ng-template #itemTemplate let-option>
+                  @if (option.value === 'ALL_USERS_OF_AGENT') {
+                    <dw-users-icon [size]="14" />
+                  } @else {
+                    <dw-user-icon [size]="14" />
+                  }
+                  {{ option.label }}
+                </ng-template>
+              </dw-dropdown>
+              <div class="dw-ar-panel-actions-spacer"></div>
+              <button class="dw-ar-cancel-btn" (click)="onCancelRememberChoice(rememberPopover)">
+                Cancel
+              </button>
+              <button class="dw-ar-save-btn" (click)="onConfirmRememberChoice(rememberPopover)">
+                <dw-bolt-icon [size]="11" />
+                Confirm
+              </button>
+            </div>
+          }
+        </div>
+      </dw-popover>
+    </div>
+  }
+</ng-template>

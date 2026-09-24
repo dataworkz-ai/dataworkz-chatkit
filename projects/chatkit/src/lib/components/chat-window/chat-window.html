@@ -49,7 +49,31 @@
 
     @if (showFooter()) {
       <div class="dw-chat-window-footer">
-        <dw-chat-footer></dw-chat-footer>
+        <dw-chat-footer
+          [userText]="footerUserText()"
+          [userFiles]="footerUserFiles()"
+          [userFilesMap]="footerUserFilesMap()"
+          [userMessageSuggestions]="footerUserMessageSuggestions()"
+          [placeholder]="footerPlaceholder()"
+          [selectedLLMId]="footerSelectedLLMId()"
+          [LLMs]="footerLLMs()"
+          [LLMsLoading]="footerLLMsLoading()"
+          [LLMsErrored]="footerLLMsErrored()"
+          [disableSend]="footerDisableSend()"
+          [showAttachment]="footerShowAttachment()"
+          [showAttachmentComputer]="showAttachmentComputer()"
+          [showAttachmentDataStore]="footerShowAttachmentDataStore()"
+          [showLLMSelector]="footerShowLLMSelector()"
+          [acceptedTypes]="footerAcceptedTypes()"
+          [showTextInput]="footerShowTextInput()"
+          (sendMessage)="onFooterSendMessage($event)"
+          (userMessageChange)="onFooterUserMessageChange($event)"
+          (selectLLM)="onFooterSelectLLM($event)"
+          (selectDataStore)="onFooterSelectDataStore()"
+          (selectComputerUpload)="onFooterSelectComputerUpload($event)"
+          (removeUserFile)="onFooterRemoveUserFile($event)"
+          (selectFile)="onFooterSelectFile($event)"
+        ></dw-chat-footer>
       </div>
     }
 

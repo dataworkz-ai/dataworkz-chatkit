@@ -1,5 +1,6 @@
 import {
   Component,
+  ContentChild,
   effect,
   ElementRef,
   EventEmitter,
@@ -7,6 +8,7 @@ import {
   Input,
   Output,
   signal,
+  TemplateRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderIcon, ChevronIcon } from '../icons';
@@ -33,6 +35,8 @@ export class Dropdown {
 
   @Output() valueChange = new EventEmitter<string>();
   @Output() onChange = new EventEmitter<DropdownOption>();
+
+  @ContentChild('itemTemplate') itemTemplate?: TemplateRef<any>;
 
   isOpen = signal(false);
 

@@ -17,7 +17,11 @@
       <!-- Scenario Selection Step -->
       @if (isScenarioSelection(item)) {
         <div class="dw-step-item">
-          <div class="dw-step-header" [class.dw-step-header-failed]="item.status === 'failed'" [class.dw-step-header-pending]="item.status === 'pending'">
+          <div
+            class="dw-step-header"
+            [class.dw-step-header-failed]="item.status === 'failed'"
+            [class.dw-step-header-pending]="item.status === 'pending'"
+          >
             <span
               class="dw-step-status"
               [class.dw-step-status-completed]="item.status === 'completed'"
@@ -37,7 +41,7 @@
                 <dw-circle-icon />
               }
             </span>
-            <span class="dw-step-title">Scenario Selected:</span>
+            <span class="dw-step-title">{{ asScenarioSelection(item).statusMessage || 'Scenario Selected:' }}</span>
             <span class="dw-step-name">{{ item.name }}</span>
             @if (item.status === 'pending') {
               <span class="dw-step-pending-label">Pending</span>
@@ -215,11 +219,15 @@
               <dw-circle-icon />
             }
           </span>
-          <span class="dw-step-icon">
-            <dw-tool-icon [toolType]="execution.toolType" />
-          </span>
-          <span class="dw-step-label">Executing Tool:</span>
-          <span class="dw-step-name">{{ execution.name }}</span>
+          @if (!!execution?.statusMessage) {
+            <span class="dw-step-label">{{execution.statusMessage}}</span>
+          } @else {
+            <span class="dw-step-icon">
+              <dw-tool-icon [toolType]="execution.toolType" />
+            </span>
+            <span class="dw-step-label">Executing Tool:</span>
+            <span class="dw-step-name">{{ execution.name }}</span>
+          }
           @if (execution.status === 'pending') {
             <span class="dw-step-pending-label">Pending</span>
           }
@@ -232,13 +240,48 @@
             </span>
           }
         </div>
-        <!-- Nested Child Executions or Children -->
+        <!-- Nested content (status + child executions) — collapsed together -->
         @if (hasNestedExecutions(execution) && isExecutionExpanded(execution.executionId)) {
           <div class="dw-nested-executions">
+            <!-- Status Section -->
+            @if (!isToolExecution(execution) && hasStatusEntries(asExecution(execution))) {
+              <div class="dw-status-section">
+                @for (
+                  statusEntry of getStatusEntries(asExecution(execution).executions);
+                  track statusEntry.ts
+                ) {
+                  <div class="dw-status-line">
+                    @if (statusEntry.title) {
+                      <span class="dw-status-title">{{ statusEntry.title }}</span>
+                    }
+                    @if (statusEntry.progress) {
+                      <span class="dw-status-separator">-</span>
+                      <div class="dw-status-progress-bar">
+                        @if (getProgressPercent(statusEntry.progress) !== null) {
+                          <div
+                            class="dw-status-progress-fill"
+                            [style.width.%]="getProgressPercent(statusEntry.progress)"
+                          ></div>
+                        } @else {
+                          <div
+                            class="dw-status-progress-fill dw-status-progress-indeterminate"
+                          ></div>
+                        }
+                      </div>
+                    } @else if (statusEntry.title && statusEntry.body) {
+                      <span class="dw-status-separator">-</span>
+                    }
+                    @if (statusEntry.body) {
+                      <span class="dw-status-body">({{ statusEntry.body }})</span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+            <!-- Child Executions -->
             @if (!isToolExecution(execution)) {
-              <!-- TStepExecution has executions record -->
               @for (
-                childExec of getExecutionsArray(asExecution(execution).executions);
+                childExec of getChildExecutions(asExecution(execution).executions);
                 track childExec.executionId
               ) {
                 <ng-container
@@ -249,12 +292,14 @@
                 />
               }
             } @else {
-              <!-- TStepToolExecution has children array -->
               @for (childItem of asToolExecution(execution).children; track $index) {
                 <ng-container
                   *ngTemplateOutlet="
                     planItemTemplate;
-                    context: { $implicit: childItem, index: execution.executionId + '-' + $index }
+                    context: {
+                      $implicit: childItem,
+                      index: execution.executionId + '-' + $index
+                    }
                   "
                 />
               }

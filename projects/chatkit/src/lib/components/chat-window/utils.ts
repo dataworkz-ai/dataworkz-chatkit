@@ -82,3 +82,30 @@ export function centerStepsInChat(
 
   centerElementInContainer(chatbody, stepsPanel, behavior);
 }
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * Formats a message timestamp as "23-Sep-2026, 11:27 PM" in the viewer's local time.
+ * ISO strings without an offset (e.g. "2026-09-21T10:52:09.482334") are treated as UTC.
+ */
+export function formatMessageTimestamp(timestamp?: number | string): string {
+  if (timestamp === undefined || timestamp === null || timestamp === '') return '';
+
+  let date: Date;
+  if (typeof timestamp === 'number') {
+    date = new Date(timestamp);
+  } else {
+    const value = timestamp.trim();
+    const hasOffset = /([zZ]|[+-]\d{2}:?\d{2})$/.test(value);
+    date = new Date(value.includes('T') && !hasOffset ? `${value}Z` : value);
+  }
+  if (isNaN(date.getTime())) return '';
+
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours24 = date.getHours();
+  const hours = String(hours24 % 12 || 12).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const meridiem = hours24 < 12 ? 'AM' : 'PM';
+  return `${day}-${MONTHS[date.getMonth()]}-${date.getFullYear()}, ${hours}:${minutes} ${meridiem}`;
+}

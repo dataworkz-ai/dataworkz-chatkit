@@ -104,6 +104,7 @@ export type TChatkitConversationTaskMessage = {
   thumbsUpOrDown?: number;
   additionalFeedback?: TAdditionalFeedback;
   hitlRequestIds?: string[];
+  timestamp?: number | string;
 };
 
 export type TChatkitLLMItem = {

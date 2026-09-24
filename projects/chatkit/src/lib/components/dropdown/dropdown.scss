@@ -103,7 +103,9 @@ $dropdown-border-radius: 6px;
   &-panel {
     position: absolute;
     left: 0;
-    right: 0;
+    // At least as wide as the trigger; grows so options stay on one line
+    min-width: 100%;
+    max-width: calc(100vw - 2rem);
     z-index: 1000;
     background: $dropdown-bg;
     border: 1px solid $dropdown-border-color;
@@ -136,6 +138,7 @@ $dropdown-border-radius: 6px;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     color: $dropdown-text-color;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.15s ease;
 

@@ -3,6 +3,9 @@ import { TMessageFile } from './data';
 import { TItemState } from './common';
 
 export type TChatkitFlags = {
+  message?: {
+    timestamps?: boolean;
+  }
   footer?: {
     attachment?: {
       computer?: boolean;

@@ -62,3 +62,6 @@
     (autoResolution)="onHitlAutoResolution($event)"
   />
 }
+  @if (timestampLabel()) {
+    <span class="dw-ai-message-timestamp">{{ timestampLabel() }}</span>
+  }

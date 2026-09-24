@@ -8,6 +8,7 @@ import { AiDataItem } from './ai-data-item/ai-data-item';
 import { AiFileItem } from './ai-file-item/ai-file-item';
 import { HitlSection } from './hitl-section/hitl-section';
 import { THitlAutoResolutionEvent, THitlResolution } from '../../../typings/data';
+import { formatMessageTimestamp } from '../utils';
 
 @Component({
   selector: 'dw-ai-message',
@@ -35,6 +36,14 @@ export class AiMessage {
 
   readonly parts = computed(() => {
     return this.chatWindowDataService.messagesMap()[this.messageId()]?.value?.parts || [];
+  });
+
+  readonly timestampLabel = computed(() => {
+    if (!this.chatWindowDataService.chatkitFlags()?.message?.timestamps) return '';
+    if (this.messageLoading() || !this.parts().length) return '';
+    return formatMessageTimestamp(
+      this.chatWindowDataService.messagesMap()[this.messageId()]?.value?.timestamp,
+    );
   });
 
   readonly showFooter = computed(() => {

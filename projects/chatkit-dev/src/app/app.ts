@@ -191,6 +191,7 @@ export class App {
             value: {
               role: message.role as any,
               parts: message.parts as (TMessageTextPart | TMessageDataPart)[],
+              timestamp: message.timestamp,
               hitlRequestIds: [
                 ...(message.metadata?.hitlRequests?.map((r: any) => r.requestId) || []),
                 ...(message.metadata?.autoResolvableHITLRequests?.map(
@@ -314,6 +315,9 @@ export class App {
   });
 
   private readonly _chatkitFlags = signal<TChatkitFlags>({
+    message: {
+      timestamps: true,
+    },
     footer: {
       llmSelector: true,
       attachment: {

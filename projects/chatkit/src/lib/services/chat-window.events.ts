@@ -5,6 +5,7 @@ import {
   THitlAutoResolutionEvent,
   THitlResolution,
   TMessageFile,
+  TChatkitStarterQuestionSelection,
 } from '../typings/data';
 
 @Injectable()
@@ -37,4 +38,5 @@ export class ChatWindowEventsService {
     messageId: string;
   }>();
   readonly hitlAutoResolution$ = new Subject<THitlAutoResolutionEvent>();
+  readonly starterQuestionSelect$ = new Subject<TChatkitStarterQuestionSelection>();
 }

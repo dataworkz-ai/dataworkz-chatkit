@@ -36,6 +36,67 @@
                 {{ chatkitAgentDescription() }}
               </p>
             }
+            @if (starterQuestions().length > 0) {
+              <section class="dw-starter-questions" aria-label="Example questions">
+                <div class="dw-starter-questions-label">Try one of these</div>
+                <div class="dw-starter-questions-grid">
+                  @for (starter of starterQuestions(); track $index; let index = $index) {
+                    <button
+                      type="button"
+                      class="dw-starter-question"
+                      [class.dw-starter-question-ready]="starterReady()[index]"
+                      [class.dw-starter-question-error]="starterHasError()[index]"
+                      [disabled]="!starterReady()[index]"
+                      [attr.aria-disabled]="!starterReady()[index] ? 'true' : null"
+                      [attr.title]="
+                        !starterReady()[index]
+                          ? starterHasError()[index]
+                            ? 'A sample file failed to load'
+                            : 'Loading sample files…'
+                          : starter.question
+                      "
+                      (click)="selectStarterQuestion(index)"
+                    >
+                      <span class="dw-starter-question-arrow" aria-hidden="true">↗</span>
+                      <span class="dw-starter-question-content">
+                        <span class="dw-starter-question-text">{{ starter.question }}</span>
+                        @if (starterFileStates()[index]?.length) {
+                          <span class="dw-starter-question-files">
+                            @for (file of starterFileStates()[index]; track $index) {
+                              <span
+                                class="dw-starter-question-file"
+                                [class.is-error]="file.status === 'error'"
+                              >
+                                <span aria-hidden="true">⌕</span>
+                                <span class="dw-starter-question-file-name">{{ file.label }}</span>
+                                @if (file.status === 'loading') {
+                                  <span
+                                    class="dw-starter-question-file-status is-loading"
+                                    aria-label="Loading"
+                                  ></span>
+                                } @else if (file.status === 'success') {
+                                  <span
+                                    class="dw-starter-question-file-status is-success"
+                                    aria-label="Ready"
+                                    >✓</span
+                                  >
+                                } @else {
+                                  <span
+                                    class="dw-starter-question-file-status is-error"
+                                    aria-label="Failed to load"
+                                    >!</span
+                                  >
+                                }
+                              </span>
+                            }
+                          </span>
+                        }
+                      </span>
+                    </button>
+                  }
+                </div>
+              </section>
+            }
           </div>
         }
       </div>

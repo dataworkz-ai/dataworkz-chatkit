@@ -18,7 +18,7 @@ import { ChatWindowDataService } from '../../services/chat-window.data';
 import { Skeleton } from '../skeleton/skeleton';
 import { ConversationIcon, ChevronIcon, UploadIcon } from '../icons';
 import { ChatWindowEventsService } from '../../services/chat-window.events';
-import { TMessageFile } from '../../typings/data';
+import { TChatkitStarterQuestionSelection, TMessageFile } from '../../typings/data';
 import {
   isScrolledUp,
   scrollToBottom,
@@ -26,6 +26,15 @@ import {
   centerMessageInChat,
   centerStepsInChat,
 } from './utils';
+
+type StarterFileStatus = 'loading' | 'success' | 'error';
+
+type StarterFileState = {
+  label: string;
+  url: string;
+  status: StarterFileStatus;
+  file: File | null;
+};
 
 @Component({
   standalone: true,
@@ -60,8 +69,38 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
   private readonly chatWindowDataService = inject(ChatWindowDataService);
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
   private readonly ngZone = inject(NgZone);
+  private starterFileFetchGeneration = 0;
+
+  readonly starterQuestions = this.chatWindowDataService.starterQuestions;
+  readonly starterFileStates = signal<StarterFileState[][]>([]);
+  readonly starterReady = computed(() =>
+    this.starterFileStates().map((files) => files.every((file) => file.status === 'success')),
+  );
+  readonly starterHasError = computed(() =>
+    this.starterFileStates().map((files) => files.some((file) => file.status === 'error')),
+  );
 
   constructor() {
+    effect(() => {
+      const generation = ++this.starterFileFetchGeneration;
+      const questions = this.starterQuestions();
+      this.starterFileStates.set(
+        questions.map((starter) =>
+          starter.files.map((url) => ({
+            label: this.fileLabel(url),
+            url,
+            status: 'loading' as StarterFileStatus,
+            file: null,
+          })),
+        ),
+      );
+      questions.forEach((starter, questionIndex) => {
+        starter.files.forEach((url, fileIndex) => {
+          void this.fetchStarterFile(generation, questionIndex, fileIndex, url);
+        });
+      });
+    });
+
     effect(() => {
       const request = this.chatkitScroll();
       if (!request) return;
@@ -219,6 +258,75 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
     this.chatWindowEventsService.selectFile$.next(file);
   }
 
+  selectStarterQuestion(index: number): void {
+    if (!this.starterReady()[index]) return;
+    const starter = this.starterQuestions()[index];
+    const selection: TChatkitStarterQuestionSelection = {
+      question: starter.question,
+      files: this.starterFileStates()[index]
+        .map((state) => state.file)
+        .filter((file): file is File => file !== null),
+    };
+    this.chatWindowEventsService.userMessageChange$.next({
+      event: new Event('input'),
+      text: starter.question,
+    });
+    this.chatWindowEventsService.starterQuestionSelect$.next(selection);
+  }
+
+  private fileLabel(url: string): string {
+    try {
+      return decodeURIComponent(
+        new URL(url, window.location.href).pathname.split('/').pop() || 'file',
+      );
+    } catch {
+      return url.split('/').pop() || 'file';
+    }
+  }
+
+  private async fetchStarterFile(
+    generation: number,
+    questionIndex: number,
+    fileIndex: number,
+    url: string,
+  ): Promise<void> {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      this.updateStarterFile(
+        generation,
+        questionIndex,
+        fileIndex,
+        'success',
+        new File([blob], this.fileLabel(url), {
+          type: blob.type || 'application/octet-stream',
+        }),
+      );
+    } catch {
+      this.updateStarterFile(generation, questionIndex, fileIndex, 'error', null);
+    }
+  }
+
+  private updateStarterFile(
+    generation: number,
+    questionIndex: number,
+    fileIndex: number,
+    status: StarterFileStatus,
+    file: File | null,
+  ): void {
+    if (generation !== this.starterFileFetchGeneration) return;
+    this.starterFileStates.update((rows) =>
+      rows.map((row, rowIndex) =>
+        rowIndex === questionIndex
+          ? row.map((item, itemIndex) =>
+              itemIndex === fileIndex ? { ...item, status, file } : item,
+            )
+          : row,
+      ),
+    );
+  }
+
   ngAfterViewInit() {
     this.scrollListener();
 
@@ -250,6 +358,10 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
     if (!chatBody) return;
 
     this.mutationObserver = new MutationObserver((mutations) => {
+      // Starter questions belong to the empty state, not the conversation
+      // timeline. Rendering them must not trigger the timeline's follow-bottom
+      // behavior before the user has sent a message.
+      if (!this.chatkitConversation()?.length) return;
       const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
 
       if (hasAddedNodes && getDistanceFromBottom(chatBody) < 100) {

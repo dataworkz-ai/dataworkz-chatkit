@@ -19,11 +19,15 @@
     display: flex;
     flex-direction: column;
     min-height: 0; // Ensure container can shrink
+    overflow: hidden;
 
     .dw-chat-window-body {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
+      flex: 1 1 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-auto-rows: max-content;
+      align-content: start;
+      min-height: 0;
       width: 100%;
       gap: 1rem;
       box-sizing: border-box;
@@ -33,12 +37,14 @@
       padding-right: 8px; // Small padding to separate content from scrollbar
 
       .dw-start-conversation-wrapper {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: max-content;
+        box-sizing: border-box;
+        min-height: 100%;
         gap: 1.25rem;
-        justify-content: center;
-        align-items: center;
+        align-content: safe center;
+        justify-items: center;
 
         .start-conversation-icon {
           height: 4rem;
@@ -52,6 +58,135 @@
 
         .start-conversation-text {
           font-size: 14px;
+          margin: 0;
+          text-align: center;
+        }
+
+        .dw-starter-questions {
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 680px;
+        }
+
+        .dw-starter-questions-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-bottom: 8px;
+          color: var(--dw-text-secondary, #64748b);
+          font-size: 12px;
+          font-weight: 600;
+        }
+
+        .dw-starter-questions-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 8px;
+        }
+
+        .dw-starter-question {
+          display: flex;
+          min-width: 0;
+          min-height: 74px;
+          align-items: flex-start;
+          gap: 10px;
+          padding: 10px 12px;
+          border: 1px solid var(--dw-border, #e2e8f0);
+          border-radius: 10px;
+          background: var(--dw-surface, #fff);
+          color: var(--dw-text, #334155);
+          font: inherit;
+          text-align: left;
+        }
+
+        .dw-starter-question-ready {
+          cursor: pointer;
+
+          &:hover {
+            border-color: var(--dw-border-accent, #bfdbfe);
+            background: var(--dw-accent-tint, #eff6ff);
+          }
+        }
+
+        .dw-starter-question:disabled {
+          cursor: wait;
+          opacity: 1;
+        }
+
+        .dw-starter-question-error:disabled {
+          cursor: not-allowed;
+        }
+
+        .dw-starter-question-arrow {
+          flex: 0 0 12px;
+          margin-top: 3px;
+          color: var(--dw-accent, #2563eb);
+          font-size: 12px;
+        }
+
+        .dw-starter-question-content,
+        .dw-starter-question-files {
+          display: flex;
+          min-width: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 5px;
+        }
+
+        .dw-starter-question-content {
+          flex: 1;
+        }
+
+        .dw-starter-question-text {
+          font-size: 13px;
+          line-height: 19px;
+          overflow-wrap: anywhere;
+        }
+
+        .dw-starter-question-file {
+          display: inline-flex;
+          max-width: 100%;
+          align-items: center;
+          gap: 4px;
+          padding: 1px 7px;
+          border: 1px solid var(--dw-border, #e2e8f0);
+          border-radius: 6px;
+          background: var(--dw-surface-hover, #f1f5f9);
+          color: var(--dw-text-secondary, #64748b);
+          font-size: 11px;
+          line-height: 18px;
+
+          &.is-error {
+            border-color: var(--dw-status-danger-border, #fecaca);
+            background: var(--dw-status-danger-bg, #fef2f2);
+            color: var(--dw-status-danger-fg, #dc2626);
+          }
+        }
+
+        .dw-starter-question-file-name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .dw-starter-question-file-status {
+          flex: 0 0 auto;
+
+          &.is-loading {
+            width: 8px;
+            height: 8px;
+            border: 1px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: dw-starter-spin 0.7s linear infinite;
+          }
+        }
+
+        @media (max-width: 760px) {
+          .dw-starter-questions-grid {
+            grid-template-columns: 1fr;
+          }
         }
       }
     }
@@ -136,6 +271,12 @@
         font-weight: 600;
       }
     }
+  }
+}
+
+@keyframes dw-starter-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

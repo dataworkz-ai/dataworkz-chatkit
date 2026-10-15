@@ -7,6 +7,7 @@ import {
   TChatkitLLMItem,
   THitlAutoResolutionRule,
   THitlRequestItem,
+  TChatkitStarterQuestion,
   TStepPlanItem,
 } from '../typings/data';
 import {
@@ -48,6 +49,7 @@ export class ChatWindowDataService {
   private readonly _hitlRequestsMap = signal<Record<string, THitlRequestItem>>({});
   private readonly _autoResolutionMap = signal<Record<string, TItemState<string>>>({});
   private readonly _autoResolutionRulesMap = signal<Record<string, THitlAutoResolutionRule>>({});
+  private readonly _starterQuestions = signal<TChatkitStarterQuestion[]>([]);
 
   // readonly getters
   readonly chatkitFlags = computed<TChatkitFlags>(() => this._chatkitFlags());
@@ -78,6 +80,7 @@ export class ChatWindowDataService {
   );
   readonly chatkitFooter = computed<TChatkitFooter>(() => this._chatkitFooter());
   readonly chatkitScroll = computed<TChatkitScroll | undefined>(() => this._chatkitScroll());
+  readonly starterQuestions = computed<TChatkitStarterQuestion[]>(() => this._starterQuestions());
 
   // public setters
   setChatkitFlags(value: TChatkitFlags) {
@@ -121,5 +124,8 @@ export class ChatWindowDataService {
   }
   setChatkitScroll(value: TChatkitScroll | undefined) {
     this._chatkitScroll.set(value);
+  }
+  setStarterQuestions(value: TChatkitStarterQuestion[] | undefined) {
+    this._starterQuestions.set(value ?? []);
   }
 }

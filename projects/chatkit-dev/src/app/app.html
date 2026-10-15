@@ -1,20 +1,38 @@
 <div class="app-container">
-  <dw-chatkit
-    [chatkitData]="chatkitData()"
-    [chatkitConfig]="chatkitConfig()"
-    (sendMessage)="onSendMessage($event)"
-    (userMessageChange)="onUserMessageChange($event)"
-    (selectLLM)="onSelectLLM($event)"
-    (viewSteps)="onViewSteps($event)"
-    (selectDataStore)="onSelectDataStore()"
-    (selectComputerUpload)="onSelectComputerUpload($event)"
-    (selectFile)="onSelectFile($event)"
-    (viewProbe)="onViewProbe($event)"
-    (feedback)="onFeedback($event)"
-    (hitlResolve)="onHitlResolve($event)"
-    (hitlCancel)="onHitlCancel($event)"
-    (hitlAutoResolution)="onHitlAutoResolution($event)"
-  ></dw-chatkit>
+  <div class="demo-toolbar">
+    <span class="demo-toolbar-label">Demo state</span>
+    <button
+      type="button"
+      class="demo-switch"
+      role="switch"
+      [attr.aria-checked]="emptyConversationMode()"
+      (click)="toggleConversationMode()"
+    >
+      <span class="demo-switch-track" aria-hidden="true">
+        <span class="demo-switch-thumb"></span>
+      </span>
+      <span>{{ emptyConversationMode() ? 'Empty conversation' : 'Existing conversation' }}</span>
+    </button>
+  </div>
+  <div class="chatkit-frame">
+    <dw-chatkit
+      [chatkitData]="chatkitData()"
+      [chatkitConfig]="chatkitConfig()"
+      (sendMessage)="onSendMessage($event)"
+      (userMessageChange)="onUserMessageChange($event)"
+      (starterQuestionSelect)="onStarterQuestionSelect($event)"
+      (selectLLM)="onSelectLLM($event)"
+      (viewSteps)="onViewSteps($event)"
+      (selectDataStore)="onSelectDataStore()"
+      (selectComputerUpload)="onSelectComputerUpload($event)"
+      (selectFile)="onSelectFile($event)"
+      (viewProbe)="onViewProbe($event)"
+      (feedback)="onFeedback($event)"
+      (hitlResolve)="onHitlResolve($event)"
+      (hitlCancel)="onHitlCancel($event)"
+      (hitlAutoResolution)="onHitlAutoResolution($event)"
+    ></dw-chatkit>
+  </div>
 </div>
 
 <router-outlet />

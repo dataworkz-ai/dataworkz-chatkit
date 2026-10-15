@@ -9,6 +9,7 @@ import {
   TAdditionalFeedback,
   THitlAutoResolutionEvent,
   THitlResolution,
+  TChatkitStarterQuestionSelection,
 } from './typings/data';
 
 @Component({
@@ -104,6 +105,12 @@ export class Chatkit {
         this.hitlAutoResolution.emit(value);
       },
     });
+
+    this.chatWindowEventsService.starterQuestionSelect$.subscribe({
+      next: (value) => {
+        this.starterQuestionSelect.emit(value);
+      },
+    });
   }
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
@@ -149,6 +156,7 @@ export class Chatkit {
     this.chatWindowDataService.setAutoResolutionRulesMap(
       chatkitData?.autoResolutionRulesMap || {},
     );
+    this.chatWindowDataService.setStarterQuestions(chatkitData?.starterQuestions);
   }
 
   @Output() sendMessage = new EventEmitter<string>();
@@ -178,4 +186,5 @@ export class Chatkit {
     messageId: string;
   }>();
   @Output() hitlAutoResolution = new EventEmitter<THitlAutoResolutionEvent>();
+  @Output() starterQuestionSelect = new EventEmitter<TChatkitStarterQuestionSelection>();
 }

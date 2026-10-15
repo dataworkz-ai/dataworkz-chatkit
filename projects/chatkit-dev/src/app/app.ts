@@ -19,6 +19,7 @@ import {
   THitlRequestItem,
   THitlAutoResolutionRule,
   THitlAutoResolutionEvent,
+  TChatkitStarterQuestionSelection,
 } from 'dw-chatkit';
 import { LLMsResponse } from './data/LLMsResponse';
 import { selectedAgentResponse } from './data/selectedAgentResponse';
@@ -66,6 +67,8 @@ export class CitationLink {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class App {
+  readonly emptyConversationMode = signal(false);
+
   constructor() {
     // Set cancelled HITL requests
     const cancelledIds = [
@@ -301,12 +304,24 @@ export class App {
     messagesMap: this._messagesMap(),
     stepPlanItemsMap: this._stepPlanItemsMap(),
     stepPlanItemsOpenMap: this._stepPlanItemsOpenMap(),
-    chatkitConversation: this._chatkitConversation(),
+    chatkitConversation: this.emptyConversationMode()
+      ? { loading: false, error: '', value: [] }
+      : this._chatkitConversation(),
     LLMs: this._LLMs(),
     chatkitAgent: this._chatkitAgent(),
     hitlRequestsMap: this._hitlRequestsMap(),
     autoResolutionRulesMap: this._autoResolutionRulesMap(),
     autoResolutionMap: this._autoResolutionMap(),
+    starterQuestions: this.emptyConversationMode()
+      ? [
+          { question: 'Summarize this invoice', files: ['/samples/sample-invoice.csv'] },
+          {
+            question: 'Compare these two sample files',
+            files: ['/samples/sample-invoice.csv', '/samples/sample-vendors.csv'],
+          },
+          { question: 'Show the available starter workflow', files: [] },
+        ]
+      : [],
   }));
 
   private readonly _chatkitCitation = signal<TChatkitCitation>({
@@ -429,6 +444,15 @@ export class App {
 
   onUserMessageChange({ text }: { text: string }) {
     this.userMessage.set(text);
+  }
+
+  toggleConversationMode(): void {
+    this.emptyConversationMode.update((empty) => !empty);
+  }
+
+  onStarterQuestionSelect(selection: TChatkitStarterQuestionSelection): void {
+    this.userMessage.set(selection.question);
+    console.log('starterQuestionSelect', selection);
   }
 
   onSendMessage(text: string) {

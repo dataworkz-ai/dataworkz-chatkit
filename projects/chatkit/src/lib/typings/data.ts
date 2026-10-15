@@ -192,6 +192,16 @@ export type THitlAutoResolutionRule = {
   scope?: THitlAutoResolutionScope;
 };
 
+export type TChatkitStarterQuestion = {
+  question: string;
+  files: string[];
+};
+
+export type TChatkitStarterQuestionSelection = {
+  question: string;
+  files: File[];
+};
+
 export type TChatkitData = {
   chatkitConversation?: TItemState<TChatkitConversationTask[]>;
   messagesMap?: Record<string, TItemState<TChatkitConversationTaskMessage>>;
@@ -202,4 +212,5 @@ export type TChatkitData = {
   autoResolutionRulesMap?: Record<string, THitlAutoResolutionRule>;
   LLMs?: TItemState<TChatkitLLMItem[]>;
   chatkitAgent?: TItemState<TChatkitAgent>;
+  starterQuestions?: TChatkitStarterQuestion[];
 };

@@ -1,0 +1,3 @@
+invoice_id,vendor,total,status
+INV-1001,Acme Supplies,2450.00,Pending
+INV-1002,Northwind Traders,1875.50,Approved

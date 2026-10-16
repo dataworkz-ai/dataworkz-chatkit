@@ -1,0 +1,26 @@
+<div
+  class="dw-agent-question"
+  role="button"
+  [class.dw-agent-question-disabled]="!ready()"
+  [attr.tabindex]="ready() ? 0 : -1"
+  [attr.aria-disabled]="!ready()"
+  (click)="onSelect()"
+  (keydown.enter)="onSelect()"
+  (keydown.space)="onSelect(); $event.preventDefault()"
+>
+  <dw-arrow-up-right-icon class="dw-agent-question-icon" [size]="14"></dw-arrow-up-right-icon>
+  <div class="dw-agent-question-content">
+    <span class="dw-agent-question-text">{{ question().question }}</span>
+    @if (files().length) {
+      <div class="dw-agent-question-files">
+        @for (file of files(); track file.url) {
+          <dw-file-item
+            [messageFile]="{ file: file.name }"
+            [documentStatus]="file.status"
+            [selectable]="false"
+          ></dw-file-item>
+        }
+      </div>
+    }
+  </div>
+</div>

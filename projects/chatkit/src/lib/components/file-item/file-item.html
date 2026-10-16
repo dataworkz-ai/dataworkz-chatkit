@@ -2,11 +2,18 @@
   class="dw-file-item"
   [class.dw-file-item-error]="errored()"
   [class.no-right-border]="!!ingestStatus()"
+  [class.dw-file-item-passive]="!selectable()"
 >
   <div class="dw-file-item-icon">
     <dw-file-icon [size]="22" [fileName]="name()"></dw-file-icon>
   </div>
-  <span class="dw-file-item-name" (click)="onSelect()" [title]="name()">{{ name() }}</span>
+  <span
+    class="dw-file-item-name"
+    [class.dw-file-item-name-selectable]="selectable()"
+    (click)="onSelect()"
+    [title]="name()"
+    >{{ name() }}</span
+  >
 
   @if (documentStatus(); as status) {
     <div class="dw-file-item-status">

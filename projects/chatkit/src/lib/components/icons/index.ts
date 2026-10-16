@@ -26,3 +26,6 @@ export { BoltIcon } from './bolt-icon';
 export { UserIcon } from './user-icon';
 export { UsersIcon } from './users-icon';
 export { WarningCircleIcon } from './warning-circle-icon';
+export { AgentBotIcon } from './agent-bot-icon';
+export { ArrowUpRightIcon } from './arrow-up-right-icon';
+export { CommentsIcon } from './comments-icon';

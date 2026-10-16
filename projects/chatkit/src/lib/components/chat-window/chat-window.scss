@@ -35,15 +35,23 @@
       .dw-start-conversation-wrapper {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        flex-shrink: 0;
+        // auto margins centre it when it fits and keep the top reachable when it overflows
+        margin: auto 0;
+        padding: 1rem 0;
         gap: 1.25rem;
-        justify-content: center;
         align-items: center;
 
-        .start-conversation-icon {
-          height: 4rem;
-          width: 4rem;
-          object-fit: contain;
+        .start-conversation-avatar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background-color: #ecf3ff;
+          color: #4b5563;
         }
 
         .start-conversation-error {
@@ -51,7 +59,39 @@
         }
 
         .start-conversation-text {
-          font-size: 14px;
+          max-width: 520px;
+          margin: 0;
+          padding: 0 24px;
+          font-size: 15px;
+          line-height: 24px;
+          color: #334155;
+          text-align: center;
+        }
+
+        .start-conversation-questions {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          width: 100%;
+          max-width: 680px;
+          padding: 0 1rem;
+          box-sizing: border-box;
+        }
+
+        .start-conversation-questions-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          font-size: 12px;
+          font-weight: 600;
+          color: #64748b;
+        }
+
+        .start-conversation-questions-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+          gap: 8px;
         }
       }
     }

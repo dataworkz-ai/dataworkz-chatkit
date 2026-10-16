@@ -4,7 +4,7 @@
   }
 
   <div class="dw-dropdown-select-wrapper">
-    <div class="dw-dropdown-trigger" (click)="toggle(); $event.stopPropagation()">
+    <div class="dw-dropdown-trigger" #trigger (click)="toggle(); $event.stopPropagation()">
       <span class="dw-dropdown-value" [class.dw-dropdown-placeholder]="!selectedOption || loading">
         @if (itemTemplate && selectedOption && !loading) {
           <ng-container
@@ -12,7 +12,7 @@
             [ngTemplateOutletContext]="{ $implicit: selectedOption }"
           ></ng-container>
         } @else {
-          {{ displayLabel }}
+          <span class="dw-dropdown-text" [title]="displayLabel">{{ displayLabel }}</span>
         }
       </span>
       <span class="dw-dropdown-icon">
@@ -31,12 +31,13 @@
         class="dw-dropdown-panel"
         [class.dw-dropdown-panel-top]="position === 'top'"
         [class.dw-dropdown-panel-bottom]="position === 'bottom'"
+        [style.max-width.px]="panelMaxWidth()"
       >
         <ul class="dw-dropdown-list">
           @for (option of options; track option.value) {
             <li
               class="dw-dropdown-item"
-              [class.dw-dropdown-item-selected]="option.value === value"
+              [class.dw-dropdown-item-selected]="!!value && option.value === value"
               (click)="selectOption(option); $event.stopPropagation()"
             >
               @if (itemTemplate) {
@@ -45,7 +46,7 @@
                   [ngTemplateOutletContext]="{ $implicit: option }"
                 ></ng-container>
               } @else {
-                {{ option.label }}
+                <span class="dw-dropdown-text" [title]="option.label">{{ option.label }}</span>
               }
             </li>
           } @empty {

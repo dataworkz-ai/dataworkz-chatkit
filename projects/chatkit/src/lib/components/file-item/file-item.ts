@@ -23,6 +23,8 @@ export class FileItem {
 
   removable = input<boolean>(false);
 
+  selectable = input<boolean>(true);
+
   remove = output<void>();
   select = output<void>();
 
@@ -41,6 +43,7 @@ export class FileItem {
   }
 
   onSelect() {
+    if (!this.selectable()) return;
     this.select.emit();
   }
 }

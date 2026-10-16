@@ -45,11 +45,18 @@
         gap: 1.25rem;
         align-content: safe center;
         justify-items: center;
+        padding: 1rem 0;
 
-        .start-conversation-icon {
-          height: 4rem;
-          width: 4rem;
-          object-fit: contain;
+        .start-conversation-avatar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background-color: #ecf3ff;
+          color: #4b5563;
         }
 
         .start-conversation-error {
@@ -57,9 +64,39 @@
         }
 
         .start-conversation-text {
-          font-size: 14px;
+          max-width: 520px;
           margin: 0;
+          padding: 0 24px;
+          color: #334155;
+          font-size: 15px;
+          line-height: 24px;
           text-align: center;
+        }
+
+        .start-conversation-questions {
+          display: flex;
+          flex-direction: column;
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 680px;
+          gap: 10px;
+          padding: 0 1rem;
+        }
+
+        .start-conversation-questions-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          color: #64748b;
+          font-size: 12px;
+          font-weight: 600;
+        }
+
+        .start-conversation-questions-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+          gap: 8px;
         }
 
         .dw-starter-questions {

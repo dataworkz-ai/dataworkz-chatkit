@@ -4,6 +4,7 @@ import {
   effect,
   ElementRef,
   EventEmitter,
+  ViewChild,
   HostListener,
   Input,
   Output,
@@ -12,6 +13,9 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoaderIcon, ChevronIcon } from '../icons';
+
+// widest the options panel gets, even when there is more room
+const PANEL_MAX_WIDTH = 320;
 
 export interface DropdownOption {
   value: string;
@@ -40,9 +44,16 @@ export class Dropdown {
 
   isOpen = signal(false);
 
+  // keeps the panel inside the nearest clipping container (or the viewport)
+  panelMaxWidth = signal<number | null>(null);
+
+  @ViewChild('trigger') triggerRef?: ElementRef<HTMLElement>;
+
   constructor(private elementRef: ElementRef) {}
 
+  // an empty value means nothing is selected, even if an option has an empty value
   get selectedOption(): DropdownOption | undefined {
+    if (!this.value) return undefined;
     return this.options.find((opt) => opt.value === this.value);
   }
 
@@ -53,7 +64,38 @@ export class Dropdown {
 
   toggle(): void {
     if (this.loading) return;
+    if (!this.isOpen()) {
+      this.panelMaxWidth.set(this.getAvailableWidth());
+    }
     this.isOpen.update((v) => !v);
+  }
+
+  private getAvailableWidth(): number | null {
+    const trigger = this.triggerRef?.nativeElement;
+    if (!trigger) return null;
+
+    const gutter = 8;
+    const left = trigger.getBoundingClientRect().left;
+    let right = document.documentElement.clientWidth;
+
+    // walk up to the first ancestor that clips horizontally; a shadow host (the chatkit
+    // element) also bounds it, so the panel never spills outside the widget
+    let node: Element | null = trigger.parentElement;
+    while (node) {
+      if (getComputedStyle(node).overflowX !== 'visible') {
+        right = Math.min(right, node.getBoundingClientRect().right);
+        break;
+      }
+      const host: Element | null = node.parentElement
+        ? null
+        : ((node.getRootNode() as ShadowRoot).host ?? null);
+      if (host) {
+        right = Math.min(right, host.getBoundingClientRect().right);
+      }
+      node = node.parentElement || host;
+    }
+
+    return Math.max(Math.min(right - left - gutter, PANEL_MAX_WIDTH), trigger.offsetWidth);
   }
 
   selectOption(option: DropdownOption): void {

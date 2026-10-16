@@ -36,8 +36,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.25rem;
-    cursor: pointer;
     max-width: 150px;
+
+    &.dw-file-item-name-selectable {
+      cursor: pointer;
+    }
   }
 
   .dw-file-item-status {
@@ -78,6 +81,11 @@
       background-color: #e2e8f0;
       color: #0f172a;
     }
+  }
+
+  // not selectable: take the cursor of whatever contains it
+  &.dw-file-item-passive {
+    cursor: inherit;
   }
 
   &.dw-file-item-error {

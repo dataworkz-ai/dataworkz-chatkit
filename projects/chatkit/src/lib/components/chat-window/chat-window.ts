@@ -16,7 +16,8 @@ import { UserMessage } from './user-message/user-message';
 import { AiMessage } from './ai-message/ai-message';
 import { ChatWindowDataService } from '../../services/chat-window.data';
 import { Skeleton } from '../skeleton/skeleton';
-import { ConversationIcon, ChevronIcon, UploadIcon } from '../icons';
+import { AgentBotIcon, ChevronIcon, CommentsIcon, UploadIcon } from '../icons';
+import { AgentQuestion } from './agent-question/agent-question';
 import { ChatWindowEventsService } from '../../services/chat-window.events';
 import { TChatkitStarterQuestionSelection, TMessageFile } from '../../typings/data';
 import {
@@ -44,7 +45,11 @@ type StarterFileState = {
     @if (role() === 'USER') {
       <dw-user-message [attr.id]="messageId()" [messageId]="messageId()"></dw-user-message>
     } @else {
-      <dw-ai-message [attr.id]="messageId()" [taskId]="taskId()" [messageId]="messageId()"></dw-ai-message>
+      <dw-ai-message
+        [attr.id]="messageId()"
+        [taskId]="taskId()"
+        [messageId]="messageId()"
+      ></dw-ai-message>
     }
   `,
 })
@@ -61,7 +66,16 @@ export class ChatMessage {
 
 @Component({
   selector: 'dw-chat-window',
-  imports: [Footer, Skeleton, ConversationIcon, ChevronIcon, UploadIcon, ChatMessage],
+  imports: [
+    Footer,
+    Skeleton,
+    AgentBotIcon,
+    CommentsIcon,
+    ChevronIcon,
+    UploadIcon,
+    ChatMessage,
+    AgentQuestion,
+  ],
   templateUrl: './chat-window.html',
   styleUrl: './chat-window.scss',
 })
@@ -155,8 +169,13 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
     return this.chatWindowDataService.chatkitAgent().error;
   });
 
-  readonly chatkitAgentDescription = computed(() => {
-    return this.chatWindowDataService.chatkitAgent().value.description;
+  readonly chatkitAgentIntro = computed(() => {
+    const agent = this.chatWindowDataService.chatkitAgent().value;
+    return agent?.purpose || agent?.description || '';
+  });
+
+  readonly chatkitAgentQuestions = computed(() => {
+    return this.chatWindowDataService.chatkitAgent().value?.questions || [];
   });
 
   readonly showFooter = computed(() => {
@@ -178,6 +197,19 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
 
   readonly footerUserFilesMap = computed(() => {
     return this.chatWindowDataService.chatkitFooter().userFilesMap || {};
+  });
+
+  // questions can't be picked while a footer file is still uploading / ingesting
+  readonly footerUserFilesLoading = computed(() => {
+    const filesMap = this.footerUserFilesMap();
+    return this.footerUserFiles().some((filename) => {
+      const file = filesMap[filename];
+      return (
+        !!file?.uploadStatus?.loading ||
+        !!file?.ingestStatus?.loading ||
+        !!file?.documentStatus?.loading
+      );
+    });
   });
 
   readonly footerUserMessageSuggestions = computed(() => {
@@ -325,6 +357,20 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
           : row,
       ),
     );
+  }
+
+  onAgentQuestionSelect({ question, files }: { question: string; files: File[] }) {
+    // a question replaces the footer contents, so clear the files already attached first
+    [...this.footerUserFiles()].forEach((filename) => {
+      this.chatWindowEventsService.removeUserFile$.next(filename);
+    });
+    this.chatWindowEventsService.userMessageChange$.next({
+      event: new Event('input'),
+      text: question,
+    });
+    if (files.length) {
+      this.chatWindowEventsService.selectComputerUpload$.next(files);
+    }
   }
 
   ngAfterViewInit() {

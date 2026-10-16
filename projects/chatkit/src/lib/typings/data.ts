@@ -112,8 +112,15 @@ export type TChatkitLLMItem = {
   value: string;
 };
 
+export type TChatkitAgentQuestion = {
+  question: string;
+  files?: string[];
+};
+
 export type TChatkitAgent = {
-  description: string;
+  description?: string;
+  purpose?: string;
+  questions?: TChatkitAgentQuestion[];
 };
 
 export type TMessageFile = {

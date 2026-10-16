@@ -25,16 +25,41 @@
         } @else {
           <div class="dw-start-conversation-wrapper">
             @if (chatkitAgentError()) {
-              <dw-conversation-icon [size]="64"></dw-conversation-icon>
+              <span class="start-conversation-avatar">
+                <dw-agent-bot-icon [size]="22"></dw-agent-bot-icon>
+              </span>
               <div class="start-conversation-error">{{ chatkitAgentError() }}</div>
             } @else if (chatkitAgentLoading()) {
-              <dw-conversation-icon [size]="64"></dw-conversation-icon>
+              <span class="start-conversation-avatar">
+                <dw-agent-bot-icon [size]="22"></dw-agent-bot-icon>
+              </span>
               <dw-skeleton></dw-skeleton>
-            } @else if (!!chatkitAgentDescription()) {
-              <dw-conversation-icon [size]="64"></dw-conversation-icon>
-              <p class="start-conversation-text">
-                {{ chatkitAgentDescription() }}
-              </p>
+            } @else if (!!chatkitAgentIntro() || !!chatkitAgentQuestions().length) {
+              <span class="start-conversation-avatar">
+                <dw-agent-bot-icon [size]="22"></dw-agent-bot-icon>
+              </span>
+              @if (chatkitAgentIntro()) {
+                <p class="start-conversation-text">
+                  {{ chatkitAgentIntro() }}
+                </p>
+              }
+              @if (chatkitAgentQuestions().length) {
+                <div class="start-conversation-questions">
+                  <div class="start-conversation-questions-label">
+                    <dw-comments-icon [size]="14"></dw-comments-icon>
+                    <span>Try one of these</span>
+                  </div>
+                  <div class="start-conversation-questions-grid">
+                    @for (question of chatkitAgentQuestions(); track $index) {
+                      <dw-agent-question
+                        [question]="question"
+                        [disabled]="footerUserFilesLoading()"
+                        (questionSelect)="onAgentQuestionSelect($event)"
+                      ></dw-agent-question>
+                    }
+                  </div>
+                </div>
+              }
             }
             @if (starterQuestions().length > 0) {
               <section class="dw-starter-questions" aria-label="Example questions">

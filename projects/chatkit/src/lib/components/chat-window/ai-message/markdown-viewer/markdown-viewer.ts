@@ -131,7 +131,10 @@ export class MarkdownViewer {
   private elementRef = inject(ElementRef);
   private sanitizer = inject(DomSanitizer);
 
-  private readonly chatWindowDataService = inject(ChatWindowDataService);
+  // Optional: this viewer is also rendered by components exported on their own
+  // (e.g. HitlSection), outside <dw-chatkit> where the service is provided.
+  // Without it there is simply no citation config.
+  private readonly chatWindowDataService = inject(ChatWindowDataService, { optional: true });
 
   private injectedSlots = new Set<string>();
 
@@ -188,7 +191,7 @@ export class MarkdownViewer {
 
   constructor() {
     effect(() => {
-      this.processContent(this.content(), this.chatWindowDataService.chatkitCitation());
+      this.processContent(this.content(), this.chatWindowDataService?.chatkitCitation?.());
     });
   }
 }

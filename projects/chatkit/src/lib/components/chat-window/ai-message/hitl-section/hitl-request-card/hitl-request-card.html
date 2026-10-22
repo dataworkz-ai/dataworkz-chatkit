@@ -1,34 +1,37 @@
 @if (request()) {
   <div class="dw-hitl-card" [class.dw-hitl-card-provided]="isProvided() || isCancelled()">
-    <div class="dw-hitl-card-header">
-      @if (isPending()) {
-        <span class="dw-hitl-status-icon dw-hitl-pending-icon">
-          <span class="dw-hitl-dot"></span>
-        </span>
-      } @else if (isCancelled()) {
-        <span class="dw-hitl-status-icon dw-hitl-cancelled-icon">
-          <span class="dw-hitl-dot"></span>
-        </span>
-      } @else {
-        <span class="dw-hitl-status-icon dw-hitl-provided-icon">
-          <dw-check-icon [size]="12" />
-        </span>
-      }
-      <span class="dw-hitl-type-label">{{ typeLabel() }}:</span>
-      @if (isPending()) {
-        <span class="dw-hitl-badge dw-hitl-badge-pending">Pending</span>
-      } @else if (isCancelled()) {
-        <span class="dw-hitl-badge dw-hitl-badge-cancelled">Cancelled</span>
-      } @else if (isAutoResolved()) {
-        <span class="dw-hitl-badge dw-hitl-badge-provided">Auto-resolved</span>
-      } @else {
-        <span class="dw-hitl-badge dw-hitl-badge-provided">Provided</span>
-      }
-    </div>
-    @if (typeSubLabel() && isPending()) {
-      <div class="dw-hitl-card-header" style="padding-left: 1.3rem">
-        <span class="dw-hitl-type-label">{{ typeSubLabel() }}</span>
+    @if (showHeader()) {
+      <div class="dw-hitl-card-header">
+        @if (isPending()) {
+          <span class="dw-hitl-status-icon dw-hitl-pending-icon">
+            <span class="dw-hitl-dot"></span>
+          </span>
+        } @else if (isCancelled()) {
+          <span class="dw-hitl-status-icon dw-hitl-cancelled-icon">
+            <span class="dw-hitl-dot"></span>
+          </span>
+        } @else {
+          <span class="dw-hitl-status-icon dw-hitl-provided-icon">
+            <dw-check-icon [size]="12" />
+          </span>
+        }
+        <span class="dw-hitl-type-label">{{ typeLabel() }}:</span>
+        @if (isPending()) {
+          <span class="dw-hitl-badge dw-hitl-badge-pending">Pending</span>
+        } @else if (isCancelled()) {
+          <span class="dw-hitl-badge dw-hitl-badge-cancelled">Cancelled</span>
+        } @else if (isAutoResolved()) {
+          <span class="dw-hitl-badge dw-hitl-badge-provided">Auto-resolved</span>
+        } @else {
+          <span class="dw-hitl-badge dw-hitl-badge-provided">Provided</span>
+        }
       </div>
+      @if (typeSubLabel() && isPending()) {
+        <div class="dw-hitl-card-header" style="padding-left: 1.3rem">
+          <span class="dw-hitl-type-label">{{ typeSubLabel() }}</span>
+        </div>
+      }
+
     }
 
     <div class="dw-hitl-content">
@@ -49,18 +52,18 @@
             ></dw-markdown-viewer>
           }
           @if (contextDataEntries().length) {
-            <ul class="dw-hitl-context-list">
+            <dl class="dw-hitl-context-grid">
               @for (entry of contextDataEntries(); track entry.key) {
-                <li>
-                  <strong>{{ entry.key }}:</strong>
+                <dt>{{ entry.key }}</dt>
+                <dd>
                   @if (entry.isObject) {
                     <pre class="dw-hitl-context-json">{{ entry.displayValue }}</pre>
                   } @else {
                     {{ entry.displayValue }}
                   }
-                </li>
+                </dd>
               }
-            </ul>
+            </dl>
           }
         </div>
       }
@@ -115,18 +118,18 @@
               }
             </div>
           } @else {
-            <ul class="dw-hitl-context-list">
+            <dl class="dw-hitl-context-grid">
               @for (entry of readonlyArgsEntries(); track entry.key) {
-                <li>
-                  <strong>{{ entry.key }}:</strong>
+                <dt>{{ entry.key }}</dt>
+                <dd>
                   @if (entry.isObject) {
                     <pre class="dw-hitl-context-json">{{ entry.displayValue }}</pre>
                   } @else {
                     {{ entry.displayValue }}
                   }
-                </li>
+                </dd>
               }
-            </ul>
+            </dl>
           }
         </div>
       }
@@ -258,55 +261,50 @@
 
       @if (isProvided()) {
         @if (isAutoResolved()) {
-          <!-- Auto-resolved: show rule reference card -->
-          <div class="dw-ar-rule-card">
-            <div class="dw-ar-rule-card-row">
-              <dw-bolt-icon [size]="12" />
-              <span class="dw-ar-rule-card-text">
-                Applied via rule:
+          <!-- Auto-resolved: the rule that answered, its scope and why it applied -->
+          <div class="dw-ar-applied">
+            <div class="dw-ar-applied-rule">
+              <span>
+                Applied via rule
                 @if (appliedRuleName()) {
-                  <strong>"{{ appliedRuleName() }}"</strong>
+                  <b>“{{ appliedRuleName() }}”</b>
                 }
               </span>
-              @if (appliedRuleLink()) {
-                <a class="dw-ar-view-rule-btn" [href]="appliedRuleLink()" target="_blank" rel="noopener noreferrer">
-                  View rule <dw-arrow-right-icon [size]="10" />
-                </a>
-              } @else {
-                <button class="dw-ar-view-rule-btn" (click)="onViewRule()">
-                  View rule <dw-arrow-right-icon [size]="10" />
-                </button>
+              @if (appliedRuleScopeLabel()) {
+                <span class="dw-ar-applied-scope">
+                  <span aria-hidden="true">·</span>
+                  @if (appliedRuleScope() === 'ALL_USERS_OF_AGENT') {
+                    <dw-users-icon [size]="12" />
+                  } @else {
+                    <dw-user-icon [size]="12" />
+                  }
+                  {{ appliedRuleScopeLabel() }}
+                </span>
               }
-            </div>
-            @if (resolutionThought() || appliedRuleScopeLabel()) {
-              <div class="dw-ar-rule-card-footer">
-                @if (resolutionThought()) {
-                  <button class="dw-ar-thought-toggle" (click)="onThoughtToggle()">
-                    <dw-chevron-icon
-                      [size]="12"
-                      [class.dw-ar-thought-chevron-expanded]="thoughtExpanded()"
-                      class="dw-ar-thought-chevron"
-                    />
-                    <span>Why was this applied?</span>
+              @if (showViewRule()) {
+                @if (appliedRuleLink()) {
+                  <a
+                    class="dw-ar-applied-link"
+                    [href]="appliedRuleLink()"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span class="dw-ar-applied-link-label">View rule</span>
+                    <dw-arrow-right-icon [size]="10" />
+                  </a>
+                } @else {
+                  <button type="button" class="dw-ar-applied-link" (click)="onViewRule()">
+                    <span class="dw-ar-applied-link-label">View rule</span>
+                    <dw-arrow-right-icon [size]="10" />
                   </button>
                 }
-                @if (appliedRuleScopeLabel()) {
-                  <div class="dw-ar-rule-scope">
-                    @if (appliedRuleScope() === 'ALL_USERS_OF_AGENT') {
-                      <dw-users-icon [size]="12" />
-                    } @else {
-                      <dw-user-icon [size]="12" />
-                    }
-                    <span>{{ appliedRuleScopeLabel() }}</span>
-                  </div>
-                }
-              </div>
-              @if (resolutionThought() && thoughtExpanded()) {
-                <div class="dw-ar-thought-body">
-                  <div class="dw-ar-thought-label">LLM THOUGHT</div>
-                  <div class="dw-ar-thought-text">{{ resolutionThought() }}</div>
-                </div>
               }
+            </div>
+            @if (resolutionThought()) {
+              <div class="dw-ar-applied-why">
+                <div class="dw-ar-applied-why-heading">Why it was applied</div>
+                <p>{{ resolutionThought() }}</p>
+              </div>
             }
           </div>
         }
@@ -324,10 +322,7 @@
         } @else if (isSaved()) {
           <!-- Rule just saved: show confirmation -->
           <div class="dw-ar-saved-row">
-            <span class="dw-ar-saved-text">
-              <dw-bolt-icon [size]="11" />
-              Auto-resolution rule saved
-            </span>
+            <span class="dw-ar-saved-text dw-ar-saved-text-done">Auto-resolution rule saved</span>
             <span class="dw-ar-saved-separator">·</span>
             @if (appliedRuleLink()) {
               <a class="dw-ar-view-rule-btn" [href]="appliedRuleLink()" target="_blank" rel="noopener noreferrer">

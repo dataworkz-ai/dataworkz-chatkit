@@ -1,6 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MarkdownViewer } from './markdown-viewer/markdown-viewer';
-import { AiMessageFooter } from './ai-message-footer/ai-message-footer';
+import { AiMessageSteps } from './ai-message-steps/ai-message-steps';
+import { AiMessageActions } from './ai-message-actions/ai-message-actions';
+import { AutoResolvedHitl } from './auto-resolved-hitl/auto-resolved-hitl';
 import { ChatWindowDataService } from '../../../services/chat-window.data';
 import { ChatWindowEventsService } from '../../../services/chat-window.events';
 import { Skeleton } from '../../skeleton/skeleton';
@@ -8,11 +10,19 @@ import { AiDataItem } from './ai-data-item/ai-data-item';
 import { AiFileItem } from './ai-file-item/ai-file-item';
 import { HitlSection } from './hitl-section/hitl-section';
 import { THitlAutoResolutionEvent, THitlResolution } from '../../../typings/data';
-import { formatMessageTimestamp } from '../utils';
 
 @Component({
   selector: 'dw-ai-message',
-  imports: [MarkdownViewer, AiMessageFooter, AiFileItem, Skeleton, AiDataItem, HitlSection],
+  imports: [
+    MarkdownViewer,
+    AiMessageSteps,
+    AiMessageActions,
+    AutoResolvedHitl,
+    AiFileItem,
+    Skeleton,
+    AiDataItem,
+    HitlSection,
+  ],
   templateUrl: './ai-message.html',
   styleUrl: './ai-message.scss',
 })
@@ -34,24 +44,13 @@ export class AiMessage {
     return this.chatWindowDataService.messagesMap()[this.messageId()]?.error;
   });
 
+  // The steps line already shows that the agent is working, so the skeleton isn't needed then
+  readonly showSkeleton = computed(
+    () => !this.chatWindowDataService.chatkitFlags()?.agentMessage?.steps,
+  );
+
   readonly parts = computed(() => {
     return this.chatWindowDataService.messagesMap()[this.messageId()]?.value?.parts || [];
-  });
-
-  readonly timestampLabel = computed(() => {
-    if (!this.chatWindowDataService.chatkitFlags()?.message?.timestamps) return '';
-    if (this.messageLoading() || !this.parts().length) return '';
-    return formatMessageTimestamp(
-      this.chatWindowDataService.messagesMap()[this.messageId()]?.value?.timestamp,
-    );
-  });
-
-  readonly showFooter = computed(() => {
-    return (
-      this.chatWindowDataService.chatkitFlags()?.agentMessage?.feedback !== undefined ||
-      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.steps ||
-      !!this.chatWindowDataService.chatkitFlags()?.agentMessage?.probe
-    );
   });
 
   readonly hitlRequestIds = computed(() => {

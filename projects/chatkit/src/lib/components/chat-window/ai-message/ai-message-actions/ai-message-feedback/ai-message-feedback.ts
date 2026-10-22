@@ -10,12 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  ThumbsUpIcon,
-  ThumbsDownIcon,
-  ThumbsUpFilledIcon,
-  ThumbsDownFilledIcon,
-} from '../../../../icons';
+import { ThumbsUpIcon, ThumbsDownIcon } from '../../../../icons';
 import { Popover } from '../../../../popover/popover';
 import { ChatWindowEventsService } from '../../../../../services/chat-window.events';
 import { TAdditionalFeedback } from '../../../../../typings/data';
@@ -30,8 +25,6 @@ import { ChatWindowDataService } from '../../../../../services/chat-window.data'
     Popover,
     ThumbsUpIcon,
     ThumbsDownIcon,
-    ThumbsUpFilledIcon,
-    ThumbsDownFilledIcon,
   ],
   templateUrl: './ai-message-feedback.html',
   styleUrl: './ai-message-feedback.scss',

@@ -1,0 +1,245 @@
+$text: #334155;
+$text-secondary: #64748b;
+$muted: #94a3b8;
+$border: #e2e8f0;
+$hover: #f1f5f9;
+$ok: #10b981;
+$danger: #b91c1c;
+$primary-50: #ecf3ff;
+$primary-200: #b0ccff;
+$primary-500: #2463f5;
+$primary-600: #144ce6;
+$primary-700: #113dc2;
+$ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+
+:host {
+  display: block;
+}
+
+.dw-steps {
+  display: flex;
+  flex-direction: column;
+  margin: 4px 0 8px 10px;
+  padding: 2px 0 2px 16px;
+  border-left: 1px solid $border;
+  animation: dw-steps-open 200ms $ease;
+}
+
+.dw-step-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 26px;
+  font-size: 13px;
+  line-height: 18px;
+  color: $text-secondary;
+
+  &.dw-step-row-group {
+    font-weight: 500;
+    color: $text;
+  }
+
+  &.dw-step-row-in-progress {
+    color: $text;
+  }
+
+  &.dw-step-row-failed {
+    color: $danger;
+  }
+
+  &.dw-step-row-pending {
+    color: $primary-500;
+  }
+}
+
+.dw-step-glyph {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $ok;
+
+  .dw-step-row-failed & {
+    color: $danger;
+  }
+
+  .dw-step-row-pending & {
+    color: $primary-500;
+  }
+}
+
+.dw-step-spinner {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid $primary-50;
+  border-top-color: $primary-500;
+  box-sizing: border-box;
+  animation: dw-steps-spin 0.9s linear infinite;
+}
+
+.dw-step-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.dw-step-circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid $muted;
+  box-sizing: border-box;
+}
+
+.dw-step-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dw-step-progress {
+  width: 36px;
+  height: 3px;
+  border-radius: 3px;
+  background: $border;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  i {
+    display: block;
+    height: 100%;
+    background: $primary-500;
+    border-radius: 3px;
+    transition: width 0.45s $ease;
+  }
+}
+
+.dw-step-link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 4px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: $text-secondary;
+  cursor: pointer;
+
+  .dw-step-link-label {
+    text-decoration: underline;
+    text-decoration-color: #cbd5e1;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .dw-step-link-chevron {
+    display: flex;
+    transform: rotate(-90deg);
+    transition: transform 120ms $ease;
+  }
+
+  &:hover {
+    background: $hover;
+    color: $primary-600;
+
+    .dw-step-link-label {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 99, 245, 0.24);
+  }
+
+  &.dw-step-link-open {
+    color: $primary-700;
+
+    .dw-step-link-label {
+      text-decoration-color: $primary-200;
+    }
+
+    .dw-step-link-chevron {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+.dw-step-thought {
+  margin: 0 0 6px 20px;
+  padding-left: 10px;
+  border-left: 2px solid $border;
+  max-width: 560px;
+  font-size: 12px;
+  line-height: 18px;
+  color: $text-secondary;
+  white-space: pre-line;
+}
+
+.dw-step-children {
+  margin-left: 5px;
+  padding-left: 16px;
+  border-left: 1px solid $border;
+}
+
+.dw-step-status-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+  font-size: 12px;
+  line-height: 16px;
+  color: $muted;
+
+  .dw-step-status-title {
+    color: $text-secondary;
+  }
+}
+
+.dw-steps-empty {
+  font-size: 13px;
+  line-height: 26px;
+  color: $muted;
+}
+
+.dw-steps-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 90%;
+  padding: 0.5rem 0;
+}
+
+@keyframes dw-steps-open {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dw-steps-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dw-steps {
+    animation: none;
+  }
+}

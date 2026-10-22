@@ -1,0 +1,56 @@
+@if (showSteps() || showProbe()) {
+  <div class="dw-ai-steps" [class.dw-ai-steps-working]="lineState().kind === 'working'">
+    <div class="dw-ai-steps-head">
+      @if (showSteps()) {
+        <button
+          type="button"
+          class="dw-ai-steps-line"
+          [attr.aria-expanded]="expanded()"
+          (click)="toggle()"
+        >
+          <span class="dw-ai-steps-glyph">
+            @if (lineState().kind === 'working') {
+              <i class="dw-ai-steps-dot"></i>
+            } @else {
+              <dw-list-check-icon [size]="13" />
+            }
+          </span>
+          <span class="dw-ai-steps-viewport" aria-live="polite">
+            <!-- Keyed on the text so every new step title rolls in -->
+            @for (text of [lineState().text]; track text) {
+              <span class="dw-ai-steps-text" [title]="text">
+                <span class="dw-ai-steps-shimmer">{{ text }}</span>
+              </span>
+            }
+          </span>
+          @if (lineState().progress; as progress) {
+            <span
+              class="dw-ai-steps-progress"
+              [title]="progress.current + ' of ' + progress.total"
+            >
+              <i [style.width.%]="progress.percent"></i>
+            </span>
+          }
+          <span class="dw-ai-steps-chevron" [class.dw-ai-steps-chevron-open]="expanded()">
+            <dw-chevron-icon [size]="12" />
+          </span>
+        </button>
+      }
+      @if (showProbe()) {
+        <button
+          type="button"
+          class="dw-ai-steps-probe"
+          title="Technical trace of every step — inputs, outputs and timings"
+          (click)="onViewProbe()"
+        >
+          <span class="dw-ai-steps-probe-label">Probe</span>
+          <dw-external-link-icon [size]="13" />
+        </button>
+      }
+    </div>
+
+    @if (showSteps() && expanded()) {
+      <dw-steps [messageId]="messageId()" />
+    }
+  </div>
+}

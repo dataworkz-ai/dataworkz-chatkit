@@ -1,0 +1,48 @@
+@if (request()) {
+  <div class="dw-ar-line" [class.dw-ar-line-open]="expanded()">
+    <button
+      type="button"
+      class="dw-ar-line-main"
+      [attr.aria-expanded]="expanded()"
+      (click)="toggle()"
+    >
+      <span class="dw-ar-line-bolt"><dw-bolt-icon [size]="13" /></span>
+      <span class="dw-ar-line-text" [title]="questionText()">
+        <b>{{ label() }}:</b>
+        {{ questionText() }}
+        @if (ruleName()) {
+          <span class="dw-ar-line-rule">· choice “{{ ruleName() }}”</span>
+        }
+      </span>
+      <span class="dw-ar-line-chevron"><dw-chevron-icon [size]="12" /></span>
+    </button>
+    @if (ruleLink()) {
+      <a class="dw-ar-line-link" [href]="ruleLink()" target="_blank" rel="noopener noreferrer">
+        <span class="dw-ar-line-link-label">View choice</span>
+        <dw-arrow-right-icon [size]="10" />
+      </a>
+    } @else {
+      <button type="button" class="dw-ar-line-link" (click)="onViewChoice()">
+        <span class="dw-ar-line-link-label">View choice</span>
+        <dw-arrow-right-icon [size]="10" />
+      </button>
+    }
+  </div>
+
+  @if (expanded()) {
+    <div class="dw-ar-detail">
+      <dw-hitl-request-card
+        [requestId]="requestId()"
+        [hitlItem]="hitlItem()"
+        [showHeader]="false"
+        [showViewRule]="false"
+        [autoResolutionMap]="autoResolutionMap()"
+        [autoResolutionRulesMap]="autoResolutionRulesMap()"
+        [showAutoResolution]="showAutoResolution()"
+        [blockAutoResolutionAgentLevel]="blockAutoResolutionAgentLevel()"
+        (resolve)="resolve.emit($event)"
+        (autoResolution)="autoResolution.emit($event)"
+      />
+    </div>
+  }
+}

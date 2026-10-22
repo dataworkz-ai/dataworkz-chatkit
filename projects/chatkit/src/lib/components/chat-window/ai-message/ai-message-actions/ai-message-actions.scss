@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.dw-ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: -2px 1rem 0 calc(1rem - 6px);
+}
+
+.dw-ai-action-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: #94a3b8;
+  cursor: pointer;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #475569;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 99, 245, 0.24);
+  }
+
+  &.dw-ai-action-btn-done {
+    color: #10b981;
+  }
+}
+
+.dw-ai-actions-timestamp {
+  margin-left: 6px;
+  font-size: 11px;
+  line-height: 16px;
+  color: #94a3b8;
+}

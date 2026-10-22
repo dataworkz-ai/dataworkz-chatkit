@@ -3,11 +3,12 @@ import { ChatWindowDataService } from '../../../services/chat-window.data';
 import { FileItem } from '../../file-item/file-item';
 import { ChatWindowEventsService } from '../../../services/chat-window.events';
 import { TMessageFile } from '../../../typings/data';
-import { formatMessageTimestamp } from '../utils';
+import { parseMessageTimestamp } from '../utils';
+import { Timestamp } from '../../timestamp/timestamp';
 
 @Component({
   selector: 'dw-user-message',
-  imports: [FileItem],
+  imports: [FileItem, Timestamp],
   templateUrl: './user-message.html',
   styleUrl: './user-message.scss',
 })
@@ -21,9 +22,9 @@ export class UserMessage {
     return this.chatWindowDataService.messagesMap()[this.messageId]?.value?.parts || [];
   });
 
-  readonly timestampLabel = computed(() => {
-    if (!this.chatWindowDataService.chatkitFlags()?.message?.timestamps) return '';
-    return formatMessageTimestamp(
+  readonly timestamp = computed(() => {
+    if (!this.chatWindowDataService.chatkitFlags()?.message?.timestamps) return null;
+    return parseMessageTimestamp(
       this.chatWindowDataService.messagesMap()[this.messageId]?.value?.timestamp,
     );
   });

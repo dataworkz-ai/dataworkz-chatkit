@@ -1,0 +1,39 @@
+@if (hasActions()) {
+  <div class="dw-ai-actions">
+    @if (responseText()) {
+      <button
+        type="button"
+        class="dw-ai-action-btn"
+        [class.dw-ai-action-btn-done]="copied()"
+        [title]="copied() ? 'Copied' : 'Copy'"
+        [attr.aria-label]="copied() ? 'Copied' : 'Copy'"
+        (click)="onCopy()"
+      >
+        @if (copied()) {
+          <dw-check-icon [size]="14" />
+        } @else {
+          <dw-copy-icon [size]="15" />
+        }
+      </button>
+    }
+    @if (showFeedback()) {
+      <dw-ai-message-feedback
+        type="up"
+        [taskId]="taskId()"
+        [messageId]="messageId()"
+        [thumbsUpOrDown]="thumbsUpOrDown()"
+        [additionalFeedback]="additionalFeedback()"
+      />
+      <dw-ai-message-feedback
+        type="down"
+        [taskId]="taskId()"
+        [messageId]="messageId()"
+        [thumbsUpOrDown]="thumbsUpOrDown()"
+        [additionalFeedback]="additionalFeedback()"
+      />
+    }
+    @if (timestamp()) {
+      <dw-timestamp class="dw-ai-actions-timestamp" [value]="timestamp()" />
+    }
+  </div>
+}

@@ -1,18 +1,38 @@
 :host {
-  display: block;
+  display: inline-flex;
 }
 
 .footer-feedback-btn {
+  width: 28px;
+  height: 28px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
-  background: transparent;
-  // Azure Electric — text-primary
-  color: #2463f5;
+  border-radius: 6px;
+  background: none;
+  color: #94a3b8;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease;
+
+  &:hover {
+    background: #f1f5f9;
+    color: #475569;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 99, 245, 0.24);
+  }
+
+  &.footer-feedback-btn-active.footer-feedback-btn-up {
+    color: #10b981;
+  }
+
+  &.footer-feedback-btn-active.footer-feedback-btn-down {
+    color: #b91c1c;
+  }
 
   &.not-clickable {
     cursor: default;

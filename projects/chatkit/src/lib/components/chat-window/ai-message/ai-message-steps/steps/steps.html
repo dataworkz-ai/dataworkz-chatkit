@@ -1,0 +1,108 @@
+<div class="dw-steps">
+  @if (stepPlanItemsLoading()) {
+    <div class="dw-steps-loader">
+      @for (_ of [].constructor(3); track $index) {
+        <dw-skeleton height="8px" />
+      }
+    </div>
+  } @else if (nodes().length > 0) {
+    @for (node of nodes(); track node.id) {
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }" />
+    }
+  } @else {
+    <span class="dw-steps-empty">Steps not found</span>
+  }
+</div>
+
+<ng-template #nodeTemplate let-node>
+  <div
+    class="dw-step-row"
+    [class.dw-step-row-group]="node.kind === 'group'"
+    [class.dw-step-row-in-progress]="node.kind === 'step' && node.status === 'in_progress'"
+    [class.dw-step-row-failed]="node.kind === 'step' && node.status === 'failed'"
+    [class.dw-step-row-pending]="node.kind === 'step' && node.status === 'pending'"
+  >
+    @if (node.kind === 'step') {
+      <span class="dw-step-glyph">
+        @switch (node.status) {
+          @case ('completed') {
+            <dw-check-icon [size]="11" />
+          }
+          @case ('in_progress') {
+            <i class="dw-step-spinner"></i>
+          }
+          @case ('failed') {
+            <dw-error-info-icon [size]="12" />
+          }
+          @case ('pending') {
+            <i class="dw-step-dot"></i>
+          }
+          @default {
+            <i class="dw-step-circle"></i>
+          }
+        }
+      </span>
+    }
+    <span class="dw-step-title" [title]="node.title">{{ node.title }}</span>
+
+    @if (node.progress) {
+      <span
+        class="dw-step-progress"
+        [title]="node.progress.current + ' of ' + node.progress.total"
+      >
+        <i [style.width.%]="node.progress.percent"></i>
+      </span>
+    }
+
+    @if (hasItemsToggle(node)) {
+      <button
+        type="button"
+        class="dw-step-link"
+        [class.dw-step-link-open]="isItemsExpanded(node.id)"
+        [attr.aria-expanded]="isItemsExpanded(node.id)"
+        (click)="toggleItems(node.id)"
+      >
+        <span class="dw-step-link-label">Items</span>
+        <span class="dw-step-link-chevron"><dw-chevron-icon [size]="10" /></span>
+      </button>
+    }
+
+    @if (node.thought) {
+      <button
+        type="button"
+        class="dw-step-link"
+        [class.dw-step-link-open]="isThoughtExpanded(node.id)"
+        [attr.aria-expanded]="isThoughtExpanded(node.id)"
+        (click)="toggleThought(node.id)"
+      >
+        <span class="dw-step-link-label">Thought</span>
+        <span class="dw-step-link-chevron"><dw-chevron-icon [size]="10" /></span>
+      </button>
+    }
+  </div>
+
+  @if (node.thought && isThoughtExpanded(node.id)) {
+    <div class="dw-step-thought">{{ node.thought }}</div>
+  }
+
+  @if (node.statusLines.length || visibleChildren(node).length) {
+    <div class="dw-step-children">
+      @for (line of node.statusLines; track line.key) {
+        <div class="dw-step-status-line">
+          @if (line.title) {
+            <span class="dw-step-status-title">{{ line.title }}</span>
+          }
+          @if (line.title && line.body) {
+            <span aria-hidden="true">·</span>
+          }
+          @if (line.body) {
+            <span class="dw-step-status-body">{{ line.body }}</span>
+          }
+        </div>
+      }
+      @for (child of visibleChildren(node); track child.id) {
+        <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: child }" />
+      }
+    </div>
+  }
+</ng-template>

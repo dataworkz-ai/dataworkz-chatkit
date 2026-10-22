@@ -1,0 +1,139 @@
+$text: #334155;
+$text-secondary: #64748b;
+$muted: #94a3b8;
+$hover: #f1f5f9;
+$primary-200: #b0ccff;
+$primary-600: #144ce6;
+$primary-700: #113dc2;
+$ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+
+:host {
+  display: block;
+}
+
+.dw-ar-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 28px;
+  margin: 0 1rem;
+  font-size: 13px;
+  color: $text-secondary;
+}
+
+.dw-ar-line-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 0 1 auto;
+  padding: 2px 6px;
+  margin-left: -6px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: $hover;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 99, 245, 0.24);
+  }
+}
+
+.dw-ar-line-bolt {
+  display: flex;
+  flex-shrink: 0;
+  color: $primary-700;
+}
+
+.dw-ar-line-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  b {
+    font-weight: 500;
+    color: $text;
+  }
+}
+
+.dw-ar-line-chevron {
+  display: flex;
+  flex-shrink: 0;
+  color: $muted;
+  transform: rotate(-90deg);
+  transition: transform 120ms $ease;
+
+  .dw-ar-line-open & {
+    transform: rotate(0deg);
+  }
+}
+
+.dw-ar-line-link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 4px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  color: $primary-700;
+  text-decoration: none;
+  cursor: pointer;
+
+  .dw-ar-line-link-label {
+    text-decoration: underline;
+    text-decoration-color: $primary-200;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  &:hover {
+    background: $hover;
+    color: $primary-600;
+
+    .dw-ar-line-link-label {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(36, 99, 245, 0.24);
+  }
+}
+
+.dw-ar-detail {
+  margin: 2px 1rem 10px calc(1rem + 10px);
+  animation: dw-ar-detail-open 200ms $ease;
+}
+
+@keyframes dw-ar-detail-open {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dw-ar-detail {
+    animation: none;
+  }
+}

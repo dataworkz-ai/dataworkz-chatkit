@@ -27,7 +27,6 @@ import { TChatkitCitation } from '../../../../typings/config';
   encapsulation: ViewEncapsulation.None,
   styles: `
     .dw-markdown-container {
-      white-space: pre;
       * {
         font-size: 14px;
         line-height: 21px;
@@ -131,7 +130,7 @@ export class MarkdownViewer {
   private elementRef = inject(ElementRef);
   private sanitizer = inject(DomSanitizer);
 
-  private readonly chatWindowDataService = inject(ChatWindowDataService);
+  private readonly chatWindowDataService = inject(ChatWindowDataService, { optional: true });
 
   private injectedSlots = new Set<string>();
 
@@ -188,7 +187,7 @@ export class MarkdownViewer {
 
   constructor() {
     effect(() => {
-      this.processContent(this.content(), this.chatWindowDataService.chatkitCitation());
+      this.processContent(this.content(), this.chatWindowDataService?.chatkitCitation?.());
     });
   }
 }

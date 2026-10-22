@@ -12,7 +12,7 @@
       }
     }
   </div>
-  @if (timestampLabel()) {
-    <span class="dw-user-message-timestamp">{{ timestampLabel() }}</span>
+  @if (timestamp()) {
+    <dw-timestamp class="dw-user-message-timestamp" [value]="timestamp()" />
   }
 </div>

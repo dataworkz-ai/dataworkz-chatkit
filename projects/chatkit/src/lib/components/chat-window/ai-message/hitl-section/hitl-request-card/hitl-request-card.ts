@@ -67,6 +67,10 @@ export class HitlRequestCard {
   readonly autoResolutionRulesMap = input<Record<string, THitlAutoResolutionRule>>({});
   readonly showAutoResolution = input<boolean>(false);
   readonly blockAutoResolutionAgentLevel = input<boolean>(false);
+  // Hidden when a surrounding element (e.g. the auto-resolved accordion) already labels the request
+  readonly showHeader = input<boolean>(true);
+  // Hidden when a surrounding element already links to the applied rule
+  readonly showViewRule = input<boolean>(true);
 
   readonly resolve = output<{
     requestId: string;
@@ -370,11 +374,6 @@ export class HitlRequestCard {
   // Auto-resolution state
   readonly isAutoResolved = computed(() => !!this.resolvedResolution()?.sourceRuleId);
   readonly resolutionThought = computed(() => this.resolvedResolution()?.resolutionThought || null);
-  readonly thoughtExpanded = signal(false);
-
-  onThoughtToggle() {
-    this.thoughtExpanded.update((v) => !v);
-  }
 
   readonly appliedRuleName = computed(() => {
     const ruleId = this.resolvedResolution()?.sourceRuleId;
@@ -393,7 +392,7 @@ export class HitlRequestCard {
   });
   readonly appliedRuleScopeLabel = computed(() => {
     const scope = this.appliedRuleScope();
-    if (scope === 'ALL_USERS_OF_AGENT') return 'Always for this Agent';
+    if (scope === 'ALL_USERS_OF_AGENT') return 'Always for this agent';
     if (scope === 'USER') return 'Only for me';
     return null;
   });

@@ -2,21 +2,7 @@ export function getDistanceFromBottom(container: HTMLElement): number {
   return container.scrollHeight - container.scrollTop - container.clientHeight;
 }
 
-export function isScrolledUp(container: HTMLElement, threshold: number = 300): boolean {
-  const isScrollable = container.scrollHeight > container.clientHeight;
-  return isScrollable && getDistanceFromBottom(container) > threshold;
-}
-
-export function scrollToBottom(container?: HTMLElement, behavior?: ScrollBehavior): void {
-  if (!container) return;
-
-  container.scrollTo({
-    top: container.scrollHeight,
-    behavior: behavior,
-  });
-}
-
-function centerElementInContainer(
+export function centerElementInContainer(
   container: HTMLElement,
   target: HTMLElement,
   behavior: ScrollBehavior = 'smooth',
@@ -44,43 +30,6 @@ function centerElementInContainer(
   }
 
   container.scrollBy({ top: scrollAdjustment, behavior });
-}
-
-export function centerMessageInChat(
-  chatbody?: HTMLElement,
-  messageId?: string,
-  behavior?: ScrollBehavior,
-) {
-  if (!chatbody || !messageId) {
-    return;
-  }
-
-  const messageEl = chatbody.querySelector(`[id="${messageId}"]`) as HTMLElement;
-  if (!messageEl) {
-    return;
-  }
-
-  centerElementInContainer(chatbody, messageEl, behavior);
-}
-
-export function centerStepsInChat(
-  chatbody?: HTMLElement,
-  messageId?: string,
-  behavior?: ScrollBehavior,
-): void {
-  if (!chatbody || !messageId) return;
-
-  const messageEl = chatbody.querySelector(`[id="${messageId}"]`) as HTMLElement;
-  if (!messageEl) {
-    return;
-  }
-
-  const stepsPanel = messageEl.querySelector('.footer-steps-panel') as HTMLElement;
-  if (!stepsPanel) {
-    return;
-  }
-
-  centerElementInContainer(chatbody, stepsPanel, behavior);
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

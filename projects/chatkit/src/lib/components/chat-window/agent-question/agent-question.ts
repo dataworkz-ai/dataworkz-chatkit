@@ -4,6 +4,14 @@ import { ArrowUpRightIcon } from '../../icons';
 import { TItemState } from '../../../typings/common';
 import { TChatkitAgentQuestion } from '../../../typings/data';
 
+export type TAgentQuestionSelect = {
+  question: string;
+  // files that loaded; failed ones are left out
+  files: File[];
+  // whether the question was configured with any files at all
+  hasFiles: boolean;
+};
+
 type TQuestionFile = {
   url: string;
   name: string;
@@ -33,7 +41,7 @@ export class AgentQuestion implements OnDestroy {
 
   readonly disabled = input<boolean>(false);
 
-  readonly questionSelect = output<{ question: string; files: File[] }>();
+  readonly questionSelect = output<TAgentQuestionSelect>();
 
   readonly files = signal<TQuestionFile[]>([]);
 
@@ -99,6 +107,7 @@ export class AgentQuestion implements OnDestroy {
       files: this.files()
         .map((f) => f.file)
         .filter((f): f is File => !!f),
+      hasFiles: this.files().length > 0,
     });
   }
 }

@@ -414,10 +414,6 @@ export class App {
     chatkitFlags: this._chatkitFlags(),
     chatkitProps: this._chatkitProps(),
     chatkitFooter: this._chatkitFooter(),
-    // chatkitScroll: {
-    //   type: 'bottom',
-    //   behavior: 'smooth',
-    // },
   }));
 
   onViewSteps({ taskId, messageId }: { taskId: string; messageId: string }) {
@@ -441,16 +437,20 @@ export class App {
         text,
       },
     ];
+    // fresh ids per send so repeated sends append new messages
+    const n = ++this.sendCount;
+    const userId = `user-${n}`;
+    const agentId = `agent-${n}`;
     this._chatkitConversation.update((prev) => {
       return {
         ...prev,
-        value: [...prev.value, { taskId: 'new-task', messageIds: ['2222', '3333'] }],
+        value: [...prev.value, { taskId: `task-${n}`, messageIds: [userId, agentId] }],
       };
     });
     this._messagesMap.update((prev) => {
       return {
         ...prev,
-        '2222': {
+        [userId]: {
           loading: false,
           error: '',
           value: {
@@ -458,7 +458,7 @@ export class App {
             parts,
           },
         },
-        '3333': {
+        [agentId]: {
           loading: true,
           error: '',
           value: {
@@ -470,27 +470,32 @@ export class App {
     });
 
     this.userMessage.set('');
+    this.streamMockResponse(agentId);
+  }
 
-    // window.setInterval(() => {
-    //   this._messagesMap.update((prev) => {
-    //     return {
-    //       ...prev,
-    //       '3333': {
-    //         loading: false,
-    //         error: '',
-    //         value: {
-    //           parts: [
-    //             ...prev['3333'].value.parts,
-    //             {
-    //               kind: 'text',
-    //               text: 'Hello, how are you?',
-    //             },
-    //           ],
-    //         },
-    //       },
-    //     };
-    //   });
-    // }, 2000);
+  private sendCount = 0;
+
+  // grows the agent message a sentence at a time to exercise scroll following
+  private streamMockResponse(agentId: string) {
+    const sentence =
+      'This is a streamed mock response line that keeps growing so scroll following can be checked. ';
+    let chunks = 0;
+    const timer = window.setInterval(() => {
+      chunks++;
+      const done = chunks >= 12;
+      this._messagesMap.update((prev) => ({
+        ...prev,
+        [agentId]: {
+          loading: false,
+          error: '',
+          value: {
+            role: 'AGENT',
+            parts: [{ kind: 'text', text: sentence.repeat(chunks * 2) }],
+          },
+        },
+      }));
+      if (done) window.clearInterval(timer);
+    }, 400);
   }
 
   onSelectLLM(llm: string) {

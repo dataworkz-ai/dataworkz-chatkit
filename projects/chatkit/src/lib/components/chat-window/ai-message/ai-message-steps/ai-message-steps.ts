@@ -1,6 +1,18 @@
-import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  input,
+  signal,
+  untracked,
+} from '@angular/core';
 import { ChatWindowDataService } from '../../../../services/chat-window.data';
 import { ChatWindowEventsService } from '../../../../services/chat-window.events';
+import { ChatScrollService } from '../../chat-scroll';
 import { ChevronIcon, ExternalLinkIcon, ListCheckIcon } from '../../../icons';
 import { Steps } from './steps/steps';
 import { buildStepNodes, findActiveStep, flattenStepNodes, TStepProgress } from './steps/utils';
@@ -23,6 +35,12 @@ export class AiMessageSteps {
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
+  private readonly chatScrollService = inject(ChatScrollService);
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
+
+  // set when the user opens the panel, so it's scrolled into view once it renders
+  private revealOnOpen = false;
 
   private readonly message = computed(
     () => this.chatWindowDataService.messagesMap()[this.messageId()],
@@ -75,9 +93,18 @@ export class AiMessageSteps {
       }
       wasPresent = present;
     });
+
+    effect(() => {
+      if (!this.expanded() || !this.revealOnOpen) return;
+      this.revealOnOpen = false;
+      afterNextRender(() => this.chatScrollService.reveal(this.el.nativeElement), {
+        injector: this.injector,
+      });
+    });
   }
 
   toggle() {
+    this.revealOnOpen = !this.expanded();
     if (!this.messagePresent()) {
       this.localOpen.update((open) => !open);
       return;

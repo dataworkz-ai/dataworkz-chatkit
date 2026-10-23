@@ -1,3 +1,11 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
 .dw-chat-window-wrapper {
   position: relative;
   display: flex;
@@ -31,6 +39,14 @@
       overflow-x: hidden;
       scrollbar-gutter: stable;
       padding-right: 8px; // Small padding to separate content from scrollbar
+
+      // room below an anchored user message so it can reach the top; sized by ChatScrollService.
+      // The negative margin cancels the flex gap so it takes no space at zero height
+      .dw-chat-window-spacer {
+        flex-shrink: 0;
+        height: 0;
+        margin-top: -1rem;
+      }
 
       .dw-start-conversation-wrapper {
         display: flex;
@@ -135,7 +151,7 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    margin: 10px auto;
+    margin: 0 auto;
     border: 1px solid #d1d5db;
     border-radius: 20px;
     padding: 10px;

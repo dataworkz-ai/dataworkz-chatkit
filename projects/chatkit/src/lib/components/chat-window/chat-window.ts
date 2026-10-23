@@ -6,10 +6,10 @@ import {
   ElementRef,
   AfterViewInit,
   OnDestroy,
-  NgZone,
   signal,
-  effect,
   input,
+  afterNextRender,
+  Injector,
 } from '@angular/core';
 import { Footer } from './footer/footer';
 import { UserMessage } from './user-message/user-message';
@@ -17,16 +17,10 @@ import { AiMessage } from './ai-message/ai-message';
 import { ChatWindowDataService } from '../../services/chat-window.data';
 import { Skeleton } from '../skeleton/skeleton';
 import { AgentBotIcon, ChevronIcon, CommentsIcon, UploadIcon } from '../icons';
-import { AgentQuestion } from './agent-question/agent-question';
+import { AgentQuestion, TAgentQuestionSelect } from './agent-question/agent-question';
 import { ChatWindowEventsService } from '../../services/chat-window.events';
 import { TMessageFile } from '../../typings/data';
-import {
-  isScrolledUp,
-  scrollToBottom,
-  getDistanceFromBottom,
-  centerMessageInChat,
-  centerStepsInChat,
-} from './utils';
+import { ChatScrollService } from './chat-scroll';
 
 @Component({
   standalone: true,
@@ -44,11 +38,21 @@ import {
     }
   `,
 })
-export class ChatMessage {
+export class ChatMessage implements OnDestroy {
   taskId = input<string>('');
   messageId = input<string>('');
 
   private readonly chatWindowDataService = inject(ChatWindowDataService);
+  private readonly chatScrollService = inject(ChatScrollService);
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    afterNextRender(() => this.chatScrollService.observe(this.el.nativeElement));
+  }
+
+  ngOnDestroy() {
+    this.chatScrollService.unobserve(this.el.nativeElement);
+  }
 
   readonly role = computed(() => {
     return this.chatWindowDataService.messagesMap()[this.messageId()]?.value?.role;
@@ -69,46 +73,20 @@ export class ChatMessage {
   ],
   templateUrl: './chat-window.html',
   styleUrl: './chat-window.scss',
+  providers: [ChatScrollService],
 })
 export class ChatWindow implements AfterViewInit, OnDestroy {
   private readonly chatWindowDataService = inject(ChatWindowDataService);
   private readonly chatWindowEventsService = inject(ChatWindowEventsService);
-  private readonly ngZone = inject(NgZone);
-
-  constructor() {
-    effect(() => {
-      const request = this.chatkitScroll();
-      if (!request) return;
-      this.chatWindowEventsService.scrollComplete$.next();
-
-      const chatbody = this.chatBodyRef?.nativeElement;
-      if (!chatbody) return;
-
-      switch (request.type) {
-        case 'bottom':
-          scrollToBottom(chatbody, request.behavior);
-          break;
-        case 'messageId':
-          centerMessageInChat(chatbody, request.messageId, request.behavior);
-          break;
-        case 'steps':
-          centerStepsInChat(chatbody, request.messageId, request.behavior);
-          break;
-      }
-    });
-  }
+  private readonly chatScrollService = inject(ChatScrollService);
+  private readonly injector = inject(Injector);
 
   @ViewChild('chatBody') chatBodyRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('chatSpacer') chatSpacerRef!: ElementRef<HTMLDivElement>;
 
-  readonly showScrollDownButton = signal(false);
+  readonly showScrollDownButton = this.chatScrollService.showScrollDownButton;
   readonly isDragging = signal(false);
   private dragCounter = 0;
-
-  private mutationObserver: MutationObserver | undefined = undefined;
-
-  private chatkitScroll = computed(() => {
-    return this.chatWindowDataService.chatkitScroll();
-  });
 
   readonly chatkitConversationLoading = computed(() => {
     return this.chatWindowDataService.chatkitConversation()?.loading;
@@ -251,11 +229,12 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
     this.chatWindowEventsService.selectFile$.next(file);
   }
 
-  onAgentQuestionSelect({ question, files }: { question: string; files: File[] }) {
+  onAgentQuestionSelect({ question, files, hasFiles }: TAgentQuestionSelect) {
     // a question replaces the footer contents, so clear the files already attached first
     [...this.footerUserFiles()].forEach((filename) => {
       this.chatWindowEventsService.removeUserFile$.next(filename);
     });
+
     this.chatWindowEventsService.userMessageChange$.next({
       event: new Event('input'),
       text: question,
@@ -263,55 +242,32 @@ export class ChatWindow implements AfterViewInit, OnDestroy {
     if (files.length) {
       this.chatWindowEventsService.selectComputerUpload$.next(files);
     }
+
+    // a message-only question is sent right away. Hosts usually disable send while the
+    // composer is empty, so wait for the filled text to come back down before checking;
+    // if the host still blocks sending (no LLM, files loading...) the text stays in the footer
+    if (!hasFiles) {
+      afterNextRender(
+        () => {
+          if (this.footerUserText() === question && !this.footerDisableSend()) {
+            this.chatWindowEventsService.sendMessage$.next(question);
+          }
+        },
+        { injector: this.injector },
+      );
+    }
   }
 
   ngAfterViewInit() {
-    this.scrollListener();
-
-    this.setupMutationObserver();
-    this.ngZone.runOutsideAngular(() => {
-      this.chatBodyRef.nativeElement?.addEventListener('scroll', this.scrollListener, {
-        passive: true,
-      });
-    });
+    this.chatScrollService.attach(this.chatBodyRef.nativeElement, this.chatSpacerRef.nativeElement);
   }
 
   ngOnDestroy() {
-    this.chatBodyRef?.nativeElement?.removeEventListener('scroll', this.scrollListener);
-    this.mutationObserver?.disconnect();
+    this.chatScrollService.detach();
   }
 
   onScrollButton() {
-    this.chatWindowDataService.setChatkitScroll({ type: 'bottom', behavior: 'smooth' });
-  }
-
-  private scrollListener = () => {
-    const el = this.chatBodyRef.nativeElement;
-    this.showScrollDownButton.set(isScrolledUp(el, 500));
-  };
-
-  private setupMutationObserver() {
-    const chatBody = this.chatBodyRef.nativeElement;
-
-    if (!chatBody) return;
-
-    this.mutationObserver = new MutationObserver((mutations) => {
-      const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
-
-      if (hasAddedNodes && getDistanceFromBottom(chatBody) < 100) {
-        setTimeout(() => {
-          this.chatWindowDataService.setChatkitScroll({ type: 'bottom', behavior: 'smooth' });
-        }, 100);
-      }
-    });
-
-    this.ngZone.runOutsideAngular(() => {
-      this.mutationObserver!.observe(chatBody, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-      });
-    });
+    this.chatScrollService.onScrollDownButton();
   }
 
   onDragOver(event: DragEvent) {

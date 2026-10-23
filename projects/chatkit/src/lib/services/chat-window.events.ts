@@ -25,7 +25,6 @@ export class ChatWindowEventsService {
     additionalFeedback?: TAdditionalFeedback;
   }>();
   readonly viewProbe$ = new Subject<{ taskId: string; messageId: string }>();
-  readonly scrollComplete$ = new Subject<void>();
   readonly hitlResolve$ = new Subject<{
     taskId: string;
     messageId: string;

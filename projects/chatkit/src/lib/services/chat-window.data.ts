@@ -14,7 +14,6 @@ import {
   TChatkitFlags,
   TChatkitFooter,
   TChatkitProps,
-  TChatkitScroll,
 } from '../typings/config';
 
 @Injectable()
@@ -23,7 +22,6 @@ export class ChatWindowDataService {
   private readonly _chatkitFlags = signal<TChatkitFlags>({});
   private readonly _chatkitProps = signal<TChatkitProps>({});
   private readonly _chatkitCitation = signal<TChatkitCitation>({});
-  private readonly _chatkitScroll = signal<TChatkitScroll | undefined>(undefined);
   private readonly _chatkitFooter = signal<TChatkitFooter>({});
   private readonly _chatkitConversation = signal<TItemState<TChatkitConversationTask[]>>({
     loading: false,
@@ -77,7 +75,6 @@ export class ChatWindowDataService {
     this._autoResolutionRulesMap(),
   );
   readonly chatkitFooter = computed<TChatkitFooter>(() => this._chatkitFooter());
-  readonly chatkitScroll = computed<TChatkitScroll | undefined>(() => this._chatkitScroll());
 
   // public setters
   setChatkitFlags(value: TChatkitFlags) {
@@ -118,8 +115,5 @@ export class ChatWindowDataService {
   }
   setChatkitFooter(value: TChatkitFooter) {
     this._chatkitFooter.set(value);
-  }
-  setChatkitScroll(value: TChatkitScroll | undefined) {
-    this._chatkitScroll.set(value);
   }
 }

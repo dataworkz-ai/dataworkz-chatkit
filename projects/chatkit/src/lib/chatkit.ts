@@ -17,6 +17,15 @@ import {
   imports: [ChatWindow],
   providers: [ChatWindowDataService, ChatWindowEventsService],
   template: `<dw-chat-window></dw-chat-window>`,
+  // fills whatever height the host gives it, so the footer docks at the bottom
+  styles: `
+    :host {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+  `,
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class Chatkit {
@@ -81,12 +90,6 @@ export class Chatkit {
       },
     });
 
-    this.chatWindowEventsService.scrollComplete$.subscribe({
-      next: () => {
-        this.scrollComplete.emit();
-      },
-    });
-
     this.chatWindowEventsService.hitlResolve$.subscribe({
       next: (value) => {
         this.hitlResolve.emit(value);
@@ -114,7 +117,6 @@ export class Chatkit {
     this.chatWindowDataService.setChatkitProps(chatkitConfig?.chatkitProps || {});
     this.chatWindowDataService.setChatkitCitation(chatkitConfig?.chatkitCitation || {});
     this.chatWindowDataService.setChatkitFooter(chatkitConfig?.chatkitFooter || {});
-    this.chatWindowDataService.setChatkitScroll(chatkitConfig?.chatkitScroll || undefined);
   }
 
   @Input() set chatkitData(chatkitData: TChatkitData) {
@@ -166,7 +168,6 @@ export class Chatkit {
     thumbsUpOrDown?: number;
     additionalFeedback?: TAdditionalFeedback;
   }>();
-  @Output() scrollComplete = new EventEmitter<void>();
   @Output() hitlResolve = new EventEmitter<{
     taskId: string;
     messageId: string;

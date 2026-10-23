@@ -24,12 +24,31 @@ export type TChatkitFlags = {
       blockAgentLevel?: boolean;
     }
   };
-};
-
-export type TChatkitScroll = {
-  type: 'bottom' | 'messageId' | 'steps';
-  messageId?: string;
-  behavior?: ScrollBehavior;
+  scroll?: {
+    // where the view starts when a conversation first renders (default 'bottom')
+    onLoad?: 'bottom' | 'none';
+    // when a new user message appears (default 'bottom'); 'anchor' puts it at the top
+    // and lets the response fill in below without pulling the view down
+    onSend?: 'bottom' | 'anchor' | 'none';
+    // while agent content streams in (default 'follow'); follows only while at the bottom
+    onResponse?: 'follow' | 'none';
+    // bring the steps panel into view when it's opened (default true)
+    steps?: boolean;
+    // bring highlightMessageId into view and hold it there (default true)
+    toHighlight?: boolean;
+    // show the jump-to-bottom button (default true)
+    scrollDownButton?: boolean;
+    // 'smooth' animates the jump, 'auto' is instant. Following a streaming response and the
+    // corrections that keep a held position in place are always instant, and every jump is
+    // instant when the user prefers reduced motion
+    behavior?: {
+      onLoad?: ScrollBehavior; // default 'auto'
+      onSend?: ScrollBehavior; // default 'smooth'
+      steps?: ScrollBehavior; // default 'smooth'
+      toHighlight?: ScrollBehavior; // default 'auto'
+      scrollDownButton?: ScrollBehavior; // default 'smooth'
+    };
+  };
 };
 
 export type TChatkitProps = {
@@ -67,5 +86,4 @@ export type TChatkitConfig = {
   chatkitProps?: TChatkitProps;
   chatkitCitation?: TChatkitCitation;
   chatkitFooter?: TChatkitFooter;
-  chatkitScroll?: TChatkitScroll;
 };
